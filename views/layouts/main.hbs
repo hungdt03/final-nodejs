@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                        // primary: 'orange'
+                        primary: 'orange'
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Bán hàng</title>
+</head>
+
+<body>
+    <div class="flex justify-between w-full h-screen">
+        {{> sidebar}}
+        <div class="bg-slate-50 w-full flex flex-col gap-y-4 overflow-y-auto custom-scrollbar scrollbar-w-2">
+            {{> header}}
+
+            {{!-- CONTENT BODY --}}
+            {{{body}}}
+        </div>
+    </div>
+</body>
+
+</html>

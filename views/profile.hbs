@@ -1,0 +1,98 @@
+<div class="px-4 pt-0 py-4 h-full flex flex-col gap-4">
+    <div class="bg-white p-4 rounded-md">
+        <div class="border-[1px] border-orange-100 rounded-md flex gap-x-4 p-6">
+            <div class="flex flex-col gap-y-3 items-start">
+                <div class="relative h-[150px]">
+                    <img width="150px" height="150px" id="avatar-img" class="h-full rounded-lg object-cover"
+                        src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-1/454643107_1196824584694982_4662964773639435390_n.jpg?stp=dst-jpg_s200x200&_nc_cat=111&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeH2bDO3Sl0a-F-dEHpL6JiccxGi39Ez7DtzEaLf0TPsO_OfYoTaI2hsxR27zm6clqyX7he8PKmiMJx8K0u38KcB&_nc_ohc=D4DDYdvPv-oQ7kNvgEhidMI&_nc_ht=scontent.fhan3-3.fna&_nc_gid=AxlM9YHkn3diHSrq_Yew10F&oh=00_AYA54dHF5eUi72Llfpwon8zHsEUZHNZM9PvZWtsn8bc1cQ&oe=66F80DC1" />
+                    <label for="upload-avatar"
+                        class="cursor-pointer absolute -bottom-3 -right-3 w-9 h-9 rounded-full z-20 bg-black bg-opacity-70 shadow flex items-center justify-center">
+                        <i class="ti-camera text-lg font-semibold text-white"></i>
+                    </label>
+                    <input id="upload-avatar" type="file" hidden />
+                </div>
+                <button id="btn-save-avatar"
+                    class="hidden py-1 px-2 rounded-md bg-primary text-white text-sm flex items-center gap-x-1">
+                    <i class="ti-check-box"></i>
+                    Lưu lại
+                </button>
+            </div>
+            <div class="flex flex-col gap-y-2">
+                <span class="text-2xl font-semibold">Nguyễn Khánh Hưng</span>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Vai trò</span>
+                    <span>Nhân viên bán hàng</span>
+                </div>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Email</span>
+                    <span>khanhhung@gmail.com</span>
+                </div>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Status</span>
+                    <span class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500">Active</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-4 p-4 bg-white rounded-md">
+            <div class="flex flex-col gap-y-4">
+                <span class="text-lg font-semibold">Thông tin cá nhân</span>
+                <div class="flex flex-col gap-y-1">
+                    <label>Họ và tên</label>
+                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Họ và tên" />
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Địa chỉ email</label>
+                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Địa chỉ email" />
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Username</label>
+                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Username" />
+                </div>
+
+                <div class="flex justify-end">
+                    <button class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-span-4 p-4 bg-white rounded-md">
+            <div class="flex flex-col gap-y-4">
+                <span class="text-lg font-semibold">Thay đổi mật khẩu</span>
+                <div class="flex flex-col gap-y-1">
+                    <label>Mật khẩu cũ</label>
+                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Mật khẩu cũ" />
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Mật khẩu mới</label>
+                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Mật khẩu mới" />
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Nhập lại mật khẩu mới</label>
+                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Nhập lại mật khẩu mới" />
+                </div>
+
+                <div class="flex justify-end">
+                    <button class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-4 p-4 bg-white rounded-md">
+
+        </div>
+    </div>
+</div>

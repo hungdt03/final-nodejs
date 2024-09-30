@@ -1,0 +1,75 @@
+<div class="px-4 pt-0 py-4 h-full">
+    <div class="grid grid-cols-12 gap-6 h-full">
+        <!-- Product List -->
+        <div class="col-span-8 p-4 bg-white rounded-md">
+            <table class="w-full text-sm text-left text-gray-500">
+                <thead class="text-primary bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3">STT</th>
+                        <th class="px-6 py-3">Tên sản phẩm</th>
+                        <th class="px-6 py-3">Đơn giá</th>
+                        <th class="px-6 py-3">Số lượng</th>
+                        <th class="px-6 py-3">Tổng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">1</td>
+                        <td class="px-6 py-4">Điện thoại Samsung Galaxy A14</td>
+                        <td class="px-6 py-4">5,000,000 VND</td>
+                        <td class="px-6 py-4">2</td>
+                        <td class="px-6 py-4">10,000,000 VND</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Payment Info -->
+        <div class="col-span-4 flex flex-col gap-y-4">
+            <div class="flex flex-col gap-y-4 p-4 bg-white rounded-md">
+                <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
+                <div class="flex flex-col gap-y-4">
+                    <div class="flex flex-col gap-y-1">
+                        <label>Số điện thoại</label>
+                        <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                            placeholder="Số điện thoại" />
+                    </div>
+
+                    <div class="flex flex-col gap-y-1">
+                        <label>Họ và tên</label>
+                        <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                            placeholder="Họ và tên" />
+                    </div>
+
+                    <div class="flex flex-col gap-y-1">
+                        <label>Địa chỉ</label>
+                        <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                            placeholder="Địa chỉ" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-y-4 p-4 bg-white rounded-md">
+                <h2 class="text-lg font-semibold">Thông tin hóa đơn</h2>
+                <div class="flex justify-between">
+                    <span>Tổng cộng</span>
+                    <span class="font-bold text-xl">10,000,000 VND</span>
+                </div>
+
+                <div class="flex flex-col gap-y-2">
+                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Số tiền khách đưa" />
+                    <div class="flex justify-between mt-4">
+                        <span>Tiền trả lại</span>
+                        <span class="font-bold text-xl">0 VND</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button class="w-full bg-primary text-white px-4 py-2 rounded-md">Thanh toán và In hóa
+                    đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
