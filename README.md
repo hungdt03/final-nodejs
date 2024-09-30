@@ -1,6 +1,6 @@
 # phone-pos
 
-
+Test git config 
 
 ## Getting started
 
