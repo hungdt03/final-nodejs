@@ -130,41 +130,41 @@ const setupUploadFile = (form) => {
 }
 
 
-function setupCustomDropdown(form) {
-    const dropdown = form.querySelector('.custom-dropdown');
-    const dropdownLabelWrapper = form.querySelector('.dropdown-label-wrapper');
-    const dropdownLabelText = form.querySelector('.dropdown-label');
-    const dropdownOptions = form.querySelector('.dropdown-options');
-    const dropdownInput = form.querySelector('input[name="categoryId"]');
-    const options = form.querySelectorAll('.dropdown-option');
+// function setupCustomDropdown(form) {
+//     const dropdown = form.querySelector('.custom-dropdown');
+//     const dropdownLabelWrapper = form.querySelector('.dropdown-label-wrapper');
+//     const dropdownLabelText = form.querySelector('.dropdown-label');
+//     const dropdownOptions = form.querySelector('.dropdown-options');
+//     const dropdownInput = form.querySelector('input[name="categoryId"]');
+//     const options = form.querySelectorAll('.dropdown-option');
 
-    // Hiển thị/Ẩn các tùy chọn khi nhấn vào label
-    dropdownLabelWrapper.addEventListener('click', () => {
-        dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
-    });
+//     // Hiển thị/Ẩn các tùy chọn khi nhấn vào label
+//     dropdownLabelWrapper.addEventListener('click', () => {
+//         dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
+//     });
 
-    // Xử lý sự kiện chọn tùy chọn
-    options.forEach(option => {
-        option.addEventListener('click', () => {
-            dropdownLabelText.innerHTML = option.textContent; // Cập nhật nhãn
-            dropdownInput.value = option.getAttribute('data-value'); // Cập nhật giá trị ẩn
-            options.forEach(opt => opt.classList.remove('selected')); // Bỏ lớp đã chọn cũ
-            option.classList.add('selected'); // Thêm lớp cho tùy chọn đã chọn
-            dropdownOptions.style.display = 'none'; // Ẩn tùy chọn
-        });
-    });
+//     // Xử lý sự kiện chọn tùy chọn
+//     options.forEach(option => {
+//         option.addEventListener('click', () => {
+//             dropdownLabelText.innerHTML = option.textContent; // Cập nhật nhãn
+//             dropdownInput.value = option.getAttribute('data-value'); // Cập nhật giá trị ẩn
+//             options.forEach(opt => opt.classList.remove('selected')); // Bỏ lớp đã chọn cũ
+//             option.classList.add('selected'); // Thêm lớp cho tùy chọn đã chọn
+//             dropdownOptions.style.display = 'none'; // Ẩn tùy chọn
+//         });
+//     });
 
-    // Đóng dropdown nếu click bên ngoài
-    window.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            dropdownOptions.style.display = 'none';
-        }
-    });
-}
+//     // Đóng dropdown nếu click bên ngoài
+//     window.addEventListener('click', (e) => {
+//         if (!dropdown.contains(e.target)) {
+//             dropdownOptions.style.display = 'none';
+//         }
+//     });
+// }
 
-// Áp dụng cho tất cả dropdown trong cả hai form
+// // Áp dụng cho tất cả dropdown trong cả hai form
 document.querySelectorAll('.form-product').forEach(form => {
-    setupCustomDropdown(form)
+    // setupCustomDropdown(form)
     setupUploadFile(form)
 });
 

@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path');
 const hbs = require('express-handlebars');
+const multer = require('multer');
 const mongoose = require('mongoose');
 
 // db models
@@ -10,7 +11,6 @@ const Customer = require('./models/customer.model');
 const Order = require('./models/order.model');
 const OrderItem = require('./models/orderItem.model');
 
-const categoryRoutes = require('./routes/category.routes');
 const productRoutes = require('./routes/product.routes');
 const orderRoutes = require('./routes/order.routes');
 const userRoutes = require('./routes/user.routes');
@@ -19,6 +19,9 @@ const reportRoutes = require('./routes/report.routes');
 const authRoutes = require('./routes/auth.routes');
 
 const app = express()
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ketnoi mongo
 mongoose.connect('mongodb://localhost:27017/pos', {
@@ -36,20 +39,28 @@ app.engine('hbs', hbs.engine({
 }));
 
 
-
 app.set('view engine', 'hbs');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/product');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    },
+});
+
+const upload = multer({ storage: storage });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    return res.render('home', { title: 'Welcome to Express with Handlebars' });
+    return res.render('home', { title: 'Welcome to Express with Handlebars', layout: 'sale' });
 });
 
 // Auth routing
 app.use('/', authRoutes);
-
-// Category routing
-app.use('/categories', categoryRoutes);
 
 // Product routing
 app.use('/products', productRoutes);
