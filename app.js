@@ -3,6 +3,9 @@ const path = require('path');
 const hbs = require('express-handlebars');
 const multer = require('multer');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const flash = require('connect-flash');
+require('dotenv').config();
 
 // db models
 const Product = require('./models/product.model')
@@ -17,17 +20,23 @@ const userRoutes = require('./routes/user.routes');
 const customerRoutes = require('./routes/customer.routes');
 const reportRoutes = require('./routes/report.routes');
 const authRoutes = require('./routes/auth.routes');
+const { seedAdminAccount } = require('./seeding/seeding-admin');
 
 const app = express()
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'my-session', 
+    resave: false,
+    saveUninitialized: true,
+}));
+
+app.use(flash());
 
 // ketnoi mongo
-mongoose.connect('mongodb://localhost:27017/pos', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+const connectionString = process.env.MONGODB_URI;
+mongoose.connect(connectionString)
     .then(() => console.log('MongoDB connected successfully'))
     .catch(err => console.log('MongoDB connection error:', err));
 
@@ -38,8 +47,15 @@ app.engine('hbs', hbs.engine({
     // partialsDir: path.join(__dirname, 'views/partials')  // Thư mục partials
 }));
 
-
 app.set('view engine', 'hbs');
+
+
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -68,7 +84,7 @@ app.use('/products', productRoutes);
 // Order routing
 app.use('/orders', orderRoutes);
 
-// Order routing
+// User routing
 app.use('/users', userRoutes);
 
 // Customer routing
@@ -82,6 +98,13 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+seedAdminAccount()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Error seeding admin account', err);
+    });
