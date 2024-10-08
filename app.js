@@ -19,12 +19,11 @@ const reportRoutes = require('./routes/report.routes');
 const authRoutes = require('./routes/auth.routes');
 
 const app = express()
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ketnoi mongo
-mongoose.connect('mongodb://localhost:27017/pos', {
+mongoose.connect('mongodb+srv://root:123@pos.m43hi.mongodb.net/pos?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
