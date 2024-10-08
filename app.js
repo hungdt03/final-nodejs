@@ -23,7 +23,6 @@ const authRoutes = require('./routes/auth.routes');
 const { seedAdminAccount } = require('./seeding/seeding-admin');
 
 const app = express()
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -48,8 +47,6 @@ app.engine('hbs', hbs.engine({
 }));
 
 app.set('view engine', 'hbs');
-
-
 
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
