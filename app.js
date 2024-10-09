@@ -19,7 +19,9 @@ const userRoutes = require('./routes/user.routes');
 const customerRoutes = require('./routes/customer.routes');
 const reportRoutes = require('./routes/report.routes');
 const authRoutes = require('./routes/auth.routes');
+const homeRoutes = require('./routes/home.routes');
 const { seedAdminAccount } = require('./seeding/seeding-admin');
+const { isAuthenticated } = require('./middlewares/authorizeRoles');
 
 const app = express()
 app.use(express.json());
@@ -28,6 +30,9 @@ app.use(session({
     secret: 'my-session', 
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: null, // Thiết lập maxAge là null để cookie không hết hạn
+    }
 }));
 
 app.use(flash());
@@ -48,17 +53,17 @@ app.set('view engine', 'hbs');
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    // console.log(req.session)
+    res.locals.user = req.session.user
     next();
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    return res.render('home', { title: 'Welcome to Express with Handlebars', layout: 'sale' });
-});
+app.use('/', isAuthenticated, homeRoutes);
 
 // Auth routing
-app.use('/', authRoutes);
+app.use('/auth', authRoutes);
 
 // Product routing
 app.use('/products', productRoutes);
@@ -75,6 +80,9 @@ app.use('/customers', customerRoutes);
 // Report routing
 app.use('/report', reportRoutes);
 
+app.get('/403', (req, res) => {
+    res.status(403).render('403');
+});
 
 app.get('*', (req, res) => {
     return res.render('404', { title: 'Welcome to Express with Handlebars' });

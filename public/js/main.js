@@ -36,29 +36,29 @@ document.addEventListener('click', function(event) {
 
 // Xử lí modal
 
-const openModalBtn = document.getElementById('openModalBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const modal = document.getElementById('myModal');
+// const openModalBtn = document.getElementById('openModalBtn');
+// const closeModalBtn = document.getElementById('closeModalBtn');
+// const modal = document.getElementById('myModal');
 
 // Hàm mở modal với hiệu ứng
-function openModal() {
-    modal.classList.add('show');
-}
+// function openModal() {
+//     modal.classList.add('show');
+// }
 
-// Hàm đóng modal
-function closeModal() {
-    modal.classList.remove('show');
-}
+// // Hàm đóng modal
+// function closeModal() {
+//     modal.classList.remove('show');
+// }
 
-// Mở modal khi nhấn nút
-openModalBtn.addEventListener('click', openModal);
+// // Mở modal khi nhấn nút
+// openModalBtn.addEventListener('click', openModal);
 
-// Đóng modal khi nhấn vào nút close
-closeModalBtn.addEventListener('click', closeModal);
+// // Đóng modal khi nhấn vào nút close
+// closeModalBtn.addEventListener('click', closeModal);
 
-// Đóng modal khi nhấn ra ngoài modal content
-window.addEventListener('click', function (event) {
-    if (event.target === modal) {
-        closeModal();
-    }
-});
+// // Đóng modal khi nhấn ra ngoài modal content
+// window.addEventListener('click', function (event) {
+//     if (event.target === modal) {
+//         closeModal();
+//     }
+// });

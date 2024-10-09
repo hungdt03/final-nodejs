@@ -79,11 +79,12 @@
                 class="close close-modal-btn">&times;</button>
         </div>
         <div class="py-4 max-h-full flex flex-col gap-y-4">
-            <form action="/users/create" method="post" id="form-create-employee" class="flex flex-col gap-y-4">
+            <form id="form-create-employee" class="flex flex-col gap-y-4">
                 <div class="flex flex-col gap-y-1">
                     <label>Họ và tên</label>
                     <input name="fullName" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Họ và tên nhân viên..." />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
                 <div class="flex flex-col gap-y-1">
@@ -91,19 +92,15 @@
                     <input type="email" name="email"
                         class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Địa chỉ email..." />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
-                <input type="submit" hidden id="submit-account" />
-
-                <div class="bg-red-50 text-red-500 rounded-lg p-4 border-[1px] border-red-100">
-                    Vui lòng nhập đầy đủ thông tin
-                </div>
             </form>
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
-            <button class="px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
-            <label for="submit-account" id="btn-create-employee" class="px-3 py-1 rounded-md bg-green-600 text-white">Thêm</label>
+            <button data-modal="createEmployeeModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <label id="btn-create-employee" class="px-3 py-1 rounded-md bg-green-600 text-white">Thêm</label>
         </div>
     </div>
 </div>
@@ -130,5 +127,4 @@
     </div>
 </div>
 
-<script src="/js/modal.js"></script>
 <script src="/js/account.js"></script>

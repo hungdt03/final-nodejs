@@ -71,8 +71,7 @@
                                     class="open-modal-btn open-edit-product-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
                                     Sửa
                                 </button>
-                                <button data-product-id="{{id}}" data-modal="confirmRemoveProductModal" {{!--
-                                    id="openConfirmRemoveProduct" --}}
+                                <button data-product-id="{{id}}" data-modal="confirmRemoveProductModal"
                                     class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
                                     Xóa
                                 </button>
@@ -231,7 +230,7 @@
             <p>Bạn có chắc là muốn xóa sản phẩm này</p>
         </div>
         <div
-            class="sticky bottom-0 flex items-center gap-x-2 justify-end py-2 pb-3 border-t-[1px] bg-white z-50 border-gray-200">
+            class="sticky mt-4 bottom-0 flex items-center gap-x-2 justify-end py-2 pb-3 border-t-[1px] bg-white z-50 border-gray-200">
             <button data-modal="confirmRemoveProductModal"
                 class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-confirm-delete" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
@@ -239,5 +238,4 @@
     </div>
 </div>
 
-<script src="/js/modal.js"></script>
 <script src="/js/product.js"></script>

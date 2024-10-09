@@ -1,4 +1,7 @@
-const bcrypt = require('bcrypt');
+const User = require('../models/user.model');
+
+require('dotenv').config();
+
 
 const profilePage = (req, res) => {
     res.render('profile', { title: 'Product List', items: [] });
@@ -8,39 +11,48 @@ const accountsPage = (req, res) => {
     res.render('account', { title: 'Product List', items: [] });
 };
 
-const createAccount = async (req, res) => {
-    try {
-        const { fullName, email } = req.body;
+const loginWithLink = async (req, res) => {
+    console.log('Come here')
+    const email = req.query.email;
+    const activationToken = req.query.activationToken;
+    // const decodeToken = Buffer.from(activationToken, 'base64').toString('utf-8');
+    // console.log(decodeToken)
+    console.log(email)
+    console.log(activationToken)
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            req.flash('error_msg', 'Email đã tồn tại.'); 
-            return res.redirect('/account'); 
+    try {
+        const user = await User.findOne({ email });
+        console.log(user)
+
+        if (!user) {
+            return res.redirect('/auth/login')
         }
 
-        const splitEmails = email.split("@")
-        const username = splitEmails[0]
-        const passwordHash = await bcrypt.hash(username, 10);
+        const token = user.tokens.find(t => 
+            t.token === activationToken && 
+            !t.isUsed && 
+            t.expiresAt > Date.now() 
+        );
 
-        const newUser = new User({
-            username,
-            email,
-            passwordHash,
-            role: 'EMPLOYEE', 
-            fullName,
-        });
+        console.log(token)
 
-        // Lưu người dùng vào MongoDB
-        await newUser.save();
+        if (!token) {
+            return res.redirect('/auth/login')
+        }
 
-        req.flash('success_msg', 'Tài khoản đã được tạo thành công!'); // Sử dụng flash message
-        res.redirect('/account'); // Redirect về trang account hoặc một trang khác
+       
+        token.isUsed = true;
+        user.isActivated = true;
+        await user.save(); 
+
+        req.session.user = user; 
+        return res.redirect('/');
     } catch (error) {
-        console.error('Lỗi khi tạo tài khoản:', error);
-        req.flash('error_msg', 'Có lỗi xảy ra trong quá trình tạo tài khoản.'); // Sử dụng flash message
-        res.redirect('/account'); // Redirect về trang account hoặc một trang khác
+        console.error(error);
+        return res.redirect('/auth/login')
     }
 }
 
 
-module.exports = { profilePage, accountsPage, createAccount };
+
+module.exports = { profilePage, accountsPage, loginWithLink };
