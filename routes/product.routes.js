@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const productController = require('../controllers/product.controller');
+const productApi = require('../apis/product.api');
 const path = require('path');
 
 // ktao multer -> upload anh
@@ -14,17 +15,16 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
     }
 });
+
 const upload = multer({ storage: storage });
 
 // dsach product
-router.get('/', productController.getAll);
-router.get('/:id', productController.getId);
+router.get('/', productController.showProducts);
 
-router.get('/add', productController.showAddForm);
-router.get('/edit/:id', productController.showEditForm);
+// API
+router.get('/api/:id', productApi.getId);
+router.post('/api/add', upload.single('thumbnail'), productApi.create);
+router.put('/api/edit/:id', upload.single('thumbnail'), productApi.update);
+router.delete('/api/delete/:id', productApi.deleteProduct);
 
-router.post('/add', upload.single('thumbnail'), productController.create);
-
-router.put('/edit/:id', upload.single('thumbnail'), productController.update);
-router.delete('/delete/:id', productController.deleteProduct);
 module.exports = router;

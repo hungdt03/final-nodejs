@@ -17,11 +17,11 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" class="p-4">
-                            <!-- Removed checkbox -->
-                        </th>
                         <th scope="col" class="px-6 py-3">
                             ID
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Mã vạch
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Hình ảnh
@@ -30,7 +30,19 @@
                             Tên sản phẩm
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Giá bán
+                            Giá nhập
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Giá bán lẻ
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tồn kho
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày tạo
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày cập nhật
                         </th>
 
                         <th scope="col" class="px-6 py-3">
@@ -39,30 +51,36 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each products}}
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="w-4 p-4">
-                            <!-- Removed checkbox -->
+                        <td class="px-6 py-4">{{id}}</td>
+                        <td class="px-6 py-4">{{barcode}}</td>
+                        <td class="px-6 py-4">
+                            <img width="100px" height="100px" class="object-cover rounded-md"
+                                src="/images/product/{{thumbnail}}" alt="Ảnh sản phẩm" />
                         </td>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">Silver</td>
-                        <td class="px-6 py-4">Laptop</td>
-                        <td class="px-6 py-4">Yes</td>
+                        <td class="px-6 py-4">{{name}}</td>
+                        <td class="px-6 py-4">{{purchasePrice}}</td>
+                        <td class="px-6 py-4">{{retailPrice}}</td>
+                        <td class="px-6 py-4">{{stockQuantity}}</td>
+                        <td class="px-6 py-4">{{createdAt}}</td>
+                        <td class="px-6 py-4">{{updatedAt}}</td>
                         <td class="flex items-center px-6 py-4">
                             <div class="flex gap-x-2">
-                                <button data-modal="editProductModal" id="openEditProductModal"
-                                    class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                                <button data-id="{{id}}" data-modal="editProductModal"
+                                    class="open-modal-btn open-edit-product-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
                                     Sửa
                                 </button>
-                                <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                    id="openConfirmRemoveProduct"
+                                <button data-product-id="1" data-modal="confirmRemoveProductModal" {{!--
+                                    id="openConfirmRemoveProduct" --}}
                                     class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
                                     Xóa
                                 </button>
                             </div>
                         </td>
                     </tr>
+                    {{/each}}
+
 
                 </tbody>
             </table>
@@ -81,28 +99,37 @@
                 class="close close-modal-btn">&times;</button>
         </div>
         <div class="py-4 max-h-full flex flex-col gap-y-4">
-            <div class="bg-red-50 text-red-500 rounded-lg p-4 border-[1px] border-red-100">
-                Vui lòng nhập đầy đủ thông tin
-            </div>
             <form id="form-create-product" class="flex flex-col gap-y-4">
                 <div class="flex flex-col gap-y-1">
                     <label>Tên sản phẩm</label>
                     <input name="name" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Tên sản phẩm" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Giá nhập</label>
-                    <input name="importPrice" type="number"
+                    <input name="purchasePrice" type="number"
                         class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Giá nhập" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Giá bán lẻ</label>
-                    <input name="price" type="number"
+                    <input name="retailPrice" type="number"
                         class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Giá bán lẻ" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Tồn kho</label>
+                    <input name="stockQuantity" type="number"
+                        class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Tồn kho" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+
                 </div>
 
                 <div class="flex flex-col gap-y-1">
@@ -112,10 +139,15 @@
                         <div class="upload-text text-sm text-gray-500 px-4 py-6">Ấn hoặc kéo thả ảnh vào khu vực này
                         </div>
                     </label>
-                    <input name="image" id="upload-product" class="upload-product" type="file" hidden
+                    <input name="thumbnail" id="upload-product" class="upload-product" type="file" hidden
                         accept="image/*" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
             </form>
+            {{!-- <div id="error-create-product"
+                class="bg-red-50 text-red-500 rounded-lg p-4 border-[1px] border-red-100">
+                Vui lòng nhập đầy đủ thông tin
+            </div> --}}
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
@@ -134,38 +166,50 @@
                 class="close close-modal-btn">&times;</button>
         </div>
         <div class="py-4 max-h-full flex flex-col gap-y-4">
-            <div class="bg-red-50 text-red-500 rounded-lg p-4 border-[1px] border-red-100">
-                Vui lòng nhập đầy đủ thông tin
-            </div>
             <form id="form-edit-product" class="flex flex-col gap-y-4">
                 <div class="flex flex-col gap-y-1">
                     <label>Tên sản phẩm</label>
                     <input name="name" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Tên sản phẩm" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Giá nhập</label>
-                    <input name="importPrice" type="number"
+                    <input name="purchasePrice" type="number"
                         class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Giá nhập" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Giá bán lẻ</label>
-                    <input name="price" type="number"
+                    <input name="retailPrice" type="number"
                         class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Giá bán lẻ" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Tồn kho</label>
+                    <input name="stockQuantity" type="number"
+                        class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Tồn kho" />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <span>Hình ảnh</span>
-                    <label for="upload-product"
+                    <label for="upload-edit-product"
                         class="image-label flex items-center justify-center cursor-pointer p-3 rounded-md border-[1px] border-dashed">
-                        <span class="upload-text text-sm text-gray-500 px-4 py-6">Upload ảnh ở đây</span>
+                        <div class="upload-text text-sm text-gray-500 px-4 py-6">Ấn hoặc kéo thả ảnh vào khu vực này
+                        </div>
                     </label>
-                    <input name="image" id="upload-product" class="upload-product" type="file" hidden
+                    <input name="thumbnail" id="upload-edit-product" class="upload-product" type="file" hidden
                         accept="image/*" />
+                    <input name="oldThumbnail" hidden />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
             </form>
         </div>

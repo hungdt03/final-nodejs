@@ -1,7 +1,6 @@
 const express = require('express')
 const path = require('path');
 const hbs = require('express-handlebars');
-const multer = require('multer');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -42,8 +41,6 @@ mongoose.connect(connectionString)
 app.engine('hbs', hbs.engine({
     extname: 'hbs',
     defaultLayout: 'main',
-    // layoutsDir: path.join(__dirname, 'views/layouts'),   // Thư mục layout
-    // partialsDir: path.join(__dirname, 'views/partials')  // Thư mục partials
 }));
 
 app.set('view engine', 'hbs');
@@ -53,18 +50,6 @@ app.use((req, res, next) => {
     res.locals.error_msg = req.flash('error_msg');
     next();
 });
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/images/product');
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    },
-});
-
-const upload = multer({ storage: storage });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -89,6 +74,7 @@ app.use('/customers', customerRoutes);
 
 // Report routing
 app.use('/report', reportRoutes);
+
 
 app.get('*', (req, res) => {
     return res.render('404', { title: 'Welcome to Express with Handlebars' });
