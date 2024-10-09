@@ -71,7 +71,7 @@
                                     class="open-modal-btn open-edit-product-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
                                     Sửa
                                 </button>
-                                <button data-product-id="1" data-modal="confirmRemoveProductModal" {{!--
+                                <button data-product-id="{{id}}" data-modal="confirmRemoveProductModal" {{!--
                                     id="openConfirmRemoveProduct" --}}
                                     class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
                                     Xóa
@@ -144,14 +144,11 @@
                     <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
             </form>
-            {{!-- <div id="error-create-product"
-                class="bg-red-50 text-red-500 rounded-lg p-4 border-[1px] border-red-100">
-                Vui lòng nhập đầy đủ thông tin
-            </div> --}}
+         
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
-            <button class="px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <button data-modal="createProductModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-create-product" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
         </div>
     </div>
@@ -215,7 +212,7 @@
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
-            <button class="px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <button data-modal="editProductModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-save-product" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
         </div>
     </div>
@@ -236,7 +233,7 @@
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-2 pb-3 border-t-[1px] bg-white z-50 border-gray-200">
             <button data-modal="confirmRemoveProductModal"
-                class="px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+                class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-confirm-delete" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
         </div>
     </div>

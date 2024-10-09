@@ -23,8 +23,8 @@ router.get('/', productController.showProducts);
 
 // API
 router.get('/api/:id', productApi.getId);
-router.post('/api/add', upload.single('thumbnail'), productApi.create);
-router.put('/api/edit/:id', upload.single('thumbnail'), productApi.update);
-router.delete('/api/delete/:id', productApi.deleteProduct);
+router.post('/api', upload.single('thumbnail'), productApi.create);
+router.put('/api/:id', upload.single('thumbnail'), productApi.update);
+router.delete('/api/:id', productApi.deleteProduct);
 
 module.exports = router;

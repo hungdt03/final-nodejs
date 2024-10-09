@@ -2,7 +2,7 @@
 // CALL PRODUCT API
 const productService = {
     createProduct: async (formData) => {
-        const response = await fetch('/products/api/add', {
+        const response = await fetch('/products/api', {
             method: 'POST',
             body: formData
         });
@@ -11,22 +11,32 @@ const productService = {
         return data;
     },
     updateProduct: async (id, formData) => {
-        const response = await fetch('/products/api/edit/' + id, {
+        const response = await fetch('/products/api/' + id, {
             method: 'PUT',
             body: formData
         });
 
         const data = await response.json()
-        console.log(data)
         return data;
     },
     getProductById: async (id) => {
         const response = await fetch('/products/api/' + id);
         const data = await response.json();
         return data;
+    },
+    deleteProductById: async (id) => {
+        const response = await fetch('/products/api/' + id, {
+            method: 'DELETE'
+        })
+
+        const data = await response.json()
+        return data;
     }
 }
 
+// FILE INPUTS
+let fileCreates = []
+let fileEdits = []
 
 // DOM related to Create Product
 const btnOpenCreateProductModal = document.getElementById('openCreateProductModal')
@@ -62,11 +72,22 @@ const validateInput = (input, message) => {
     }
 };
 
+const validateFiles = (input, message) => {
+    if (!input.files.length && !fileCreates.length) {
+        showError(input, message);
+        return false;
+    } else {
+        hideError(input);
+        return true
+    }
+};
+
+
 createNameInput.addEventListener('blur', () => validateInput(createNameInput, 'Tên sản phẩm không được để trống'));
 createPurchasePriceInput.addEventListener('blur', () => validateInput(createPurchasePriceInput, 'Giá nhập không được để trống'));
 createRetailPriceInput.addEventListener('blur', () => validateInput(createRetailPriceInput, 'Giá bán không được để trống'));
 createStockQuantityInput.addEventListener('blur', () => validateInput(createStockQuantityInput, 'Số lượng trong kho không được để trống'));
-createThumbnailInput.addEventListener('blur', () => validateInput(createThumbnailInput, 'Ảnh sản phẩm không được để trống'));
+createThumbnailInput.addEventListener('blur', () => validateFiles(createThumbnailInput, 'Ảnh sản phẩm không được để trống'));
 
 // Ẩn lỗi khi người dùng đang gõ
 createNameInput.addEventListener('input', () => hideError(createNameInput));
@@ -81,7 +102,7 @@ const validateCreateProductForm = () => {
     const isPurchasePriceValid = validateInput(createPurchasePriceInput, 'Giá nhập không được để trống');
     const isRetailPriceValid = validateInput(createRetailPriceInput, 'Giá bán không được để trống');
     const isStockQuantityValid = validateInput(createStockQuantityInput, 'Số lượng trong kho không được để trống');
-    const isThumbnailValid = validateInput(createThumbnailInput, 'Ảnh sản phẩm không được để trống');
+    const isThumbnailValid = validateFiles(createThumbnailInput, 'Ảnh sản phẩm không được để trống');
 
     return isNameValid && isPurchasePriceValid && isRetailPriceValid && isStockQuantityValid && isThumbnailValid
 };
@@ -95,6 +116,7 @@ btnOpenCreateProductModal.addEventListener('click', function (e) {
 
     btnCreateProduct.addEventListener('click', async (e) => {
         const formData = new FormData(formCreateProduct);
+        formData.set('thumbnail', fileCreates[0])
         if (validateCreateProductForm()) {
             const response = await productService.createProduct(formData);
             if (response.success) {
@@ -180,11 +202,12 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
 
         btnSaveProduct.addEventListener('click', async (e) => {
             const formData = new FormData(formEditProduct);
-            const data = Object.fromEntries(formData.entries());
-            console.log(data)
+            if(fileEdits.length > 0) {
+                formData.set('thumbnail', fileEdits[0])
+            }
+
             if (validateEditProductForm()) {
                 const response = await productService.updateProduct(productId, formData);
-                console.log(response)
                 if (response.success) {
                     alert(response.message)
                     window.location.reload()
@@ -205,7 +228,7 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
 const deleteProductBtns = document.querySelectorAll('.delete-product-btn');
 deleteProductBtns.forEach(btn => {
     btn.addEventListener('click', function () {
-        const productId = this.getAttribute('data-product-id'); // Lấy productId
+        const productId = this.getAttribute('data-product-id'); 
         const modal = document.getElementById('confirmRemoveProductModal');
         modal.setAttribute('data-product-id', productId);
         
@@ -213,45 +236,41 @@ deleteProductBtns.forEach(btn => {
     });
 });
 
-// Xử lý khi người dùng xác nhận xóa trong modal
 const confirmDeleteBtn = document.querySelector('#btn-confirm-delete');
 
-confirmDeleteBtn.addEventListener('click', function () {
+confirmDeleteBtn.addEventListener('click', async function () {
     const modal = document.getElementById('confirmRemoveProductModal');
     const productId = modal.getAttribute('data-product-id');
-    deleteProduct(productId);
-    modal.classList.remove('show');
+    
+    const response = await productService.deleteProductById(productId)
+    if(response.success) {
+        modal.classList.remove('show');
+        window.location.reload()
+    }
+    
 });
-
-// Hàm giả định để xóa sản phẩm
-function deleteProduct(productId) {
-    console.log(`Xóa sản phẩm với ID: ${productId}`);
-}
 
 
 // =====================================================================
 // =============================UPLOAD IMAGE PRODUCT============================
 // =====================================================================
+
 // Handle Upload file
 const setupUploadFile = (form) => {
     const uploadInput = form.querySelector('.upload-product');
-    console.log(uploadInput)
     const imageLabel = form.querySelector('.image-label');
     const uploadText = form.querySelector('.upload-text');
 
-    // Xử lý sự kiện thay đổi file
     const handleFileUpload = (file) => {
         if (file) {
             const reader = new FileReader();
 
-            // Đọc file dưới dạng DataURL (base64)
+            // DataURL (base64)
             reader.readAsDataURL(file);
 
             reader.onload = function (e) {
-                // Xóa nội dung text trong label
                 uploadText.style.display = 'none';
 
-                // Nếu đã có ảnh cũ thì xóa ảnh cũ trước khi thêm ảnh mới
                 const oldImage = form.querySelector('.image-label img');
                 if (oldImage) {
                     oldImage.remove();
@@ -270,6 +289,13 @@ const setupUploadFile = (form) => {
     // Sự kiện khi chọn file
     uploadInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
+        if(form.id === 'createProductModal') {
+            fileCreates = event.target.files;
+            fileEdits = []
+        } else {
+            fileEdits = event.target.files;
+            fileCreates = []
+        }
         handleFileUpload(file);
     });
 
@@ -293,6 +319,14 @@ const setupUploadFile = (form) => {
 
         const files = event.dataTransfer.files;
         if (files.length > 0) {
+            if(form.id === 'createProductModal') {
+                fileCreates = files;
+                fileEdits = []
+            } else {
+                fileEdits = files;
+                fileCreates = []
+            }
+
             handleFileUpload(files[0]); // Gọi hàm upload với file được thả
         }
     });
@@ -302,6 +336,7 @@ const setupUploadFile = (form) => {
 
 // Áp dụng cho tất cả dropdown trong cả hai form
 document.querySelectorAll('.form-product').forEach(form => {
+    console.log(form)
     setupUploadFile(form)
 });
 

@@ -56,6 +56,7 @@ exports.update = async (req, res) => {
         const { id } = req.params;
         const { barcode, name, purchasePrice, retailPrice, stockQuantity } = req.body;
         let thumbnail = req.body.oldThumbnail;
+        console.log(req.file)
 
         if (req.file) {
             const oldThumbnailPath = path.join(__dirname, '..', 'public/images/product/', thumbnail);
@@ -101,12 +102,18 @@ exports.deleteProduct = async (req, res) => {
         const deletedProduct = await Product.findByIdAndDelete(id);
 
         if (!deletedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'Không tìm thấy sản phẩm'
+            });
         }
 
-        res.status(200).json({ message: 'Product deleted successfully' });
+        res.status(200).json({
+            success: true,
+            message: 'Xóa sản phẩm thành công'
+        });
     } catch (err) {
-        res.status(400).json({ message: 'Error deleting product', error: err });
+        res.status(400).json({ message: 'Error deleting product', success: false, });
     }
 };
 

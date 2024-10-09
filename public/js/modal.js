@@ -1,7 +1,8 @@
 // Lấy tất cả các button mở modal
 const openModalBtns = document.querySelectorAll('.open-modal-btn');
 // Lấy tất cả các button đóng modal
-const closeModalBtns = document.querySelectorAll('.close-modal-btn');
+// const closeModalBtns = document.querySelectorAll('.close-modal-btn');
+const closeModalBtns = document.querySelectorAll('.close');
 
 // Lặp qua các button mở modal và gán sự kiện
 // openModalBtns.forEach(btn => {
