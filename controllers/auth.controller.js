@@ -5,6 +5,37 @@ exports.changePassword = (req, res) => {
     res.render('change-password')
 }
 
+exports.processChangePassword = async (req, res) => {
+    const { password, confirmPassword } = req.body;
+
+    if(password !== confirmPassword) {
+        return res.render('change-password', {
+            error: 'Mật khẩu không khớp'
+        })
+    }
+
+    const email = req.session.user.email;
+    const user = await User.findOne({ email });
+
+    if(!user) {
+        return res.render('change-password', {
+            error: 'Vui lòng đăng xuất và đăng nhập lại'
+        })
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    user.passwordHash = passwordHash;
+    user.isPasswordChanged = true;
+    await user.save()
+    
+    req.session.user = {
+        ...req.session.user,
+        isPasswordChanged: true 
+    };
+
+    res.redirect('/')
+}
+
 exports.loginPage = (req, res) => {
     if(req.session.user) {
         return res.redirect('/');
@@ -47,11 +78,10 @@ exports.processLogin = async (req, res) => {
         }
 
         // Đăng nhập thành công
-        req.session.user = user; // Lưu ID người dùng vào session
-        return res.redirect('/'); // Chuyển hướng tới trang dashboard
+        req.session.user = user; 
+        return res.redirect('/'); 
 
     } catch (error) {
-        console.error(error);
         return res.render('login', {
             error: 'Thông tin đăng nhập không chính xác',
             username,

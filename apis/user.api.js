@@ -35,6 +35,7 @@ exports.createAccount = async (req, res) => {
             role: 'EMPLOYEE',
             fullName,
             isActivated: false,
+            isPasswordChanged: false,
             tokens: [token]
         });
 

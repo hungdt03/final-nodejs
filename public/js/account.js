@@ -70,7 +70,11 @@ btnOpenCreateEmployeeModal.addEventListener('click', function (e) {
             const formData = new FormData(formCreateEmployee);
             const data = Object.fromEntries(formData.entries());
             const response = await accountService.createAccount(data)
-            console.log(response)
+            if(response.success) {
+                window.location.reload()
+            } else {
+                alert(response.message)
+            }
         }
 
     })

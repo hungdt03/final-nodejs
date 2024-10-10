@@ -19,6 +19,7 @@ const userSchema = new Schema({
     },
     fullName: { type: String, required: true },
     isActivated: { type: Boolean, required: true },
+    isPasswordChanged: { type: Boolean, required: true },
     avatar: String,
     status: { type: String, default: 'active' },
     createdAt: { type: Date, default: Date.now },

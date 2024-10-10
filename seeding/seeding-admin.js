@@ -7,7 +7,8 @@ const seedAdminAccount = async () => {
         email: 'hungktpm1406@gmail.com',
         role: 'ADMIN',
         fullName: 'Quản trị viên',
-        isActivated: true
+        isActivated: true,
+        isPasswordChanged: true,
     };
 
     const existingAdmin = await User.findOne({ role: 'ADMIN' });

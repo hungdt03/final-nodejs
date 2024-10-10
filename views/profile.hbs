@@ -4,7 +4,7 @@
             <div class="flex flex-col gap-y-3 items-start">
                 <div class="relative h-[150px]">
                     <img width="150px" height="150px" id="avatar-img" class="h-full rounded-lg object-cover"
-                        src="https://scontent.fhan3-3.fna.fbcdn.net/v/t39.30808-1/454643107_1196824584694982_4662964773639435390_n.jpg?stp=dst-jpg_s200x200&_nc_cat=111&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeH2bDO3Sl0a-F-dEHpL6JiccxGi39Ez7DtzEaLf0TPsO_OfYoTaI2hsxR27zm6clqyX7he8PKmiMJx8K0u38KcB&_nc_ohc=D4DDYdvPv-oQ7kNvgEhidMI&_nc_ht=scontent.fhan3-3.fna&_nc_gid=AxlM9YHkn3diHSrq_Yew10F&oh=00_AYA54dHF5eUi72Llfpwon8zHsEUZHNZM9PvZWtsn8bc1cQ&oe=66F80DC1" />
+                        src="{{#if user.avatar}}{{user.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
                     <label for="upload-avatar"
                         class="cursor-pointer absolute -bottom-3 -right-3 w-9 h-9 rounded-full z-20 bg-black bg-opacity-70 shadow flex items-center justify-center">
                         <i class="ti-camera text-lg font-semibold text-white"></i>
@@ -12,24 +12,29 @@
                     <input id="upload-avatar" type="file" hidden />
                 </div>
                 <button id="btn-save-avatar"
-                    class="hidden py-1 px-2 rounded-md bg-primary text-white text-sm flex items-center gap-x-1">
+                    class="hidden py-1 px-2 rounded-md bg-primary text-white text-sm items-center gap-x-1">
                     <i class="ti-check-box"></i>
                     Lưu lại
                 </button>
             </div>
             <div class="flex flex-col gap-y-2">
-                <span class="text-2xl font-semibold">Nguyễn Khánh Hưng</span>
+                <span class="text-2xl font-semibold">{{user.fullName}}</span>
                 <div class="flex items-center gap-x-4">
                     <span class="min-w-[70px]">Vai trò</span>
-                    <span>Nhân viên bán hàng</span>
+                    {{#if (eq user.role 'EMPLOYEE')}}
+                        <span>Nhân viên bán hàng</span>
+                    {{else}}
+                        <span>Quản trị viên</span>
+                    {{/if}}
+
                 </div>
                 <div class="flex items-center gap-x-4">
                     <span class="min-w-[70px]">Email</span>
-                    <span>khanhhung@gmail.com</span>
+                    <span>{{user.email}}</span>
                 </div>
                 <div class="flex items-center gap-x-4">
                     <span class="min-w-[70px]">Status</span>
-                    <span class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500">Active</span>
+                    <span class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500 uppercase">{{user.status}}</span>
                 </div>
             </div>
 
@@ -96,3 +101,5 @@
         </div>
     </div>
 </div>
+
+<script src="/js/profile.js"></script>

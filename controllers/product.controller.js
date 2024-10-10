@@ -1,4 +1,5 @@
 const Product = require('../models/product.model');
+const { formatDateTime } = require('../utils/formatDatetime');
 
 exports.showProducts = async (req, res) => {
     try {
@@ -13,13 +14,13 @@ exports.showProducts = async (req, res) => {
                 purchasePrice: product.purchasePrice,
                 retailPrice: product.retailPrice,
                 stockQuantity: product.stockQuantity,
-                createdAt: product.createdAt,
-                updatedAt: product.updatedAt
+                createdAt: formatDateTime(product.createdAt),
+                updatedAt: formatDateTime(product.updatedAt)
             };
         });
         
         res.render('product', { products: filteredProducts });
     } catch (error) {
-        console.log('Error: ', error)
+        res.render('500')
     }
 }

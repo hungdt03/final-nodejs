@@ -12,20 +12,14 @@ const accountsPage = (req, res) => {
 };
 
 const loginWithLink = async (req, res) => {
-    console.log('Come here')
     const email = req.query.email;
     const activationToken = req.query.activationToken;
-    // const decodeToken = Buffer.from(activationToken, 'base64').toString('utf-8');
-    // console.log(decodeToken)
-    console.log(email)
-    console.log(activationToken)
 
     try {
         const user = await User.findOne({ email });
-        console.log(user)
 
         if (!user) {
-            return res.redirect('/auth/login')
+            return res.redirect('/invalid-token')
         }
 
         const token = user.tokens.find(t => 
@@ -34,22 +28,19 @@ const loginWithLink = async (req, res) => {
             t.expiresAt > Date.now() 
         );
 
-        console.log(token)
-
         if (!token) {
-            return res.redirect('/auth/login')
+            return res.redirect('/invalid-token')
         }
 
-       
         token.isUsed = true;
         user.isActivated = true;
         await user.save(); 
-
+        
         req.session.user = user; 
-        return res.redirect('/');
+        return res.redirect('/auth/change-password'); 
     } catch (error) {
         console.error(error);
-        return res.redirect('/auth/login')
+        return res.redirect('/invalid-token')
     }
 }
 

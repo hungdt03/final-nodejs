@@ -9,20 +9,16 @@
                         <input class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
                             placeholder="Tìm kiếm sản phẩm..." />
                     </div>
-
+                    {{#if (eq user.role 'ADMIN')}}
                     <button data-modal="createProductModal" id="openCreateProductModal"
                         class="open-modal-btn px-4 py-2 rounded-md bg-primary text-white">Thêm mới</button>
+                    {{/if}}
+
                 </div>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3">
-                            ID
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Mã vạch
-                        </th>
                         <th scope="col" class="px-6 py-3">
                             Hình ảnh
                         </th>
@@ -44,19 +40,19 @@
                         <th scope="col" class="px-6 py-3">
                             Ngày cập nhật
                         </th>
-
+                        {{#if (eq ../user.role 'ADMIN')}}
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            Thao tác
                         </th>
+                        {{/if}}
+
                     </tr>
                 </thead>
                 <tbody>
                     {{#each products}}
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4">{{id}}</td>
-                        <td class="px-6 py-4">{{barcode}}</td>
                         <td class="px-6 py-4">
-                            <img width="100px" height="100px" class="object-cover rounded-md"
+                            <img class="object-cover rounded-md  w-[70px] h-[70px]"
                                 src="/images/product/{{thumbnail}}" alt="Ảnh sản phẩm" />
                         </td>
                         <td class="px-6 py-4">{{name}}</td>
@@ -65,22 +61,22 @@
                         <td class="px-6 py-4">{{stockQuantity}}</td>
                         <td class="px-6 py-4">{{createdAt}}</td>
                         <td class="px-6 py-4">{{updatedAt}}</td>
-                        <td class="flex items-center px-6 py-4">
-                            <div class="flex gap-x-2">
-                                <button data-id="{{id}}" data-modal="editProductModal"
-                                    class="open-modal-btn open-edit-product-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                    Sửa
-                                </button>
-                                <button data-product-id="{{id}}" data-modal="confirmRemoveProductModal"
-                                    class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                    Xóa
-                                </button>
-                            </div>
-                        </td>
+                        {{#if (eq ../user.role 'ADMIN')}}
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-x-2">
+                                    <button data-id="{{id}}" data-modal="editProductModal"
+                                        class="open-modal-btn open-edit-product-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                                        Sửa
+                                    </button>
+                                    <button data-product-id="{{id}}" data-modal="confirmRemoveProductModal"
+                                        class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
+                                        Xóa
+                                    </button>
+                                </div>
+                            </td>
+                        {{/if}}
                     </tr>
                     {{/each}}
-
-
                 </tbody>
             </table>
         </div>
@@ -143,11 +139,12 @@
                     <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
             </form>
-         
+
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
-            <button data-modal="createProductModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <button data-modal="createProductModal"
+                class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-create-product" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
         </div>
     </div>

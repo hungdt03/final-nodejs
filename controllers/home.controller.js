@@ -19,3 +19,20 @@ exports.homePage = async (req, res) => {
     
     res.render('home', { products: filteredProducts, layout: 'sale' });
 };
+
+exports.customer = (req, res) => {
+    res.render('customer')
+}
+
+exports.profile = (req, res) => {
+    res.render('profile')
+}
+
+exports.report = (req, res) => {
+    res.render('report')
+}
+exports.invalidToken = (req, res) => {
+    res.render('invalid-token', {
+        layout: null
+    })
+}

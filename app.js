@@ -21,31 +21,47 @@ const reportRoutes = require('./routes/report.routes');
 const authRoutes = require('./routes/auth.routes');
 const homeRoutes = require('./routes/home.routes');
 const { seedAdminAccount } = require('./seeding/seeding-admin');
-const { isAuthenticated } = require('./middlewares/authorizeRoles');
+const { checkPasswordChange } = require('./middlewares/checkPasswordChange');
+const { checkAuthenticated } = require('./middlewares/checkAuthenticated');
+const helpers = require('./helpers');
+const { checkPermission } = require('./middlewares/checkPermission');
 
 const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-    secret: 'my-session', 
+    secret: 'my-session',
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: null, // Thiết lập maxAge là null để cookie không hết hạn
+        maxAge: null,
     }
 }));
 
 app.use(flash());
 
-// ketnoi mongo
 const connectionString = process.env.MONGODB_URI;
 mongoose.connect(connectionString)
-    .then(() => console.log('MongoDB connected successfully'))
+    .then(() => {
+        console.log('MongoDB connected successfully')
+        seedAdminAccount()
+            .then(() => {
+                console.log('Seediing admin successfully')
+            })
+            .catch(err => {
+                console.error('Error seeding admin account', err);
+            });
+    
+    })
     .catch(err => console.log('MongoDB connection error:', err));
 
 app.engine('hbs', hbs.engine({
     extname: 'hbs',
     defaultLayout: 'main',
+    helpers: {
+        eq: helpers.eq,
+        notEq: helpers.notEq
+    }
 }));
 
 app.set('view engine', 'hbs');
@@ -53,31 +69,23 @@ app.set('view engine', 'hbs');
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
-    // console.log(req.session)
+    console.log(req.session.user)
     res.locals.user = req.session.user
     next();
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', isAuthenticated, homeRoutes);
+app.use(checkAuthenticated);
+app.use(checkPasswordChange);
+app.use(checkPermission);
 
-// Auth routing
+app.use('/', homeRoutes);
 app.use('/auth', authRoutes);
-
-// Product routing
 app.use('/products', productRoutes);
-
-// Order routing
 app.use('/orders', orderRoutes);
-
-// User routing
 app.use('/users', userRoutes);
-
-// Customer routing
 app.use('/customers', customerRoutes);
-
-// Report routing
 app.use('/report', reportRoutes);
 
 app.get('/403', (req, res) => {
@@ -85,17 +93,12 @@ app.get('/403', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    return res.render('404', { title: 'Welcome to Express with Handlebars' });
+    return res.render('404');
 });
 
 const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
-seedAdminAccount()
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Server is running on http://localhost:${PORT}`);
-        });
-    })
-    .catch(err => {
-        console.error('Error seeding admin account', err);
-    });
+    
