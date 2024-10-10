@@ -5,5 +5,4 @@ function generateToken() {
     return token.toString('base64'); ;
 }
 
-
 module.exports = { generateToken }

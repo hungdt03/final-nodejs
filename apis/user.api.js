@@ -36,6 +36,7 @@ exports.createAccount = async (req, res) => {
             fullName,
             isActivated: false,
             isPasswordChanged: false,
+            locked: false,
             tokens: [token]
         });
 

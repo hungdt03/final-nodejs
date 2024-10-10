@@ -12,6 +12,7 @@ const userSchema = new Schema({
     username: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     passwordHash: { type: String, required: true },
+    avatar: { type: String, required: false },
     role: { 
         type: String, 
         required: true, 
@@ -20,10 +21,10 @@ const userSchema = new Schema({
     fullName: { type: String, required: true },
     isActivated: { type: Boolean, required: true },
     isPasswordChanged: { type: Boolean, required: true },
-    avatar: String,
     status: { type: String, default: 'active' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    locked: { type: Boolean, required: true },
     tokens: [tokenSchema]
 });
 

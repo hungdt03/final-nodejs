@@ -56,7 +56,6 @@ exports.update = async (req, res) => {
         const { id } = req.params;
         const { barcode, name, purchasePrice, retailPrice, stockQuantity } = req.body;
         let thumbnail = req.body.oldThumbnail;
-        console.log(req.file)
 
         if (req.file) {
             const oldThumbnailPath = path.join(__dirname, '..', 'public/images/product/', thumbnail);

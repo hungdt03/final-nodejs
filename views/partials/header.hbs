@@ -1,8 +1,8 @@
 <div class="flex items-center justify-between sticky top-0 z-50 bg-white px-10 py-2 shadow">
     <div class="flex gap-x-3 items-center">
-        <img width="40" height="40" class="rounded-full" src="{{#if user.avatar}}/images/avatar/{{user.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
+        <img class="rounded-full w-[40px] h-[40px] object-cover" src="{{#if user.avatar}}/images/avatar/{{user.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
         <div>
-            <span class="text-xl font-semibold">Chào Hưng Nguyễn,</span>
+            <span class="text-xl font-semibold">Chào {{user.fullName}},</span>
             <p class="text-sm text-gray-500 mt-1">Chúc bạn có một ngày bán hàng tốt lành</p>
         </div>
     </div>

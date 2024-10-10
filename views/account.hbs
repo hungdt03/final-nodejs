@@ -18,49 +18,91 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3">
-                            ID
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            Ảnh đại diện
+                            Hình đại diện
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Họ và tên
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Username
+                            Email
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Email
+                            Trạng thái
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Vai trò
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tình trạng
                         </th>
 
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            Thao tác
                         </th>
                     </tr>
                 </thead>
                 <tbody>
+                    {{#each employees}}
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td class="px-6 py-4">Silver</td>
-                        <td class="px-6 py-4">Silver</td>
-                        <td class="px-6 py-4">Laptop</td>
-                        <td class="px-6 py-4">Yes</td>
-                        <td class="flex items-center px-6 py-4">
-                            <div class="flex gap-x-2">
-                                <button data-modal="editProductModal" id="openEditProductModal"
-                                    class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                    Sửa
-                                </button>
-                                <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                    id="openConfirmRemoveProduct"
-                                    class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                    Xóa
-                                </button>
+                        <td class="px-6 py-4">
+                            <img class="object-cover rounded-full w-[70px] h-[70px]"
+                                src="{{#if avatar}}/images/avatar/{{avatar}}{{else}}/images/system/avatar.avif{{/if}}"
+                                alt="Ảnh đại diện" />
+                        </td>
+                        <td class="px-6 py-4">{{fullName}}</td>
+                        <td class="px-6 py-4">{{email}}</td>
+                        <td class="px-6 py-4">
+                            {{#if (eq status 'active')}}
+                            <span class="italic text-green-600 font-medium">Đang hoạt động</span>
+                            {{else}}
+                            <span class="italic text-red-600 font-medium">Không hoạt động</span>
+                            {{/if}}
+
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#if (eq role 'ADMIN')}}
+                            <span class="bg-green-100 text-xs text-green-600 font-semibold py-1 px-2 rounded-lg">Quản
+                                trị viên</span>
+                            {{else}}
+                            <span class="bg-sky-100 text-xs text-sky-600 font-semibold py-1 px-2 rounded-lg">Nhân viên
+                                bán hàng</span>
+                            {{/if}}
+
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#if locked}}
+                            Đã khóa
+                            {{else}}
+                            Không khóa
+                            {{/if}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#unless (eq role 'ADMIN')}}
+                            <div class="flex items-center gap-x-2">
+                                {{#unless isPasswordChanged}}
+                                <form action="/users/send-link-again/{{id}}" method="post">
+                                    <button type="submit"
+                                        class="open-modal-btn bg-green-500 hover:bg-green-700 text-white font-medium py-1 px-2 rounded-md">
+                                        Gửi link
+                                    </button>
+                                </form>
+
+                                {{/unless}}
+                                <form action="/users/toggle-locked/{{id}}" method="post">
+                                    <button type="submit"
+                                        class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
+                                        {{#if locked}}
+                                        Bỏ khóa
+                                        {{else}}
+                                        Khóa
+                                        {{/if}}
+                                    </button>
+                                </form>
                             </div>
+                            {{/unless}}
                         </td>
                     </tr>
+                    {{/each}}
 
                 </tbody>
             </table>
@@ -99,7 +141,8 @@
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
-            <button data-modal="createEmployeeModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <button data-modal="createEmployeeModal"
+                class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <label id="btn-create-employee" class="px-3 py-1 rounded-md bg-green-600 text-white">Thêm</label>
         </div>
     </div>

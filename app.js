@@ -4,6 +4,8 @@ const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
+const http = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 // db models
@@ -18,7 +20,6 @@ const orderRoutes = require('./routes/order.routes');
 const userRoutes = require('./routes/user.routes');
 const customerRoutes = require('./routes/customer.routes');
 const reportRoutes = require('./routes/report.routes');
-const authRoutes = require('./routes/auth.routes');
 const homeRoutes = require('./routes/home.routes');
 const { seedAdminAccount } = require('./seeding/seeding-admin');
 const { checkPasswordChange } = require('./middlewares/checkPasswordChange');
@@ -27,6 +28,9 @@ const helpers = require('./helpers');
 const { checkPermission } = require('./middlewares/checkPermission');
 
 const app = express()
+const server = http.createServer(app); // Tạo server HTTP từ Express
+const io = new Server(server);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
@@ -51,7 +55,7 @@ mongoose.connect(connectionString)
             .catch(err => {
                 console.error('Error seeding admin account', err);
             });
-    
+
     })
     .catch(err => console.log('MongoDB connection error:', err));
 
@@ -66,10 +70,19 @@ app.engine('hbs', hbs.engine({
 
 app.set('view engine', 'hbs');
 
+io.on('connection', (socket) => {
+    console.log('A user connected');
+    console.log(socket)
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+    });
+});
+
+
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
-    console.log(req.session.user)
     res.locals.user = req.session.user
     next();
 });
@@ -81,7 +94,6 @@ app.use(checkPasswordChange);
 app.use(checkPermission);
 
 app.use('/', homeRoutes);
-app.use('/auth', authRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
@@ -101,4 +113,3 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-    

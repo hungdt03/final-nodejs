@@ -1,24 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+
 const productController = require('../controllers/product.controller');
 const productApi = require('../apis/product.api');
-const path = require('path');
+const { storageProduct } = require('../utils/multer-upload');
 
-// ktao multer -> upload anh
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/images/product');
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
+const upload = multer({ storage: storageProduct });
 
-const upload = multer({ storage: storage });
-
-// dsach product
 router.get('/', productController.showProducts);
 
 // API

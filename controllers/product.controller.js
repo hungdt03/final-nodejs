@@ -1,4 +1,5 @@
 const Product = require('../models/product.model');
+const { formatCurrencyVND } = require('../utils/formatCurrency');
 const { formatDateTime } = require('../utils/formatDatetime');
 
 exports.showProducts = async (req, res) => {
@@ -11,8 +12,8 @@ exports.showProducts = async (req, res) => {
                 barcode: product.barcode,
                 thumbnail: product.thumbnail,
                 name: product.name,
-                purchasePrice: product.purchasePrice,
-                retailPrice: product.retailPrice,
+                purchasePrice: formatCurrencyVND(product.purchasePrice),
+                retailPrice: formatCurrencyVND(product.retailPrice),
                 stockQuantity: product.stockQuantity,
                 createdAt: formatDateTime(product.createdAt),
                 updatedAt: formatDateTime(product.updatedAt)

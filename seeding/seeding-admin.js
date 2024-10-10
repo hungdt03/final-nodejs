@@ -8,6 +8,7 @@ const seedAdminAccount = async () => {
         role: 'ADMIN',
         fullName: 'Quản trị viên',
         isActivated: true,
+        locked: false,
         isPasswordChanged: true,
     };
 

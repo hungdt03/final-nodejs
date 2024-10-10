@@ -4,27 +4,29 @@
             <div class="flex flex-col gap-y-3 items-start">
                 <div class="relative h-[150px]">
                     <img width="150px" height="150px" id="avatar-img" class="h-full rounded-lg object-cover"
-                        src="{{#if user.avatar}}{{user.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
+                        src="{{#if user.avatar}}/images/avatar/{{user.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
                     <label for="upload-avatar"
                         class="cursor-pointer absolute -bottom-3 -right-3 w-9 h-9 rounded-full z-20 bg-black bg-opacity-70 shadow flex items-center justify-center">
                         <i class="ti-camera text-lg font-semibold text-white"></i>
                     </label>
-                    <input id="upload-avatar" type="file" hidden />
                 </div>
-                <button id="btn-save-avatar"
-                    class="hidden py-1 px-2 rounded-md bg-primary text-white text-sm items-center gap-x-1">
-                    <i class="ti-check-box"></i>
-                    Lưu lại
-                </button>
+                <form enctype="multipart/form-data" method="POST" action="/users/upload-avatar">
+                    <input id="upload-avatar" name="avatar" type="file" hidden />
+                    <button type="submit" id="btn-save-avatar"
+                        class="hidden py-1 px-2 rounded-md bg-primary text-white text-sm items-center gap-x-1">
+                        <i class="ti-check-box"></i>
+                        Lưu lại
+                    </button>
+                </form>
             </div>
             <div class="flex flex-col gap-y-2">
                 <span class="text-2xl font-semibold">{{user.fullName}}</span>
                 <div class="flex items-center gap-x-4">
                     <span class="min-w-[70px]">Vai trò</span>
                     {{#if (eq user.role 'EMPLOYEE')}}
-                        <span>Nhân viên bán hàng</span>
+                    <span>Nhân viên bán hàng</span>
                     {{else}}
-                        <span>Quản trị viên</span>
+                    <span>Quản trị viên</span>
                     {{/if}}
 
                 </div>
@@ -34,7 +36,8 @@
                 </div>
                 <div class="flex items-center gap-x-4">
                     <span class="min-w-[70px]">Status</span>
-                    <span class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500 uppercase">{{user.status}}</span>
+                    <span
+                        class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500 uppercase">{{user.status}}</span>
                 </div>
             </div>
 
@@ -44,57 +47,71 @@
 
     <div class="grid grid-cols-12 gap-4">
         <div class="col-span-4 p-4 bg-white rounded-md">
-            <div class="flex flex-col gap-y-4">
+            <form method="post" action="/users/change-info" class="flex flex-col gap-y-4">
                 <span class="text-lg font-semibold">Thông tin cá nhân</span>
+                {{#if error_profile}}
+                    <div class="bg-red-50 text-red-600 rounded-lg p-4 border-[1px] border-red-200">
+                        {{error_profile}}
+                    </div>
+                {{/if}}
                 <div class="flex flex-col gap-y-1">
                     <label>Họ và tên</label>
-                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="fullName" value="{{user.fullName}}" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Họ và tên" />
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Địa chỉ email</label>
-                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="email" value="{{user.email}}" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Địa chỉ email" />
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Username</label>
-                    <input class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="username" value="{{user.username}}" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Username" />
                 </div>
 
                 <div class="flex justify-end">
-                    <button class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
+                    <button type="submit" class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
                 </div>
-            </div>
+
+                
+            </form>
 
         </div>
         <div class="col-span-4 p-4 bg-white rounded-md">
-            <div class="flex flex-col gap-y-4">
+            <form method="post" action="/users/change-password" class="flex flex-col gap-y-4">
                 <span class="text-lg font-semibold">Thay đổi mật khẩu</span>
+                  {{#if error_password}}
+                    <div class="bg-red-50 text-red-600 rounded-lg p-4 border-[1px] border-red-200">
+                        {{error_password}}
+                    </div>
+                {{/if}}
                 <div class="flex flex-col gap-y-1">
                     <label>Mật khẩu cũ</label>
-                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="oldPassword" type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Mật khẩu cũ" />
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Mật khẩu mới</label>
-                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="newPassword" type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Mật khẩu mới" />
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Nhập lại mật khẩu mới</label>
-                    <input type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input name="confirmPassword" type="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Nhập lại mật khẩu mới" />
                 </div>
 
                 <div class="flex justify-end">
-                    <button class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
+                    <button type="submit" class="py-2 px-4 rounded-md bg-primary text-white">Lưu lại</button>
                 </div>
-            </div>
+
+              
+            </form>
         </div>
         <div class="col-span-4 p-4 bg-white rounded-md">
 
