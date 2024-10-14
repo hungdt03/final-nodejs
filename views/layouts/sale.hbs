@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/css/toastr.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -24,208 +27,19 @@
 </head>
 
 <body>
+    {{{toastr}}}
     <div class="flex justify-between w-full h-screen">
         {{> sidebar}}
-        <div class="bg-slate-50 w-full flex flex-col gap-y-4 overflow-y-auto custom-scrollbar scrollbar-w-2">
+        <div class="bg-slate-50 w-full flex flex-col overflow-y-auto custom-scrollbar scrollbar-w-2">
             {{> header}}
 
             {{!-- CONTENT BODY --}}
             {{{body}}}
         </div>
-        <aside class="w-[450px] bg-white pt-3 px-6 border-l-[1px] border-gray-100 h-full">
-            <div class="flex items-center justify-between bg-slate-50 py-2 px-2 rounded-md">
-                <span class="text-[16px]">Giỏ hàng hiện tại</span>
-                <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">5</span>
-            </div>
-            <div class="flex justify-end my-2">
-                <button class="text-primary">Clear All</button>
-            </div>
-            <div class="w-full h-[1px] bg-slate-200"></div>
-            <div
-                class="flex flex-col gap-y-2 w-full py-4 max-h-[65%] overflow-y-auto custom-scrollbar scrollbar-w-2 rounded-md">
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
-                <div id="product-row"
-                    class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-                    <img class="rounded-lg object-cover" width="50" height="50"
-                        src="https://cdn.nguyenkimmall.com/images/detailed/856/10054628-dien-thoai-samsung-galaxy-a14-5g-4gb-128gb-den-1.jpg" />
-                    <div class="flex flex-col gap-y-2 flex-1">
-                        <p class="text-sm font-medium">Điện thoại iPhone 11 64GB</p>
-                        <div class="flex items-center gap-x-5 justify-between">
-                            <p class="text-[14px] font-semibold text-primary">15.000.000 vnđ</p>
-                            <div class="flex items-center gap-x-2">
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/minus-svg-com.svg" />
-                                </a>
-                                <span class="text-xs">1</span>
-                                <a href="#" class="bg-gray-100 p-1 rounded-lg flex justify-center">
-                                    <img width="12" height="12" src="/svg/plus-svg-com.svg" />
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-trash"
-                        class="absolute top-2 right-2 p-1 flex items-center justify-center bg-red-500 rounded-full">
-                        <img width="14" height="14" src="/svg/trash-svg-com.svg" />
-                    </button>
-                </div>
 
-            </div>
-            <div class="w-full h-[1px] bg-slate-200"></div>
-
-            <div class="mt-6 flex flex-col gap-y-3">
-                <div class="flex items-center justify-between border-[1px] border-slate-100 py-2 px-2 rounded-md">
-                    <span>Tổng tiền</span>
-                    <span class="font-semibold text-primary">2.000.000 vnđ</span>
-                </div>
-                <button type="button" id="openModalBtn" class="w-full py-2 rounded-md bg-primary text-white">Tiếp tục
-                    thanh toán</button>
-            </div>
-        </aside>
     </div>
 </body>
 <script src="/js/main.js"></script>
 <script src="/js/modal.js"></script>
+
 </html>

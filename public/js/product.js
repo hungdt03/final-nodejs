@@ -1,38 +1,6 @@
 
-// CALL PRODUCT API
-const productService = {
-    createProduct: async (formData) => {
-        const response = await fetch('/products/api', {
-            method: 'POST',
-            body: formData
-        });
+import productService from "./services/product-service.js"
 
-        const data = await response.json()
-        return data;
-    },
-    updateProduct: async (id, formData) => {
-        const response = await fetch('/products/api/' + id, {
-            method: 'PUT',
-            body: formData
-        });
-
-        const data = await response.json()
-        return data;
-    },
-    getProductById: async (id) => {
-        const response = await fetch('/products/api/' + id);
-        const data = await response.json();
-        return data;
-    },
-    deleteProductById: async (id) => {
-        const response = await fetch('/products/api/' + id, {
-            method: 'DELETE'
-        })
-
-        const data = await response.json()
-        return data;
-    }
-}
 
 // FILE INPUTS
 let fileCreates = []
@@ -275,7 +243,7 @@ const setupUploadFile = (form) => {
                     oldImage.remove();
                 }
 
-                // Tạo thẻ img để chứa ảnh và gắn vào label
+         
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.alt = 'Uploaded Image';
@@ -285,7 +253,6 @@ const setupUploadFile = (form) => {
         }
     };
 
-    // Sự kiện khi chọn file
     uploadInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
         if(form.id === 'createProductModal') {
@@ -298,23 +265,22 @@ const setupUploadFile = (form) => {
         handleFileUpload(file);
     });
 
-    // Sự kiện kéo thả
     imageLabel.addEventListener('dragover', function (event) {
-        event.preventDefault(); // Ngăn chặn hành vi mặc định
+        event.preventDefault(); 
         event.stopPropagation();
-        imageLabel.classList.add('border-orange-500'); // Thay đổi kiểu để cho biết khu vực có thể thả
+        imageLabel.classList.add('border-orange-500'); 
     });
 
     imageLabel.addEventListener('dragleave', function (event) {
         event.preventDefault();
         event.stopPropagation();
-        imageLabel.classList.remove('border-orange-500'); // Khôi phục kiểu khi rời khỏi khu vực
+        imageLabel.classList.remove('border-orange-500');
     });
 
     imageLabel.addEventListener('drop', function (event) {
         event.preventDefault();
         event.stopPropagation();
-        imageLabel.classList.remove('border-orange-500'); // Khôi phục kiểu sau khi thả
+        imageLabel.classList.remove('border-orange-500'); 
 
         const files = event.dataTransfer.files;
         if (files.length > 0) {
@@ -326,14 +292,11 @@ const setupUploadFile = (form) => {
                 fileCreates = []
             }
 
-            handleFileUpload(files[0]); // Gọi hàm upload với file được thả
+            handleFileUpload(files[0]); 
         }
     });
 }
 
-
-
-// Áp dụng cho tất cả dropdown trong cả hai form
 document.querySelectorAll('.form-product').forEach(form => {
     console.log(form)
     setupUploadFile(form)

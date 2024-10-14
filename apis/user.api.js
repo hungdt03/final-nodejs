@@ -43,7 +43,12 @@ exports.createAccount = async (req, res) => {
         await newUser.save();
 
         const linkLogin = `${process.env.WEB_URL}/users/login?email=${email}&activationToken=${activationToken}`
-        sendLinkLogin(newUser, linkLogin)
+        const response = await sendLinkLogin(newUser, linkLogin)
+        if(response) {
+            console.log('Gửi gmail thành công')
+        } else {
+            console.log('Gửi gmail thất bại')
+        }
 
         return res.status(200).json({
             success: true,

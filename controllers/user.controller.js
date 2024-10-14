@@ -13,7 +13,13 @@ const profilePage = (req, res) => {
 };
 
 const accountsPage = async (req, res) => {
-    const employees = await User.find()
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 2;
+
+    const skip = (page - 1) * size;
+
+    const employees = await User.find().skip(skip).limit(size);
+    const total = await User.countDocuments();
 
     const filterEmployees = employees.map(emp => ({
         id: emp._id,
@@ -26,7 +32,14 @@ const accountsPage = async (req, res) => {
         isPasswordChanged: emp.isPasswordChanged
     }))
 
-    res.render('account', { employees: filterEmployees });
+    res.render('account', {
+        employees: filterEmployees, pagination: {
+            page,
+            size,
+            total,
+            totalPages: Math.ceil(total / size)
+        }
+    });
 };
 
 const uploadAvatar = async (req, res) => {
@@ -66,7 +79,7 @@ const changeInfo = async (req, res) => {
         });
     }
 
-    if(!validateEmail(email)) {
+    if (!validateEmail(email)) {
         return res.render('profile', {
             error_profile: 'Định dạng email không hợp lệ'
         });
@@ -77,7 +90,7 @@ const changeInfo = async (req, res) => {
 
     const isExistedEmail = await User.findOne({
         email: email,
-        _id: { $ne: user._id } 
+        _id: { $ne: user._id }
     });
 
     if (isExistedEmail) {
@@ -88,7 +101,7 @@ const changeInfo = async (req, res) => {
 
     const isExistedUsername = await User.findOne({
         username: username,
-        _id: { $ne: user._id } 
+        _id: { $ne: user._id }
     });
 
     if (isExistedUsername) {
@@ -103,6 +116,8 @@ const changeInfo = async (req, res) => {
 
     await user.save();
 
+    req.toastr.success('Cập nhật thông tin thành công', "Thành công!");
+
     req.session.user = {
         ...req.session.user,
         email,
@@ -116,7 +131,7 @@ const changeInfo = async (req, res) => {
 const changePassword = async (req, res) => {
     const { oldPassword, newPassword, confirmPassword } = req.body
 
-    if(!oldPassword || !newPassword || !confirmPassword) {
+    if (!oldPassword || !newPassword || !confirmPassword) {
         return res.render('profile', {
             error_password: 'Vui lòng nhập đủ thông tin'
         })
@@ -209,6 +224,10 @@ const sendLinkAgain = async (req, res) => {
         return res.redirect('/users')
     }
 
+    if (existingUser.isPasswordChanged) {
+        return res.redirect('/users')
+    }
+
     const activationToken = generateToken()
     const token = {
         token: activationToken,
@@ -221,7 +240,13 @@ const sendLinkAgain = async (req, res) => {
     await existingUser.save();
 
     const linkLogin = `${process.env.WEB_URL}/users/login?email=${existingUser.email}&activationToken=${encodeURIComponent(activationToken)}`
-    sendLinkLogin(existingUser, linkLogin)
+    const response = await sendLinkLogin(existingUser, linkLogin)
+
+    if (response) {
+        console.log('Gửi gmail thành công')
+    } else {
+        console.log('Gửi gmail thất bại')
+    }
 
     return res.redirect('/users')
 }

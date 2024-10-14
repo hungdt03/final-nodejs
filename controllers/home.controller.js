@@ -151,6 +151,7 @@ exports.processLogin = async (req, res) => {
             });
         }
 
+        req.toastr.success('Đăng nhập thành công', "Thành công!");
         // Đăng nhập thành công
         req.session.user = user; 
         return res.redirect('/'); 
@@ -166,5 +167,5 @@ exports.processLogin = async (req, res) => {
 
 exports.logout = async (req, res) => {
     delete req.session.user;
-    res.redirect('/login'); // Redirect đến trang đăng nhập hoặc trang bạn muốn
+    res.redirect('/login'); 
 }
