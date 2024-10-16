@@ -4,6 +4,7 @@ const hbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const flash = require('connect-flash');
+const toastr = require('express-toastr');
 const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
@@ -21,11 +22,12 @@ const userRoutes = require('./routes/user.routes');
 const customerRoutes = require('./routes/customer.routes');
 const reportRoutes = require('./routes/report.routes');
 const homeRoutes = require('./routes/home.routes');
+
 const { seedAdminAccount } = require('./seeding/seeding-admin');
 const { checkPasswordChange } = require('./middlewares/checkPasswordChange');
 const { checkAuthenticated } = require('./middlewares/checkAuthenticated');
-const helpers = require('./helpers');
 const { checkPermission } = require('./middlewares/checkPermission');
+const helpers = require('./helpers');
 
 const app = express()
 const server = http.createServer(app); // Tạo server HTTP từ Express
@@ -43,6 +45,7 @@ app.use(session({
 }));
 
 app.use(flash());
+app.use(toastr());
 
 const connectionString = process.env.MONGODB_URI;
 mongoose.connect(connectionString)
@@ -63,8 +66,7 @@ app.engine('hbs', hbs.engine({
     extname: 'hbs',
     defaultLayout: 'main',
     helpers: {
-        eq: helpers.eq,
-        notEq: helpers.notEq
+        ...helpers
     }
 }));
 
@@ -83,6 +85,7 @@ io.on('connection', (socket) => {
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.toastr = req.toastr.render()
     res.locals.user = req.session.user
     next();
 });

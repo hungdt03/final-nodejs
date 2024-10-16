@@ -1,19 +1,5 @@
-const accountService = {
-    createAccount: async (payload) => {
-        const response = await fetch('/users/api', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        })
-
-        const data = await response.json();
-        return data
-        
-    }
-}
-
+import { showLoading, hideLoading } from "./loading.js";
+import accountService from "./services/account-service.js"
 
 const btnOpenCreateEmployeeModal = document.getElementById('openCreateEmployeeModal')
 const btnCreateEmployee = document.getElementById('btn-create-employee')
@@ -69,7 +55,9 @@ btnOpenCreateEmployeeModal.addEventListener('click', function (e) {
         if (validateForm()) {
             const formData = new FormData(formCreateEmployee);
             const data = Object.fromEntries(formData.entries());
+            showLoading()
             const response = await accountService.createAccount(data)
+            hideLoading()
             if(response.success) {
                 window.location.reload()
             } else {

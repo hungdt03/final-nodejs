@@ -4,7 +4,13 @@ const { formatDateTime } = require('../utils/formatDatetime');
 
 exports.showProducts = async (req, res) => {
     try {
-        const products = await Product.find({});
+        const page = parseInt(req.query.page) || 1;
+        const size = parseInt(req.query.size) || 2;
+
+        const skip = (page - 1) * size;
+
+        const products = await Product.find().skip(skip).limit(size);
+        const total = await Product.countDocuments();
 
         const filteredProducts = products.map(product => {
             return {
@@ -19,8 +25,16 @@ exports.showProducts = async (req, res) => {
                 updatedAt: formatDateTime(product.updatedAt)
             };
         });
-        
-        res.render('product', { products: filteredProducts });
+
+        res.render('product', {
+            products: filteredProducts,
+            pagination: {
+                page,
+                size,
+                total,
+                totalPages: Math.ceil(total / size)
+            }
+        });
     } catch (error) {
         res.render('500')
     }

@@ -37,6 +37,7 @@ exports.create = async (req, res) => {
         });
 
         await newProduct.save();
+        req.toastr.success('Thêm sản phẩm mới', "Thành công!");
         res.status(201).json({
             success: true,
             data: newProduct,
@@ -85,6 +86,8 @@ exports.update = async (req, res) => {
                 message: 'Không tìm thấy sản phẩm'
             });
         }
+
+        req.toastr.success('Cập nhật sản phẩm thành công', "Thành công!");
         res.status(200).json({
             success: true,
             data: updatedProduct,
@@ -106,7 +109,7 @@ exports.deleteProduct = async (req, res) => {
                 message: 'Không tìm thấy sản phẩm'
             });
         }
-
+        req.toastr.success('Xóa sản phẩm thành công', "Thành công!");
         res.status(200).json({
             success: true,
             message: 'Xóa sản phẩm thành công'
