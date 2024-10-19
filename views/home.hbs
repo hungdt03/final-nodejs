@@ -1,1 +1,56 @@
-<h1>{{title}}</h1>
+<div class="grid grid-cols-12 h-[90%]">
+    <div class="col-span-8">
+        <div class="grid grid-cols-4 gap-6 px-10 pt-4 py-8 overflow-y-auto">
+
+            {{#each products}}
+            <div id="product-item" class="p-3 bg-white rounded-md shadow-sm relative">
+                <div class="flex justify-center">
+                    <img class="rounded-lg object-cover w-[150px] h-[150px]" src="/images/product/{{thumbnail}}"
+                        alt="Ảnh minh họa" />
+                </div>
+                <div class="flex flex-col items-start gap-y-2 mt-3 overflow-hidden">
+                    <p class="text-lg truncate">{{name}}</p>
+                    <p class="font-semibold text-primary">{{retailPrice}}</p>
+                </div>
+
+                <button
+                    data-id="{{id}}"
+                    class="cart-product absolute bottom-2 right-2 bg-gray-100 p-2 rounded-lg flex justify-center">
+                    <img width="20" height="20" src="/svg/cart-svg-com.svg" />
+                </button>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+
+
+    <aside class="col-span-4 bg-white pt-3 px-6 border-l-[1px] border-gray-100 h-full overflow-y-auto">
+        <div class="flex items-center justify-between bg-slate-50 py-2 px-2 rounded-md">
+            <span class="text-[16px]">Giỏ hàng hiện tại</span>
+            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">5</span>
+        </div>
+        {{!-- <div class="flex justify-end my-2">
+            <button class="text-primary">Clear All</button>
+        </div> --}}
+        <div class="w-full h-[1px] bg-slate-200"></div>
+        <div id="cart-area"
+            class="flex flex-col gap-y-2 w-full py-4 max-h-[70%] overflow-y-auto custom-scrollbar scrollbar-w-2 rounded-md">
+          
+        </div>
+        <div class="w-full h-[1px] bg-slate-200"></div>
+
+        <div class="mt-6 flex flex-col gap-y-3">
+            <div class="flex items-center justify-between border-[1px] border-slate-100 py-2 px-2 rounded-md">
+                <span>Tổng tiền</span>
+                <span id="total-money" class="font-semibold text-primary">2.000.000 vnđ</span>
+            </div>
+            <button type="button" disabled id="btn-checkout" class="w-full py-2 rounded-md bg-primary text-white">
+                <a href="/orders/checkout">Tiếp tục
+                thanh toán</a>
+            </button>
+        </div>
+    </aside>
+</div>
+
+<script type="module" src="/js/cart.js"></script>

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/fonts/themify-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -20,6 +21,9 @@
             }
         }
     </script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/css/toastr.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
     <title>Bán hàng</title>
 </head>
 
@@ -33,6 +37,16 @@
             {{{body}}}
         </div>
     </div>
+    {{{toastr}}}
+    <div id="loading"
+        class="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-25 z-[100] pointer-events-none hidden">
+        <div class="flex items-center justify-center h-full w-full">
+            <img class="w-16 h-1w-16 animate-spin" alt="Loading" src="/images/system/spinnner.png" />
+        </div>
+    </div>
 </body>
+
+<script src="/js/main.js"></script>
+<script src="/js/modal.js"></script>
 
 </html>

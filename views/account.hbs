@@ -1,0 +1,216 @@
+<div class="p-4">
+    <div class="bg-white rounded-md p-3">
+        <div class="relative overflow-x-auto sm:rounded-lg flex flex-col gap-y-3">
+            <div class="flex items-end justify-between">
+                <span class="text-xl">QUẢN LÍ NHÂN VIÊN</span>
+                <div class="flex items-center gap-x-4">
+                    <div class="flex items-center pl-3 pr-2 rounded-lg bg-gray-100">
+                        <img width="15" height="15" src="/svg/search-svg-com.svg" />
+                        <input class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
+                            placeholder="Tìm kiếm nhân viên..." />
+                    </div>
+
+                    <button data-modal="createEmployeeModal" id="openCreateEmployeeModal"
+                        class="open-modal-btn px-4 py-2 rounded-md bg-primary text-white">Thêm mới</button>
+                </div>
+            </div>
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Hình đại diện
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Họ và tên
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Email
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Trạng thái
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Vai trò
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tình trạng
+                        </th>
+
+                        <th scope="col" class="px-6 py-3">
+                            Thao tác
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each employees}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <img class="object-cover rounded-full w-[70px] h-[70px]"
+                                src="{{#if avatar}}/images/avatar/{{avatar}}{{else}}/images/system/avatar.avif{{/if}}"
+                                alt="Ảnh đại diện" />
+                        </td>
+                        <td class="px-6 py-4">{{fullName}}</td>
+                        <td class="px-6 py-4">{{email}}</td>
+                        <td class="px-6 py-4">
+                            {{#if (eq status 'active')}}
+                            <span class="italic text-green-600 font-medium">Đang hoạt động</span>
+                            {{else}}
+                            <span class="italic text-red-600 font-medium">Không hoạt động</span>
+                            {{/if}}
+
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#if (eq role 'ADMIN')}}
+                            <span class="bg-green-100 text-xs text-green-600 font-semibold py-1 px-2 rounded-lg">Quản
+                                trị viên</span>
+                            {{else}}
+                            <span class="bg-sky-100 text-xs text-sky-600 font-semibold py-1 px-2 rounded-lg">Nhân viên
+                                bán hàng</span>
+                            {{/if}}
+
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#if locked}}
+                            Đã khóa
+                            {{else}}
+                            Không khóa
+                            {{/if}}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{#unless (eq role 'ADMIN')}}
+                            <div class="flex items-center gap-x-2">
+                                {{#unless isPasswordChanged}}
+                                <form action="/users/send-link-again/{{id}}" method="post">
+                                    <button type="submit"
+                                        class="open-modal-btn bg-green-500 hover:bg-green-700 text-white font-medium py-1 px-2 rounded-md">
+                                        Gửi link
+                                    </button>
+                                </form>
+
+                                {{/unless}}
+                                <form action="/users/toggle-locked/{{id}}" method="post">
+                                    <button type="submit"
+                                        class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
+                                        {{#if locked}}
+                                        Bỏ khóa
+                                        {{else}}
+                                        Khóa
+                                        {{/if}}
+                                    </button>
+                                </form>
+                            </div>
+                            {{/unless}}
+                        </td>
+                    </tr>
+                    {{/each}}
+
+                </tbody>
+            </table>
+
+            <div class="py-4 flex justify-end">
+                <div class="flex items-center gap-x-2 text-sm">
+                    {{#if (gt pagination.page 1)}}
+                        <a href="/products?page={{subtract pagination.page 1}}&size={{pagination.size}}">
+                            <button
+                                class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M5 1 1 5l4 4" />
+                                </svg>
+                            </button>
+                        </a>
+                    {{/if}}
+
+                    {{#paginationPages pagination.page pagination.totalPages}}
+                        {{#if (eq this ../pagination.page)}}
+                            <a href="#" class="cursor-default">
+                                <button class="w-8 h-8 text-white rounded-lg bg-primary">{{this}}</button>
+                            </a>
+                        {{else}}
+                            <a href="/products?page={{this}}&size={{pagination.size}}">
+                                <button
+                                    class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg">{{this}}</button>
+                            </a>
+                        {{/if}}
+                    {{/paginationPages}}
+
+                    {{#if (lt pagination.page pagination.totalPages)}}
+                        <a href="/products?page={{add pagination.page 1}}&size={{pagination.size}}">
+                            <button
+                                class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                                </svg>
+                            </button>
+                        </a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- MODAL --}}
+
+<!-- MODAL CREATE -->
+<div id="createEmployeeModal" class="modal form-employee">
+    <div class="modal-content w-[500px] max-h-[600px] overflow-y-auto custom-scrollbar scrollbar-w-2">
+        <div class="sticky top-0 z-50 bg-white py-4">
+            <h2 class="text-center text-xl font-semibold">THÊM NHÂN VIÊN MỚI</h2>
+            <button id="closeCreateEmployeeModal" data-modal="createEmployeeModal"
+                class="close close-modal-btn">&times;</button>
+        </div>
+        <div class="py-4 max-h-full flex flex-col gap-y-4">
+            <form id="form-create-employee" class="flex flex-col gap-y-4">
+                <div class="flex flex-col gap-y-1">
+                    <label>Họ và tên</label>
+                    <input name="fullName" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Họ và tên nhân viên..." />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
+
+                <div class="flex flex-col gap-y-1">
+                    <label>Địa chỉ email</label>
+                    <input type="email" name="email"
+                        class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                        placeholder="Địa chỉ email..." />
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
+
+            </form>
+        </div>
+        <div
+            class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
+            <button data-modal="createEmployeeModal"
+                class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <label id="btn-create-employee" class="px-3 py-1 rounded-md bg-green-600 text-white">Thêm</label>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODAL CONFIRM -->
+
+<div id="confirmRemoveEmployeeModal" class="modal">
+    <div class="modal-content w-[400px] max-h-[600px] overflow-y-auto custom-scrollbar scrollbar-w-2">
+        <div class="sticky top-0 z-50 bg-white py-4 w-full">
+            <h2 class="text-center text-xl font-semibold">XÓA SẢN PHẨM</h2>
+            <button id="closeConfirmRemoveEmployeeModal" data-modal="confirmRemoveEmployeeModal"
+                class="close close-modal-btn">&times;</button>
+        </div>
+        <div class="py-2 max-h-full">
+            <p>Bạn có chắc là muốn xóa sản phẩm này</p>
+        </div>
+        <div
+            class="sticky bottom-0 flex items-center gap-x-2 justify-end py-2 pb-3 border-t-[1px] bg-white z-50 border-gray-200">
+            <button data-modal="confirmRemoveProductModal"
+                class="px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
+            <button id="btn-confirm-delete" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/js/account.js"></script>
