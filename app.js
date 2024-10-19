@@ -17,6 +17,7 @@ const Order = require('./models/order.model');
 const OrderItem = require('./models/orderItem.model');
 
 const productRoutes = require('./routes/product.routes');
+const cartRoutes = require('./routes/cart.routes');
 const orderRoutes = require('./routes/order.routes');
 const userRoutes = require('./routes/user.routes');
 const customerRoutes = require('./routes/customer.routes');
@@ -98,6 +99,7 @@ app.use(checkPermission);
 
 app.use('/', homeRoutes);
 app.use('/products', productRoutes);
+app.use('/carts', cartRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
 app.use('/customers', customerRoutes);

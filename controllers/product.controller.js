@@ -5,7 +5,7 @@ const { formatDateTime } = require('../utils/formatDatetime');
 exports.showProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const size = parseInt(req.query.size) || 2;
+        const size = parseInt(req.query.size) || 8;
 
         const skip = (page - 1) * size;
 
