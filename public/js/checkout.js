@@ -21,6 +21,7 @@ inputPhoneNumber.addEventListener('input', function(e) {
 
 const loadCustomerInfo = async (phoneNumber) => {
     const response = await customerService.findCustomer(phoneNumber);
+    console.log(response)
     if(response.success) {
         inputPhoneNumber.value = response.data.phoneNumber;
         inputName.value = response.data.fullName;

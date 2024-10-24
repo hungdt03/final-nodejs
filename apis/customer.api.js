@@ -1,24 +1,14 @@
+const Customer = require("../models/customer.model");
 
-const Customer = require('../controllers/customer.controller');
 
 exports.findCustomer = async (req, res) => {
     const { phoneNumber } = req.params;
+    console.log(phoneNumber)
     
     try {   
         let customer = await Customer.findOne({ phoneNumber });
+        console.log(customer)
         if(!customer) {
-            // customer = new Customer({
-            //     fullName,
-            //     phoneNumber,
-            //     address
-            // });
-            // await customer.save();
-            // return res.status(201).json({
-            //     success: true,
-            //     data: customer,
-            //     message: 'Tạo khách hàng mới thành công'
-            // });
-
             return res.status(404).json({
                 success: false,
                 message: 'Khách hàng chưa tồn tại'
@@ -31,6 +21,7 @@ exports.findCustomer = async (req, res) => {
             message: 'Tìm thấy thông tin khách hàng'
         });
     } catch(error) {
+        console.log(error)
         res.status(500).json({
             success: false,
             message: 'Lỗi xử lý thông tin khách hàng'

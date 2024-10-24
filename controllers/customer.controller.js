@@ -2,8 +2,16 @@ const Customer = require('../models/customer.model');
 const Order = require('../models/order.model');
 const OrderItem = require('../models/orderItem.model');
 
-exports.getCustomers = (req, res) => {
-    res.render('customer', { title: 'Product List', items: [] });
+exports.getCustomers = async (req, res) => {
+    try {
+        const customers = await Customer.find();
+        const plainCustomers = customers.map(customer => customer.toObject())
+        console.log(plainCustomers);
+        res.render('customer', { customers: plainCustomers });
+    } catch (error) {
+        console.error('Error fetching customers:', error);
+        res.status(500).send('Internal Server Error');
+    }
 };
 
 exports.getCustomerOrder = async (phoneNumber) => {
