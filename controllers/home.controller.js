@@ -36,38 +36,41 @@ exports.report = (req, res) => {
 }
 
 exports.invalidToken = async (req, res) => {
-    const { activationToken } = req.query
+    const { activationToken } = req.query;
 
-    if(!activationToken) {
-        return res.redirect('/404')
+    if (!activationToken) {
+        return res.redirect('/invalid-token');
     }
 
-    if(!req.session.user) return res.redirect('/login')
+    const user = await User.findOne({ 'tokens.token': activationToken });
 
-    const user = await User.findById(req.session.user._id);
-    const isExistedToken = user.tokens.find(t =>
-        t.token === activationToken
-    );
-
-    if(!isExistedToken) {
-        return res.redirect('/404')
+    if (!user) {
+        return res.redirect('/invalid-token'); 
     }
 
-    if(isExistedToken.isUsed || isExistedToken.expiresAt < Date.now()) {
+    const isExistedToken = user.tokens.find(t => t.token === activationToken);
+
+    if (!isExistedToken) {
+        return res.redirect('/invalid-token');
+    }
+
+    if (isExistedToken.isUsed || isExistedToken.expiresAt < Date.now()) {
         return res.render('invalid-token', {
             layout: null
-        })
-    } 
-    
-    if(!isExistedToken.isUsed && isExistedToken.expiresAt > Date.now()) {
-        res.redirect('/404')
+        });
     }
-}
+
+    if (!isExistedToken.isUsed && isExistedToken.expiresAt > Date.now()) {
+        return res.redirect('/404');
+    }
+};
+
 
 exports.changePassword = (req, res) => {
     if(req.session.user.isPasswordChanged) {
         return res.redirect('/')
     }
+
     res.render('change-password')
 }
 

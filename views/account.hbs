@@ -106,11 +106,11 @@
 
                 </tbody>
             </table>
-
+            {{#if (gt pagination.totalPages 1)}}
             <div class="py-4 flex justify-end">
                 <div class="flex items-center gap-x-2 text-sm">
                     {{#if (gt pagination.page 1)}}
-                        <a href="/products?page={{subtract pagination.page 1}}&size={{pagination.size}}">
+                        <a href="/users?page={{subtract pagination.page 1}}&size={{pagination.size}}">
                             <button
                                 class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
                                 <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
@@ -128,7 +128,7 @@
                                 <button class="w-8 h-8 text-white rounded-lg bg-primary">{{this}}</button>
                             </a>
                         {{else}}
-                            <a href="/products?page={{this}}&size={{pagination.size}}">
+                            <a href="/users?page={{this}}&size={{pagination.size}}">
                                 <button
                                     class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg">{{this}}</button>
                             </a>
@@ -136,7 +136,7 @@
                     {{/paginationPages}}
 
                     {{#if (lt pagination.page pagination.totalPages)}}
-                        <a href="/products?page={{add pagination.page 1}}&size={{pagination.size}}">
+                        <a href="/users?page={{add pagination.page 1}}&size={{pagination.size}}">
                             <button
                                 class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
                                 <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
@@ -149,6 +149,7 @@
                     {{/if}}
                 </div>
             </div>
+            {{/if}}
         </div>
     </div>
 </div>
