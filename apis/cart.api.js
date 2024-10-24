@@ -29,6 +29,7 @@ exports.addToCart = async (req, res) => {
             product: product,
             subTotal: quantity * product.retailPrice,
             quantity,
+            price: product.retailPrice
         }
 
         req.session.cart.push(item);
@@ -69,7 +70,8 @@ exports.updateCart = async (req, res) => {
         const item = {
             product: product,
             subTotal: quantity * product.retailPrice,
-            quantity
+            quantity,
+            price: product.retailPrice
         }
 
         req.session.cart.push(item);

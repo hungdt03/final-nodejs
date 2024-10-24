@@ -1,5 +1,5 @@
+const Customer = require("../models/customer.model");
 
-const Customer = require('../controllers/customer.controller');
 
 exports.findCustomer = async (req, res) => {
     const { phoneNumber } = req.params;
@@ -7,17 +7,6 @@ exports.findCustomer = async (req, res) => {
     try {   
         let customer = await Customer.findOne({ phoneNumber });
         if(!customer) {
-            // customer = new Customer({
-            //     fullName,
-            //     phoneNumber,
-            //     address
-            // });
-            // await customer.save();
-            // return res.status(201).json({
-            //     success: true,
-            //     data: customer,
-            //     message: 'Tạo khách hàng mới thành công'
-            // });
 
             return res.status(404).json({
                 success: false,
