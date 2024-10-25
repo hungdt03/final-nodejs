@@ -52,13 +52,13 @@ input[type="number"] {
 
 /* Product Hover */
 
-#btn-product, #cart-product {
+#btn-product, .cart-product {
     opacity: 0;
     pointer-events: none; /* Vô hiệu hóa tương tác khi ẩn */
     transition: opacity 0.3s ease; /* Thêm hiệu ứng chuyển đổi mượt mà */
 }
 
-#product-item:hover #btn-product, #product-item:hover #cart-product {
+#product-item:hover .cart-product {
     opacity: 1;
     pointer-events: auto; /* Cho phép tương tác khi hiện */
 }
@@ -140,47 +140,3 @@ input[type="number"] {
 
 /*============== END MODAL CSS =================*/
 
-/* ============= BEGIN CUSTOM DROPDOWN IN PRODUCT PAGE ============ */
-
-.custom-dropdown {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-
-.dropdown-label-wrapper {
-    padding: 8px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f1f5f9;
-    cursor: pointer;
-}
-
-.dropdown-options {
-    display: none;
-    position: absolute;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 1px 3px 5px #ccc;
-    z-index: 1;
-    width: 100%;
-    margin-top: 5px;
-}
-
-.dropdown-option {
-    padding: 8px;
-    cursor: pointer;
-}
-
-.dropdown-option:hover {
-    background-color: #f1f5f9;
-}
-
-.dropdown-option.selected {
-    background-color: #f1f5f9;
-}
-
-
-/* ============= END CUSTOM DROPDOWN IN PRODUCT PAGE ============ */

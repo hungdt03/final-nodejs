@@ -175,6 +175,7 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
             }
 
             if (validateEditProductForm()) {
+                console.log(productId)
                 const response = await productService.updateProduct(productId, formData);
                 if (response.success) {
                     window.location.reload()

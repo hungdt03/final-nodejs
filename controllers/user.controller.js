@@ -186,7 +186,6 @@ const toggleLocked = async (req, res) => {
 const loginWithLink = async (req, res) => {
     const email = req.query.email;
     const activationToken = req.query.activationToken;
-
     try {
         const user = await User.findOne({ email });
 
@@ -199,6 +198,7 @@ const loginWithLink = async (req, res) => {
             !t.isUsed &&
             t.expiresAt > Date.now()
         );
+
 
         if (!token) {
             return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
@@ -228,6 +228,8 @@ const sendLinkAgain = async (req, res) => {
         return res.redirect('/users')
     }
 
+    existingUser.tokens = [];
+
     const activationToken = generateToken()
     const token = {
         token: activationToken,
@@ -243,8 +245,10 @@ const sendLinkAgain = async (req, res) => {
     const response = await sendLinkLogin(existingUser, linkLogin)
 
     if (response) {
+        req.toastr.success('Gửi link đăng nhập thành công', "Thành công!");
         console.log('Gửi gmail thành công')
     } else {
+        req.toastr.error('Gửi link đăng nhập thất bại', "Thất bại!");
         console.log('Gửi gmail thất bại')
     }
 

@@ -87,148 +87,29 @@
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th scope="col" class="p-4">
-                                <!-- Removed checkbox -->
+                            <th scope="col" class="px-6 py-3">
+                                Họ và tên
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                ID
+                                Số điện thoại
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Hình ảnh
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Tên sản phẩm
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Giá bán
-                            </th>
-
-                            <th scope="col" class="px-6 py-3">
-                                Action
+                                Địa chỉ
                             </th>
                         </tr>
                     </thead>
                     <tbody>
+                        {{#each customers}}
                         <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
 
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
+                                {{fullName}}
                             </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
+                            <td class="px-6 py-4">{{phoneNumber}}</td>
+                            <td class="px-6 py-4">{{address}}</td>
 
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
                         </tr>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
-
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
-
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
-
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="w-4 p-4">
-                                <!-- Removed checkbox -->
-                            </td>
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td class="px-6 py-4">Silver</td>
-                            <td class="px-6 py-4">Laptop</td>
-                            <td class="px-6 py-4">Yes</td>
-                            <td class="flex items-center px-6 py-4">
-                                <div class="flex gap-x-2">
-
-                                    <button data-product-id="1" data-modal="orderDetailModal"
-                                        class="open-modal-btn detail-order-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                        Chi tiết
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        {{/each}}
 
                     </tbody>
                 </table>
