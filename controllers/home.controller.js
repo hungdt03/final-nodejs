@@ -31,10 +31,6 @@ exports.profile = (req, res) => {
     res.render('profile')
 }
 
-exports.report = (req, res) => {
-    res.render('report')
-}
-
 exports.invalidToken = async (req, res) => {
     const { activationToken } = req.query
 
@@ -73,6 +69,12 @@ exports.changePassword = (req, res) => {
 
 exports.processChangePassword = async (req, res) => {
     const { password, confirmPassword } = req.body;
+
+    if(!password) {
+        return res.render('change-password', {
+            error: 'Vui lòng nhập mật khẩu'
+        })
+    }
 
     if(password !== confirmPassword) {
         return res.render('change-password', {

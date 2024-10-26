@@ -2,6 +2,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "connect-flash": "^0.1.1",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-handlebars": "^8.0.1",
@@ -10,6 +11,7 @@
     "mongoose": "^8.6.3",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
+    "pdfkit": "^0.15.0",
     "socket.io": "^4.8.0"
   },
   "devDependencies": {
