@@ -10,8 +10,6 @@ const types = ['today', 'yesterday', 'month', 'week'];
 exports.report = async (req, res) => {
     const { type = '', from, end } = req.query;
     let dateFilter = {};
-    console.log(from)
-    console.log(end)
 
     if (types.includes(type)) {
         const now = new Date();
@@ -36,7 +34,6 @@ exports.report = async (req, res) => {
             };
         }
     } else if (from && end) {
-        console.log('Vô đay hen')
         dateFilter = {
             orderDate: { $gte: startOfDay(new Date(from)), $lte: endOfDay(new Date(end)) }
         };
@@ -53,7 +50,6 @@ exports.report = async (req, res) => {
 
     const customerCount = await Customer.countDocuments();
 
-    console.log(totalAmount, orderCount, productCount);
     const filterOrders = orders.map(o => ({
         id: o._id,
         orderDate: formatDateTime(o.orderDate),

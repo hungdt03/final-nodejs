@@ -4,6 +4,7 @@ const OrderItem = require("../models/orderItem.model");
 
 const PDFDocument = require('pdfkit');
 const { formatDateTime } = require("../utils/formatDatetime");
+const { formatCurrencyVND } = require("../utils/formatCurrency");
 
 exports.checkout = (req, res) => {
     const carts = req.session.cart ?? []
@@ -67,17 +68,15 @@ exports.processCheckout = async (req, res) => {
                 price: cartItem.price,
                 subTotal: cartItem.subTotal
             });
-
             await orderItem.save({ session });
         }
-
 
         await session.commitTransaction();
         session.endSession();
 
         req.session.cart = []
         req.toastr.success('Thanh toán đơn hàng thành công', "Thành công!");
-        res.redirect("/orders/invoice/" + order._id);
+        res.redirect("/orders/success/" + order._id);
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -85,6 +84,23 @@ exports.processCheckout = async (req, res) => {
         console.error("Transaction error: ", error);
         return res.render('checkout', { carts, totalPrice, error: 'Có lỗi xảy ra khi lưu thông tin đơn hàng hoặc khách hàng.' });
     }
+}
+
+exports.orderSuccess = async(req, res) => {
+    const { orderId } = req.params;
+    const order = await Order.findById(orderId);
+    if(!order) {
+        return res.redirect('/404')
+    }
+
+
+    return res.render('order-success', {
+        order: {
+            id: order._id,
+            orderDate: formatDateTime(order.orderDate),
+            totalAmount: formatCurrencyVND(order.totalAmount)
+        }
+    });
 }
 
 
