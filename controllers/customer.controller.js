@@ -31,9 +31,16 @@ exports.customerDetail = async (req, res) => {
       
     }))
 
+    console.log(customer)
+
     res.render('customer-detail', {
         orders: filterOrders,
-        customer
+        customer: {
+            fullName: customer.fullName,
+            address: customer.address,
+            phoneNumber: customer.phoneNumber
+        },
+        isEmpty: orders.length === 0
     })
 
 }

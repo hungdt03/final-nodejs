@@ -131,3 +131,5 @@ cartBtnProducts.forEach(btn => {
     })
 })
 
+export { addItemToCart, renderCart }
+

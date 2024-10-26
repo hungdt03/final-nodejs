@@ -21,7 +21,35 @@ exports.getAll = async (req, res) => {
     }
 }
 
+exports.search = async (req, res) => {
+    const { search } = req.query;
+    console.log(search)
 
+    try {
+        const products = await Product.find({
+            name: { $regex: search, $options: 'i' }
+        });
+
+        const filterProducts = products.map(product => ({
+            id: product._id,
+            name: product.name,
+            retailPrice: product.retailPrice,
+            thumbnail: product.thumbnail
+        }))
+
+        return res.status(200).json({
+            message: 'Search product successful',
+            data: filterProducts,
+            success: true
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Search product failed',
+            error: error.message,
+            success: false
+        });
+    }
+};
 exports.create = async (req, res) => {
     try {
         const { name, purchasePrice, retailPrice, stockQuantity } = req.body;
@@ -103,7 +131,7 @@ exports.deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const orderItem = await OrderItem.find({ productId: id });
-        if(orderItem.length > 0) {
+        if (orderItem.length > 0) {
             req.toastr.error('Sản phẩm này đã được mua', "Không thể xóa!");
             return res.status(400).json({ message: 'Sản phẩm này đã được mua, không thể xóa', success: false, });
         }

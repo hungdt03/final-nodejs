@@ -84,7 +84,8 @@ const accountDetail = async (req, res) => {
             avatar: user.avatar,
             role: user.role
         },
-        orders: filterOrders
+        orders: filterOrders,
+        isEmpty: orders.length === 0
     })
 }
 

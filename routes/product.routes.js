@@ -11,6 +11,7 @@ const upload = multer({ storage: storageProduct });
 router.get('/', productController.showProducts);
 
 // API
+router.get('/api/search', productApi.search);
 router.get('/api/:id', productApi.getId);
 router.post('/api', upload.single('thumbnail'), productApi.create);
 router.put('/api/:id', upload.single('thumbnail'), productApi.update);

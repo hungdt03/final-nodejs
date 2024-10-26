@@ -30,6 +30,11 @@ const productService = {
 
         const data = await response.json()
         return data;
+    },
+    searchProducts: async(query) => {
+        const response = await fetch('/products/api/search?search=' + encodeURIComponent(query));
+        const data = await response.json();
+        return data
     }
 }
 
