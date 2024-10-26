@@ -9,7 +9,7 @@ const { storageAvatar } = require('../utils/multer-upload');
 const upload = multer({ storage: storageAvatar });
 
 router.get('/', userController.accountsPage);
-router.get('/:userId', userController.accountDetail);
+router.get('/details/:userId', userController.accountDetail);
 router.get('/profile', userController.profilePage);
 router.get('/login', userController.loginWithLink);
 router.post('/upload-avatar', upload.single('avatar'), userController.uploadAvatar);

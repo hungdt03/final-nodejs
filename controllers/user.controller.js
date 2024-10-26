@@ -37,6 +37,7 @@ const accountsPage = async (req, res) => {
         role: emp.role,
         status: emp.status,
         locked: emp.locked,
+        isActivated: emp.isActivated,
         isPasswordChanged: emp.isPasswordChanged
     }))
 
@@ -90,14 +91,14 @@ const accountDetail = async (req, res) => {
 }
 
 const uploadAvatar = async (req, res) => {
-    const existingUser = await User.findOne({ email: req.session.user.email });
+    
+    const existingUser = await User.findById(req.session.user._id);
     if (!existingUser) {
         return res.redirect('/login')
     }
 
     let avatar = existingUser.avatar;
     if (req.file) {
-
         if (avatar) {
             const oldThumbnailPath = path.join(__dirname, '..', 'public/images/avatar/', avatar);
             fs.unlink(oldThumbnailPath, (err) => {
@@ -114,7 +115,7 @@ const uploadAvatar = async (req, res) => {
         }
     }
 
-    return res.redirect('profile')
+    return res.redirect('/profile')
 }
 
 const changeInfo = async (req, res) => {
@@ -237,7 +238,8 @@ const loginWithLink = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+            console.log('User not found')
+            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent('email not found')}`)
         }
 
         const token = user.tokens.find(t =>
@@ -248,7 +250,8 @@ const loginWithLink = async (req, res) => {
 
 
         if (!token) {
-            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+            console.log('Token is invalid or expired')
+            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent('invalid')}`)
         }
 
         token.isUsed = true;
@@ -259,7 +262,7 @@ const loginWithLink = async (req, res) => {
         return res.redirect('/change-password');
     } catch (error) {
         console.error(error);
-        return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+        return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent(error)}`)
     }
 }
 
@@ -271,7 +274,8 @@ const sendLinkAgain = async (req, res) => {
         return res.redirect('/users')
     }
 
-    if (existingUser.isPasswordChanged) {
+    if (existingUser.isActivated) {
+        req.toastr.error('Tài khoản này đã được kích hoạt', 'Thất bại')
         return res.redirect('/users')
     }
 
@@ -282,7 +286,7 @@ const sendLinkAgain = async (req, res) => {
         token: activationToken,
         isUsed: false,
         createdAt: Date.now(),
-        expiresAt: new Date(Date.now() + 36000000)
+        expiresAt: new Date(Date.now() + 60000)
     };
 
     existingUser.tokens.push(token);

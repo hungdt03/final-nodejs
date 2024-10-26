@@ -32,32 +32,15 @@ exports.profile = (req, res) => {
 }
 
 exports.invalidToken = async (req, res) => {
-    const { activationToken } = req.query
+    const { error } = req.query
 
-    if(!activationToken) {
-        return res.redirect('/404')
-    }
-
-    if(!req.session.user) return res.redirect('/login')
-
-    const user = await User.findById(req.session.user._id);
-    const isExistedToken = user.tokens.find(t =>
-        t.token === activationToken
-    );
-
-    if(!isExistedToken) {
-        return res.redirect('/404')
-    }
-
-    if(isExistedToken.isUsed || isExistedToken.expiresAt < Date.now()) {
+    if(error) {
         return res.render('invalid-token', {
             layout: null
         })
     } 
-    
-    if(!isExistedToken.isUsed && isExistedToken.expiresAt > Date.now()) {
-        res.redirect('/404')
-    }
+
+    return res.redirect('/404')
 }
 
 exports.changePassword = (req, res) => {
