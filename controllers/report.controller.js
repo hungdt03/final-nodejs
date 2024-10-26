@@ -39,7 +39,7 @@ exports.report = async (req, res) => {
         };
     }
 
-    const orders = await Order.find(dateFilter).sort({ orderDate: -1 });
+    const orders = await Order.find(dateFilter).sort({ orderDate: -1 }).populate('customerId');;
     const orderIds = orders.map(order => order._id);
 
     const orderItems = await OrderItem.find({ orderId: { $in: orderIds } });
@@ -53,7 +53,12 @@ exports.report = async (req, res) => {
     const filterOrders = orders.map(o => ({
         id: o._id,
         orderDate: formatDateTime(o.orderDate),
-        totalAmount: formatCurrencyVND(o.totalAmount)
+        totalAmount: formatCurrencyVND(o.totalAmount),
+        customer:{
+            id: o.customerId._id,   
+            fullName: o.customerId.fullName, 
+            address: o.customerId.address 
+        } 
     }))
 
     console.log(filterOrders)

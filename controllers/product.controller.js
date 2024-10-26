@@ -5,12 +5,16 @@ const { formatDateTime } = require('../utils/formatDatetime');
 exports.showProducts = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const size = parseInt(req.query.size) || 8;
+        const size = parseInt(req.query.size) || 6;
+        const search = req.query.search || '';
 
         const skip = (page - 1) * size;
+        const searchCondition = search ? {
+            name: { $regex: search, $options: 'i' } 
+        } : {};
 
-        const products = await Product.find().skip(skip).limit(size);
-        const total = await Product.countDocuments();
+        const products = await Product.find(searchCondition).skip(skip).limit(size);
+        const total = await Product.countDocuments(searchCondition);
 
         const filteredProducts = products.map(product => {
             return {
@@ -26,8 +30,11 @@ exports.showProducts = async (req, res) => {
             };
         });
 
+
+
         res.render('product', {
             products: filteredProducts,
+            search,
             pagination: {
                 page,
                 size,

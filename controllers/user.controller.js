@@ -5,6 +5,9 @@ const fs = require('fs');
 const { generateToken } = require('../utils/generateToken');
 const { sendLinkLogin } = require('../utils/mailService');
 const { validateEmail } = require('../utils/validate-email');
+const Order = require('../models/order.model');
+const { formatDateTime } = require('../utils/formatDatetime');
+const { formatCurrencyVND } = require('../utils/formatCurrency');
 
 require('dotenv').config();
 
@@ -14,12 +17,17 @@ const profilePage = (req, res) => {
 
 const accountsPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 2;
+    const size = parseInt(req.query.size) || 6;
+    const search = req.query.search || '';
 
     const skip = (page - 1) * size;
+    const searchCondition = search ? {
+        fullName: { $regex: search, $options: 'i' }
+    } : {};
 
-    const employees = await User.find().skip(skip).limit(size);
-    const total = await User.countDocuments();
+
+    const employees = await User.find(searchCondition).skip(skip).limit(size);
+    const total = await User.countDocuments(searchCondition);
 
     const filterEmployees = employees.map(emp => ({
         id: emp._id,
@@ -33,7 +41,9 @@ const accountsPage = async (req, res) => {
     }))
 
     res.render('account', {
-        employees: filterEmployees, pagination: {
+        employees: filterEmployees,
+        search,
+        pagination: {
             page,
             size,
             total,
@@ -41,6 +51,42 @@ const accountsPage = async (req, res) => {
         }
     });
 };
+
+const accountDetail = async (req, res) => {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.redirect('/404')
+    }
+
+    const orders = await Order.find({ userId: userId }).populate('customerId');
+
+    const filterOrders = orders.map(o => ({
+        id: o._id,
+        orderDate: formatDateTime(o.orderDate),
+        totalAmount: formatCurrencyVND(o.totalAmount),
+        customer:{
+            id: o.customerId._id,   
+            fullName: o.customerId.fullName, 
+            address: o.customerId.address 
+        } 
+    }))
+
+    res.render('account-detail', {
+        employee: {
+            id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            username: user.username,
+            status: user.status,
+            locked: user.locked,
+            avatar: user.avatar,
+            role: user.role
+        },
+        orders: filterOrders
+    })
+}
 
 const uploadAvatar = async (req, res) => {
     const existingUser = await User.findOne({ email: req.session.user.email });
@@ -256,4 +302,4 @@ const sendLinkAgain = async (req, res) => {
 }
 
 
-module.exports = { profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, sendLinkAgain, changeInfo, changePassword };
+module.exports = { accountDetail, profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, sendLinkAgain, changeInfo, changePassword };

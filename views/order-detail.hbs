@@ -1,13 +1,14 @@
 <div class="px-4 pt-0 py-4 h-full">
     <div class="grid grid-cols-12 gap-6 h-full">
-        <!-- Product List -->
-        <div class="col-span-8 p-4 bg-white rounded-md">
-            {{#if isEmpty}}
-            <div class="flex flex-col gap-y-8 items-center justify-center h-full">
-                <img width="50%" src="/images/system/empty-cart.png" />
-                <a href="/" class="bg-primary text-white py-1 px-3 rounded-md">Quay lại trang chủ</a>
+        <div class="col-span-8 p-4 bg-white rounded-md flex flex-col gap-y-4">
+            <div class="flex justify-between items-center">
+                <div class="flex flex-col items-start">
+                    <span class="text-xl">CHI TIẾT ĐƠN HÀNG <b>{{order.id}}</b></span>
+                    <p>Thời gian giao dịch: {{order.orderDate}}</p>
+                </div>
+                <a href="/orders/invoice/{{order.id}}" class="bg-primary text-white px-4 py-2 rounded-md">Xem
+                hóa đơn</a>
             </div>
-            {{else}}
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-primary bg-gray-50">
                     <tr>
@@ -20,50 +21,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each carts}}
+                    {{#each orderItems}}
                     <tr class="bg-white border-b hover:bg-gray-50">
-                        <td class="px-6 py-4">{{product._id}}</td>
+                        <td class="px-6 py-4">{{index}}</td>
                         <td class="px-6 py-4">
                             <img class="object-cover rounded-md  w-[70px] h-[70px]"
                                 src="/images/product/{{product.thumbnail}}" alt="Ảnh sản phẩm" />
                         </td>
                         <td class="px-6 py-4">{{product.name}}</td>
-                        <td class="px-6 py-4">${{product.retailPrice}}</td>
+                        <td class="px-6 py-4">${{price}}</td>
                         <td class="px-6 py-4">{{quantity}}</td>
                         <td class="px-6 py-4">${{subTotal}}</td>
                     </tr>
                     {{/each}}
                 </tbody>
             </table>
-            {{/if}}
-
         </div>
 
         <!-- Payment Info -->
         <div class="col-span-4">
-            <form method="post" action="/orders/checkout" class="flex flex-col gap-y-4">
+            <div class="flex flex-col gap-y-4">
                 <div class="flex flex-col gap-y-4 p-4 bg-white rounded-md">
                     <h2 class="text-lg font-semibold">Thông tin khách hàng</h2>
                     <div class="flex flex-col gap-y-4">
                         <div class="flex flex-col gap-y-1">
                             <label>Số điện thoại</label>
-                            <input name="phoneNumber" id="input-phoneNumber"
-                                class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
-                                placeholder="Số điện thoại" />
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.customer.phoneNumber}}
+                            </span>
                         </div>
 
                         <div class="flex flex-col gap-y-1">
                             <label>Họ và tên</label>
-                            <input name="fullName" id="input-name"
-                                class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
-                                placeholder="Họ và tên" />
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.customer.fullName}}
+                            </span>
                         </div>
 
                         <div class="flex flex-col gap-y-1">
                             <label>Địa chỉ</label>
-                            <input name="address" id="input-address"
-                                class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
-                                placeholder="Địa chỉ" />
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.customer.address}}
+                            </span>
                         </div>
                         <div id="alert-warning"
                             class="hidden bg-red-50 text-red-600 rounded-lg p-4 border-[1px] border-red-200">
@@ -74,29 +73,33 @@
 
                 <div class="flex flex-col gap-y-4 p-4 bg-white rounded-md">
                     <h2 class="text-lg font-semibold">Thông tin hóa đơn</h2>
-                    <div class="flex justify-between">
-                        <span>Tổng cộng</span>
-                        <span class="font-bold text-xl">{{totalPrice}}</span>
-                        <input hidden name="totalAmount" value="{{totalPrice}}" />
-                    </div>
-
-                    <div class="flex flex-col gap-y-2">
-                        <input name="givenAmount"
-                            class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
-                            placeholder="Số tiền khách đưa" />
-                        <div class="flex justify-between mt-4">
-                            <span>Tiền trả lại</span>
-                            <span id="refund-amount" class="font-bold text-xl">0 VND</span>
-                            <input hidden name="refundAmount" />
+                    <div class="flex flex-col gap-y-4">
+                        <div class="flex flex-col gap-y-1">
+                            <label>Tổng tiền</label>
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.totalAmount}}
+                            </span>
                         </div>
+
+                        <div class="flex flex-col gap-y-1">
+                            <label>Tiền khách đưa</label>
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.givenAmount}}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-col gap-y-1">
+                            <label>Tiền thối lại</label>
+                            <span class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                                {{order.refundAmount}}
+                            </span>
+                        </div>
+
                     </div>
                 </div>
 
-                <div>
-                    <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md">Thanh toán và In hóa
-                        đơn</button>
-                </div>
-            </form>
+
+            </div>
         </div>
     </div>
 </div>

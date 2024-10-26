@@ -1,0 +1,79 @@
+<div class="px-4 pt-0 py-4 h-full flex flex-col gap-4">
+    <div class="bg-white p-4 rounded-md">
+        <div class="border-[1px] border-orange-100 rounded-md flex gap-x-4 p-6">
+            <div class="flex flex-col gap-y-3 items-start">
+                <div class="relative h-[150px]">
+                    <img width="150px" height="150px" class="h-full rounded-lg object-cover"
+                        src="{{#if employee.avatar}}/images/avatar/{{employee.avatar}}{{else}}/images/system/avatar.avif{{/if}}" />
+
+                </div>
+
+            </div>
+            <div class="flex flex-col gap-y-2">
+                <span class="text-2xl font-semibold">{{employee.fullName}}</span>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Vai trò</span>
+                    {{#if (eq employee.role 'EMPLOYEE')}}
+                    <span>Nhân viên bán hàng</span>
+                    {{else}}
+                    <span>Quản trị viên</span>
+                    {{/if}}
+
+                </div>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Email</span>
+                    <span>{{employee.email}}</span>
+                </div>
+                <div class="flex items-center gap-x-4">
+                    <span class="min-w-[70px]">Status</span>
+                    <span
+                        class="px-3 py-1 rounded-3xl bg-opacity-10 bg-gray-800 text-green-500 uppercase">{{employee.status}}</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class=" p-4 bg-white rounded-md">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        Mã đơn hàng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Khách hàng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Ngày mua hàng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Tổng tiền
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Thao tác
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4">{{id}}</td>
+                    <td class="px-6 py-4">{{customer.fullName}}</td>
+                    <td class="px-6 py-4">{{orderDate}}</td>
+                    <td class="px-6 py-4">{{totalAmount}}</td>
+                    <td class="flex items-center px-6 py-4">
+                        <a href="/orders/{{id}}"
+                            class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                            Chi tiết
+                        </a>
+                    </td>
+                </tr>
+
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+</div>

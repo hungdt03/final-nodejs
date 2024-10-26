@@ -4,11 +4,15 @@
             <div class="flex items-end justify-between">
                 <span class="text-xl">QUẢN LÍ NHÂN VIÊN</span>
                 <div class="flex items-center gap-x-4">
-                    <div class="flex items-center pl-3 pr-2 rounded-lg bg-gray-100">
+                    <form method="get" action="/users/" class="flex items-center pl-3 rounded-lg bg-gray-100">
                         <img width="15" height="15" src="/svg/search-svg-com.svg" />
-                        <input class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
-                            placeholder="Tìm kiếm nhân viên..." />
-                    </div>
+                        <input name="search" value="{{search}}"
+                            class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
+                            placeholder="Tìm kiếm sản phẩm..." />
+                        <input type="hidden" name="page" value="{{pagination.page}}">
+                        <input type="hidden" name="size" value="{{pagination.size}}">
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary text-white">Tìm kiếm</button>
+                    </form>
 
                     <button data-modal="createEmployeeModal" id="openCreateEmployeeModal"
                         class="open-modal-btn px-4 py-2 rounded-md bg-primary text-white">Thêm mới</button>
@@ -77,8 +81,9 @@
                             {{/if}}
                         </td>
                         <td class="px-6 py-4">
-                            {{#unless (eq role 'ADMIN')}}
-                            <div class="flex items-center gap-x-2">
+                            <div class="flex items-center gap-2">
+                                {{#unless (eq role 'ADMIN')}}
+
                                 {{#unless isPasswordChanged}}
                                 <form action="/users/send-link-again/{{id}}" method="post">
                                     <button type="submit"
@@ -98,8 +103,12 @@
                                         {{/if}}
                                     </button>
                                 </form>
+
+                                {{/unless}}
+                                <a href="/users/{{id}}"
+                                    class="bg-primary text-white font-medium py-1 px-2 rounded-md">Chi
+                                    tiết</a>
                             </div>
-                            {{/unless}}
                         </td>
                     </tr>
                     {{/each}}
@@ -110,42 +119,42 @@
             <div class="py-4 flex justify-end">
                 <div class="flex items-center gap-x-2 text-sm">
                     {{#if (gt pagination.page 1)}}
-                        <a href="/users?page={{subtract pagination.page 1}}&size={{pagination.size}}">
-                            <button
-                                class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M5 1 1 5l4 4" />
-                                </svg>
-                            </button>
-                        </a>
+                    <a href="/users?page={{subtract pagination.page 1}}&size={{pagination.size}}&search={{search}}">
+                        <button
+                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center bg-slate-100 text-gray-500">
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M5 1 1 5l4 4" />
+                            </svg>
+                        </button>
+                    </a>
                     {{/if}}
 
                     {{#paginationPages pagination.page pagination.totalPages}}
-                        {{#if (eq this ../pagination.page)}}
-                            <a href="#" class="cursor-default">
-                                <button class="w-8 h-8 text-white rounded-lg bg-primary">{{this}}</button>
-                            </a>
-                        {{else}}
-                            <a href="/users?page={{this}}&size={{pagination.size}}">
-                                <button
-                                    class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg">{{this}}</button>
-                            </a>
-                        {{/if}}
+                    {{#if (eq this ../pagination.page)}}
+                    <a href="#" class="cursor-default">
+                        <button class="w-8 h-8 text-white rounded-lg bg-primary">{{this}}</button>
+                    </a>
+                    {{else}}
+                    <a href="/users?page={{this}}&size={{../pagination.size}}&search={{search}}">
+                        <button
+                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg bg-slate-100 text-gray-500">{{this}}</button>
+                    </a>
+                    {{/if}}
                     {{/paginationPages}}
 
                     {{#if (lt pagination.page pagination.totalPages)}}
-                        <a href="/users?page={{add pagination.page 1}}&size={{pagination.size}}">
-                            <button
-                                class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 9 4-4-4-4" />
-                                </svg>
-                            </button>
-                        </a>
+                    <a href="/users?page={{add pagination.page 1}}&size={{pagination.size}}&search={{search}}">
+                        <button
+                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white bg-slate-100 text-gray-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                        </button>
+                    </a>
                     {{/if}}
                 </div>
             </div>

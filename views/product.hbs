@@ -4,13 +4,15 @@
             <div class="flex items-end justify-between">
                 <span class="text-xl">QUẢN LÍ SẢN PHẨM</span>
                 <div class="flex items-center gap-x-4">
-                    <div class="flex items-center pl-3 rounded-lg bg-gray-100">
+                    <form method="get" action="/products/" class="flex items-center pl-3 rounded-lg bg-gray-100">
                         <img width="15" height="15" src="/svg/search-svg-com.svg" />
-                        <input class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
+                        <input name="search" value="{{search}}"
+                            class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
                             placeholder="Tìm kiếm sản phẩm..." />
-                        <button
-                            class="px-4 py-2 rounded-md bg-primary text-white">Tìm kiếm</button>
-                    </div>
+                        <input type="hidden" name="page" value="{{pagination.page}}">
+                        <input type="hidden" name="size" value="{{pagination.size}}">
+                        <button type="submit" class="px-4 py-2 rounded-md bg-primary text-white">Tìm kiếm</button>
+                    </form>
                     {{#if (eq user.role 'ADMIN')}}
                     <button data-modal="createProductModal" id="openCreateProductModal"
                         class="open-modal-btn px-4 py-2 rounded-md bg-primary text-white">Thêm mới</button>
@@ -85,9 +87,9 @@
             <div class="py-4 flex justify-end">
                 <div class="flex items-center gap-x-2 text-sm">
                     {{#if (gt pagination.page 1)}}
-                    <a href="/products?page={{subtract pagination.page 1}}&size={{pagination.size}}">
+                    <a href="/products?page={{subtract pagination.page 1}}&size={{pagination.size}}&search={{search}}">
                         <button
-                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
+                            class="w-8 h-8 text-primary bg-slate-100 text-gray-500 hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -103,17 +105,17 @@
                         <button class="w-8 h-8 text-white rounded-lg bg-primary">{{this}}</button>
                     </a>
                     {{else}}
-                    <a href="/products?page={{this}}&size={{pagination.size}}">
+                    <a href="/products?page={{this}}&size={{../pagination.size}}&search={{search}}">
                         <button
-                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg">{{this}}</button>
+                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg bg-slate-100 text-gray-500">{{this}}</button>
                     </a>
                     {{/if}}
                     {{/paginationPages}}
 
                     {{#if (lt pagination.page pagination.totalPages)}}
-                    <a href="/products?page={{add pagination.page 1}}&size={{pagination.size}}">
+                    <a href="/products?page={{add pagination.page 1}}&size={{pagination.size}}&search={{search}}">
                         <button
-                            class="w-8 h-8 text-primary hover:bg-primary hover:text-white rounded-lg flex items-center justify-center">
+                            class="w-8 h-8 text-primary hover:bg-primary bg-slate-100 text-gray-500 hover:text-white rounded-lg flex items-center justify-center">
                             <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"

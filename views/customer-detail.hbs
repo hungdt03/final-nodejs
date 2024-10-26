@@ -55,7 +55,7 @@
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-x-2">
                         <i class="ti-user font-bold text-xl text-primary mb-1"></i>
-                        <span class="text-lg font-semibold">Danh sách khách hàng</span>
+                        <span class="text-lg font-semibold">Các đơn hàng đã mua</span>
                     </div>
 
                     <button class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</button>
@@ -64,13 +64,13 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Họ và tên
+                                Mã đơn hàng
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Số điện thoại
+                                Ngày mua hàng
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Địa chỉ
+                                Tổng tiền
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Thao tác
@@ -78,21 +78,19 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{#each customers}}
+                        {{#each orders}}
                         <tr class="bg-white border-b hover:bg-gray-50">
-
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{fullName}}
-                            </th>
-                            <td class="px-6 py-4">{{phoneNumber}}</td>
-                            <td class="px-6 py-4">{{address}}</td>
-                            <td class="px-6 py-4">
-                                <a href="/customers/{{_id}}"
+                            <td class="px-6 py-4">{{id}}</td>
+                            <td class="px-6 py-4">{{orderDate}}</td>
+                            <td class="px-6 py-4">{{totalAmount}}</td>
+                            <td class="flex items-center px-6 py-4">
+                                <a href="/orders/{{id}}"
                                     class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
                                     Chi tiết
                                 </a>
                             </td>
                         </tr>
+
                         {{/each}}
 
                     </tbody>

@@ -99,6 +99,9 @@
                         Mã đơn hàng
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Khách hàng
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Ngày mua hàng
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -113,20 +116,14 @@
                 {{#each orders}}
                 <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="px-6 py-4">{{id}}</td>
+                    <td class="px-6 py-4">{{customer.fullName}}</td>
                     <td class="px-6 py-4">{{orderDate}}</td>
                     <td class="px-6 py-4">{{totalAmount}}</td>
                     <td class="flex items-center px-6 py-4">
-                        <div class="flex gap-x-2">
-                            <button data-modal="editProductModal" id="openEditProductModal"
-                                class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                Sửa
-                            </button>
-                            <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                id="openConfirmRemoveProduct"
-                                class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                Xóa
-                            </button>
-                        </div>
+                        <a href="/orders/{{id}}"
+                            class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                            Chi tiết
+                        </a>
                     </td>
                 </tr>
 

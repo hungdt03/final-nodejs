@@ -5,10 +5,13 @@ const cartArea = document.getElementById('cart-area')
 const totalMoneyTag = document.getElementById('total-money')
 const btnCheckout = document.getElementById('btn-checkout')
 
+const formatCurrencyVND = (amount) => {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+};
+
 const renderCart = (data) => {
-    let html = `<div class="flex flex-col items-center justify-center">
-        <img width="100px" src="/images/system/cart.png" />
-        <span>Chưa có sản phẩm nào</span>
+    let html = `<div class="flex flex-col gap-y-4 items-center justify-center">
+        <img width="60%" src="/images/system/empty-cart.png" />
     </div>`
     btnCheckout.disabled = true;
 
@@ -16,29 +19,29 @@ const renderCart = (data) => {
         html = data.map(item => `
         <div id="product-row"
             class="relative flex items-start gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
-            <img class="rounded-lg object-cover" width="50" height="50"
+            <img class="rounded-lg object-cover w-[50px] h-[50px]"
                 src="/images/product/${item.product.thumbnail}" />
             <div class="flex flex-col gap-y-2 flex-1">
                 <p class="text-sm font-medium">${item.product.name}</p>
                 <div class="flex items-center gap-x-5 justify-between">
                     <div class="flex items-center gap-x-1">
-                        <p class="text-[14px] font-semibold text-primary">${item.product.retailPrice}</p>
+                        <p class="text-[14px] font-semibold text-primary">${formatCurrencyVND(item.product.retailPrice)}</p>
                         x
                         <span class="text-gray-400">${item.quantity}</span>
                     </div>
                     <div class="flex items-center gap-x-2">
-                        <a href="#" data-id="${item.product._id}" class="qty-minus bg-white border-[1px] border-primary p-[5px] rounded-lg flex justify-center">
+                        <a href="#" data-id="${item.product._id}" class="qty-minus bg-white border-[1px] border-primary p-[3px] rounded-lg flex justify-center">
                             <i class="ti-minus text-primary"></i> 
                         </a>
-                        <input value="${item.quantity}" data-id="${item.product._id}" type="number" class="quantity-input text-center w-10 px-1 py-[5px] outline-none border-[1px] rounded-md border-primary" />
-                        <a href="#" data-id="${item.product._id}" class="qty-plus bg-white border-[1px] border-primary p-[5px] rounded-lg flex justify-center">
+                        <input value="${item.quantity}" data-id="${item.product._id}" type="number" class="quantity-input text-center w-8 px-1 py-[4px] outline-none border-[1px] rounded-md border-primary" />
+                        <a href="#" data-id="${item.product._id}" class="qty-plus bg-white border-[1px] border-primary p-[3px] rounded-lg flex justify-center">
                             <i class="ti-plus text-primary"></i> 
                         </a>
                     </div>
                 </div>
             </div>
-            <button id="btn-trash" data-id="${item.product._id}"  class="btn-remove-cart-item bg-white border-[1px] border-red-600 p-[5px] rounded-lg flex justify-center">
-                <i class="ti-close text-red-600"></i> 
+            <button id="btn-trash" data-id="${item.product._id}"  class="btn-remove-cart-item border-[1px] bg-red-600 border-red-600 p-[2px] rounded-lg flex justify-center">
+                <i class="ti-close text-white text-xs w-4 h-4"></i> 
             </button>  
          </div>
     `).join('')
@@ -46,7 +49,7 @@ const renderCart = (data) => {
     }
 
     cartArea.innerHTML = html;
-    totalMoneyTag.innerHTML = data.reduce((acc, cur) => acc + Number(cur.subTotal), 0);
+    totalMoneyTag.innerHTML = formatCurrencyVND(data.reduce((acc, cur) => acc + Number(cur.subTotal), 0));
 
     const buttons = document.querySelectorAll('.btn-remove-cart-item');
     buttons.forEach(button => {

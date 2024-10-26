@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Product = require('../models/product.model');
 const { randomUUID } = require('crypto');
+const OrderItem = require('../models/orderItem.model');
 
 exports.getAll = async (req, res) => {
     try {
@@ -101,6 +102,12 @@ exports.update = async (req, res) => {
 exports.deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
+        const orderItem = await OrderItem.find({ productId: id });
+        if(orderItem.length > 0) {
+            req.toastr.error('Sản phẩm này đã được mua', "Không thể xóa!");
+            return res.status(400).json({ message: 'Sản phẩm này đã được mua, không thể xóa', success: false, });
+        }
+
         const deletedProduct = await Product.findByIdAndDelete(id);
 
         if (!deletedProduct) {

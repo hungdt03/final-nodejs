@@ -211,10 +211,7 @@ confirmDeleteBtn.addEventListener('click', async function () {
     const productId = modal.getAttribute('data-product-id');
     
     const response = await productService.deleteProductById(productId)
-    if(response.success) {
-        modal.classList.remove('show');
-        window.location.reload()
-    }
+    window.location.reload()
     
 });
 
