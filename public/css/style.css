@@ -30,26 +30,6 @@ input[type="number"] {
 }
 
 
-/* Custom scrollbar */
-
-.scrollbar-w-2::-webkit-scrollbar {
-    width: 2px;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-}
-
-.scrollbar-h-4::-webkit-scrollbar {
-    height: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #e8eaec;
-    border-radius: 1000px;
-}
-
-
 /* Product Hover */
 
 #btn-product, .cart-product {
