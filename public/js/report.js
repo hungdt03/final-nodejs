@@ -6,7 +6,6 @@ fromDateInput.onblur = () => {
         fromDateInput.classList.remove('bg-slate-100')
         fromDateInput.classList.add('bg-orange-50')
         fromDateInput.classList.add('text-primary')
-       
     } else {
         fromDateInput.classList.add('bg-slate-100')
         fromDateInput.classList.remove('bg-orange-50')

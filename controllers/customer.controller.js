@@ -28,7 +28,7 @@ exports.customerDetail = async (req, res) => {
         id: o._id,
         orderDate: formatDateTime(o.orderDate),
         totalAmount: formatCurrencyVND(o.totalAmount),
-      
+
     }))
 
     console.log(customer)
