@@ -29,9 +29,11 @@
                         <th scope="col" class="px-6 py-3">
                             Tên sản phẩm
                         </th>
+                        {{#if (eq user.role 'ADMIN')}}
                         <th scope="col" class="px-6 py-3">
                             Giá nhập
                         </th>
+                        {{/if}}
                         <th scope="col" class="px-6 py-3">
                             Giá bán lẻ
                         </th>
