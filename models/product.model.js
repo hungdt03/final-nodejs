@@ -9,7 +9,8 @@ const productSchema = new Schema({
     retailPrice: { type: Number, required: true },
     stockQuantity: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date }
+    updatedAt: { type: Date },
+    categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
 });
 
 const Product = mongoose.model('Product', productSchema);
