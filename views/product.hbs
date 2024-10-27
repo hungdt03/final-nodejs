@@ -62,7 +62,9 @@
                                 alt="Ảnh sản phẩm" />
                         </td>
                         <td class="px-6 py-4">{{name}}</td>
+                        {{#if (eq ../user.role 'ADMIN')}}
                         <td class="px-6 py-4">{{purchasePrice}}</td>
+                        {{/if}}
                         <td class="px-6 py-4">{{retailPrice}}</td>
                         <td class="px-6 py-4">{{stockQuantity}}</td>
                         <td class="px-6 py-4">{{createdAt}}</td>
