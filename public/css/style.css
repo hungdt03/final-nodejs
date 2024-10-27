@@ -28,24 +28,6 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
-/* Custom scrollbar */
-
-.scrollbar-w-2::-webkit-scrollbar {
-    width: 2px;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-    width: 5px;
-}
-
-.scrollbar-h-4::-webkit-scrollbar {
-    height: 10px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #e8eaec;
-    border-radius: 1000px;
-}
 
 /* Product Hover */
 
@@ -70,6 +52,25 @@ input[type="number"] {
 #product-row:hover #btn-trash {
     opacity: 1;
     pointer-events: auto; /* Cho phép tương tác khi hiện */
+}
+
+/* scrollbar */
+
+.scrollbar-w-2::-webkit-scrollbar {
+    width: 2px;
+}
+.scrollbar-h-4::-webkit-scrollbar {
+    height: 10px;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #e8eaec;
+    border-radius: 1000px;
 }
 
 
