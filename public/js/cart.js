@@ -2,13 +2,12 @@ import cartService from "./services/cart-service.js";
 
 const cartBtnProducts = document.querySelectorAll('.cart-product');
 const cartArea = document.getElementById('cart-area')
+const cartCount = document.getElementById('cart-count')
 const totalMoneyTag = document.getElementById('total-money')
 const btnCheckout = document.getElementById('btn-checkout')
-
 const formatCurrencyVND = (amount) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 };
-
 const renderCart = (data) => {
     let html = `<div class="flex flex-col gap-y-4 items-center justify-center">
         <img width="60%" src="/images/system/empty-cart.png" />
@@ -48,6 +47,13 @@ const renderCart = (data) => {
         btnCheckout.disabled = false;
     }
 
+    let itemCount = data.length;
+    let tmp = 0;
+    data.forEach(items => {
+        let quantities = items.quantity;
+        tmp += items.quantity
+    });
+    cartCount.innerHTML = tmp
     cartArea.innerHTML = html;
     totalMoneyTag.innerHTML = formatCurrencyVND(data.reduce((acc, cur) => acc + Number(cur.subTotal), 0));
 
