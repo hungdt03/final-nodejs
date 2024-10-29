@@ -13,7 +13,11 @@ exports.showProducts = async (req, res) => {
             name: { $regex: search, $options: 'i' } 
         } : {};
 
-        const products = await Product.find(searchCondition).skip(skip).limit(size);
+        const products = await Product
+            .find(searchCondition)
+            .populate('categoryId')
+            .skip(skip).limit(size);
+
         const total = await Product.countDocuments(searchCondition);
 
         const filteredProducts = products.map(product => {
@@ -26,7 +30,10 @@ exports.showProducts = async (req, res) => {
                 retailPrice: formatCurrencyVND(product.retailPrice),
                 stockQuantity: product.stockQuantity,
                 createdAt: formatDateTime(product.createdAt),
-                updatedAt: formatDateTime(product.updatedAt)
+                updatedAt: formatDateTime(product.updatedAt),
+                category: {
+                    name: product.categoryId.name
+                }
             };
         });
 

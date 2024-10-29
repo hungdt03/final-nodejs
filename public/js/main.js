@@ -7,7 +7,6 @@ const searchResultWrapper = document.getElementById('search-result-wrapper')
 const searchResultList = document.getElementById('search-result-list')
 const searchResultTitle = document.getElementById('search-result-title')
 
-
 inputSearchProduct.addEventListener('focus', function () {
     const query = inputSearchProduct.value.trim();
     if (query.length > 0) {

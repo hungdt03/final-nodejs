@@ -29,6 +29,9 @@
                         <th scope="col" class="px-6 py-3">
                             Tên sản phẩm
                         </th>
+                        <th scope="col" class="px-6 py-3">
+                            Danh mục
+                        </th>
                         {{#if (eq user.role 'ADMIN')}}
                         <th scope="col" class="px-6 py-3">
                             Giá nhập
@@ -62,6 +65,7 @@
                                 alt="Ảnh sản phẩm" />
                         </td>
                         <td class="px-6 py-4">{{name}}</td>
+                        <td class="px-6 py-4">{{category.name}}</td>
                         {{#if (eq ../user.role 'ADMIN')}}
                         <td class="px-6 py-4">{{purchasePrice}}</td>
                         {{/if}}
@@ -149,6 +153,13 @@
         <div class="py-4 max-h-full flex flex-col gap-y-4">
             <form id="form-create-product" class="flex flex-col gap-y-4">
                 <div class="flex flex-col gap-y-1">
+                    <label>Danh mục</label>
+                    <select id="create-category-select" name="categoryId" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                        <option value="">Chọn danh mục</option>
+                    </select>
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
+                <div class="flex flex-col gap-y-1">
                     <label>Tên sản phẩm</label>
                     <input name="name" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Tên sản phẩm" />
@@ -213,6 +224,13 @@
         </div>
         <div class="py-4 max-h-full flex flex-col gap-y-4">
             <form id="form-edit-product" class="flex flex-col gap-y-4">
+                <div class="flex flex-col gap-y-1">
+                    <label>Danh mục</label>
+                    <select id="edit-category-select" name="categoryId" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md">
+                        <option value="">Chọn danh mục</option>
+                    </select>
+                    <p class="text-red-500 text-sm pl-2 hidden"></p>
+                </div>
                 <div class="flex flex-col gap-y-1">
                     <label>Tên sản phẩm</label>
                     <input name="name" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"

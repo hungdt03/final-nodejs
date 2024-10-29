@@ -9,14 +9,8 @@ const http = require('http');
 const { Server } = require('socket.io');
 require('dotenv').config();
 
-// db models
-const Product = require('./models/product.model')
-const User = require('./models/user.model');
-const Customer = require('./models/customer.model');
-const Order = require('./models/order.model');
-const OrderItem = require('./models/orderItem.model');
-
 const productRoutes = require('./routes/product.routes');
+const categoryRoutes = require('./routes/category.routes');
 const cartRoutes = require('./routes/cart.routes');
 const orderRoutes = require('./routes/order.routes');
 const userRoutes = require('./routes/user.routes');
@@ -99,6 +93,7 @@ app.use(checkPermission);
 
 app.use('/', homeRoutes);
 app.use('/products', productRoutes);
+app.use('/categories', categoryRoutes);
 app.use('/carts', cartRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
