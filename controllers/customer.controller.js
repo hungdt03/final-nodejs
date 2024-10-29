@@ -1,6 +1,8 @@
 const Customer = require('../models/customer.model');
 const Order = require('../models/order.model');
 const OrderItem = require('../models/orderItem.model');
+const { formatCurrencyVND } = require('../utils/formatCurrency');
+const { formatDateTime } = require('../utils/formatDatetime');
 
 exports.getCustomers = async (req, res) => {
     try {
@@ -13,6 +15,35 @@ exports.getCustomers = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+exports.customerDetail = async (req, res) => {
+    const { customerId } = req.params;
+    const customer = await Customer.findById(customerId);
+    if(!customer) return res.redirect('/404')
+    const orders = await Order.find({
+        customerId
+    })
+
+    const filterOrders = orders.map(o => ({
+        id: o._id,
+        orderDate: formatDateTime(o.orderDate),
+        totalAmount: formatCurrencyVND(o.totalAmount),
+
+    }))
+
+    console.log(customer)
+
+    res.render('customer-detail', {
+        orders: filterOrders,
+        customer: {
+            fullName: customer.fullName,
+            address: customer.address,
+            phoneNumber: customer.phoneNumber
+        },
+        isEmpty: orders.length === 0
+    })
+
+}
 
 exports.getCustomerOrder = async (phoneNumber) => {
     try {

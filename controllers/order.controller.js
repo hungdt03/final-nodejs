@@ -5,12 +5,55 @@ const OrderItem = require("../models/orderItem.model");
 const PDFDocument = require('pdfkit');
 const { formatDateTime } = require("../utils/formatDatetime");
 
+const { formatCurrencyVND } = require("../utils/formatCurrency");
+
 exports.checkout = (req, res) => {
     const carts = req.session.cart ?? []
     const totalPrice = carts.reduce((acc, curr) => acc + curr.subTotal, 0)
-    res.render('checkout', { carts, totalPrice });
+    const isEmpty = carts.length === 0
+    res.render('checkout', { carts, totalPrice, isEmpty });
 };
 
+exports.orderDetail = async (req, res) => {
+    const { orderId } = req.params;
+    const order = await Order.findById(orderId).populate('customerId')
+    if(!order) {
+        return res.redirect('/404')
+    }
+
+    const orderItems = await OrderItem.find({ orderId }).populate('productId');
+
+    const filterOrderItems = orderItems.map((item, index) => {
+        return ({
+            index: index + 1,
+            product: {
+                name: item.productId.name,
+                thumbnail: item.productId.thumbnail
+            },
+            quantity: item.quantity,
+            price: formatCurrencyVND(item.price),
+            subTotal: formatCurrencyVND(item.subTotal)
+        })
+    });
+
+    const filterOrder = {
+        id: order._id,
+        totalAmount: formatCurrencyVND(order.totalAmount),
+        refundAmount: formatCurrencyVND(order.refundAmount),
+        givenAmount: formatCurrencyVND(order.givenAmount),
+        orderDate: formatDateTime(order.orderDate),
+        customer: {
+            fullName: order.customerId.fullName,
+            phoneNumber: order.customerId.phoneNumber,
+            address: order.customerId.address
+        }
+    }
+
+    res.render('order-detail', {
+        order: filterOrder,
+        orderItems: filterOrderItems
+    })
+}
 
 exports.processCheckout = async (req, res) => {
     const { fullName, phoneNumber, address, totalAmount, givenAmount, refundAmount } = req.body;
@@ -72,12 +115,14 @@ exports.processCheckout = async (req, res) => {
         }
 
 
+
         await session.commitTransaction();
         session.endSession();
 
         req.session.cart = []
         req.toastr.success('Thanh toán đơn hàng thành công', "Thành công!");
-        res.redirect("/orders/invoice/" + order._id);
+
+        res.redirect("/orders/success/" + order._id);
     } catch (error) {
         await session.abortTransaction();
         session.endSession();
@@ -87,6 +132,22 @@ exports.processCheckout = async (req, res) => {
     }
 }
 
+exports.orderSuccess = async(req, res) => {
+    const { orderId } = req.params;
+    const order = await Order.findById(orderId);
+    if(!order) {
+        return res.redirect('/404')
+    }
+
+
+    return res.render('order-success', {
+        order: {
+            id: order._id,
+            orderDate: formatDateTime(order.orderDate),
+            totalAmount: formatCurrencyVND(order.totalAmount)
+        }
+    });
+}
 
 exports.viewInvoice = async (req, res) => {
     const { orderId } = req.params;

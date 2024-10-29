@@ -5,6 +5,9 @@ const fs = require('fs');
 const { generateToken } = require('../utils/generateToken');
 const { sendLinkLogin } = require('../utils/mailService');
 const { validateEmail } = require('../utils/validate-email');
+const Order = require('../models/order.model');
+const { formatDateTime } = require('../utils/formatDatetime');
+const { formatCurrencyVND } = require('../utils/formatCurrency');
 
 require('dotenv').config();
 
@@ -14,12 +17,17 @@ const profilePage = (req, res) => {
 
 const accountsPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 2;
+    const size = parseInt(req.query.size) || 3;
+    const search = req.query.search || '';
 
     const skip = (page - 1) * size;
+    const searchCondition = search ? {
+        fullName: { $regex: search, $options: 'i' }
+    } : {};
 
-    const employees = await User.find().skip(skip).limit(size);
-    const total = await User.countDocuments();
+
+    const employees = await User.find(searchCondition).skip(skip).limit(size);
+    const total = await User.countDocuments(searchCondition);
 
     const filterEmployees = employees.map(emp => ({
         id: emp._id,
@@ -29,11 +37,14 @@ const accountsPage = async (req, res) => {
         role: emp.role,
         status: emp.status,
         locked: emp.locked,
+        isActivated: emp.isActivated,
         isPasswordChanged: emp.isPasswordChanged
     }))
 
     res.render('account', {
-        employees: filterEmployees, pagination: {
+        employees: filterEmployees,
+        search,
+        pagination: {
             page,
             size,
             total,
@@ -42,15 +53,52 @@ const accountsPage = async (req, res) => {
     });
 };
 
+const accountDetail = async (req, res) => {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+        return res.redirect('/404')
+    }
+
+    const orders = await Order.find({ userId: userId }).populate('customerId');
+
+    const filterOrders = orders.map(o => ({
+        id: o._id,
+        orderDate: formatDateTime(o.orderDate),
+        totalAmount: formatCurrencyVND(o.totalAmount),
+        customer:{
+            id: o.customerId._id,   
+            fullName: o.customerId.fullName, 
+            address: o.customerId.address 
+        } 
+    }))
+
+    res.render('account-detail', {
+        employee: {
+            id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            username: user.username,
+            status: user.status,
+            locked: user.locked,
+            avatar: user.avatar,
+            role: user.role
+        },
+        orders: filterOrders,
+        isEmpty: orders.length === 0
+    })
+}
+
 const uploadAvatar = async (req, res) => {
-    const existingUser = await User.findOne({ email: req.session.user.email });
+    
+    const existingUser = await User.findById(req.session.user._id);
     if (!existingUser) {
         return res.redirect('/login')
     }
 
     let avatar = existingUser.avatar;
     if (req.file) {
-
         if (avatar) {
             const oldThumbnailPath = path.join(__dirname, '..', 'public/images/avatar/', avatar);
             fs.unlink(oldThumbnailPath, (err) => {
@@ -67,7 +115,7 @@ const uploadAvatar = async (req, res) => {
         }
     }
 
-    return res.redirect('profile')
+    return res.redirect('/profile')
 }
 
 const changeInfo = async (req, res) => {
@@ -190,7 +238,8 @@ const loginWithLink = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+            console.log('User not found')
+            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent('email not found')}`)
         }
 
         const token = user.tokens.find(t =>
@@ -201,7 +250,8 @@ const loginWithLink = async (req, res) => {
 
 
         if (!token) {
-            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+            console.log('Token is invalid or expired')
+            return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent('invalid')}`)
         }
 
         token.isUsed = true;
@@ -212,7 +262,7 @@ const loginWithLink = async (req, res) => {
         return res.redirect('/change-password');
     } catch (error) {
         console.error(error);
-        return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}`)
+        return res.redirect(`/invalid-token?activationToken=${encodeURIComponent(activationToken)}&error=${encodeURIComponent(error)}`)
     }
 }
 
@@ -224,7 +274,8 @@ const sendLinkAgain = async (req, res) => {
         return res.redirect('/users')
     }
 
-    if (existingUser.isPasswordChanged) {
+    if (existingUser.isActivated) {
+        req.toastr.error('Tài khoản này đã được kích hoạt', 'Thất bại')
         return res.redirect('/users')
     }
 
@@ -235,7 +286,7 @@ const sendLinkAgain = async (req, res) => {
         token: activationToken,
         isUsed: false,
         createdAt: Date.now(),
-        expiresAt: new Date(Date.now() + 36000000)
+        expiresAt: new Date(Date.now() + 60000)
     };
 
     existingUser.tokens.push(token);
@@ -256,4 +307,4 @@ const sendLinkAgain = async (req, res) => {
 }
 
 
-module.exports = { profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, sendLinkAgain, changeInfo, changePassword };
+module.exports = { accountDetail, profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, sendLinkAgain, changeInfo, changePassword };

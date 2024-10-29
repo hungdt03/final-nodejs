@@ -3,16 +3,31 @@
         class="flex items-center justify-between bg-white shadow px-4 py-2 sticky top-[69px] transition-all ease-in-out duration-300 z-50">
         <span class="text-xl font-semibold">Thống kê bán hàng</span>
         <div class="flex items-center gap-x-4 h-full">
-            <button class="bg-slate-100 hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md">Hôm nay</button>
-            <button class="bg-slate-100 hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md">Hôm qua</button>
-            <button class="bg-slate-100 hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md">7 ngày qua</button>
-            <button class="bg-slate-100 hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md">Tháng này</button>
+            <a href="/report/?type=today"
+                class="hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md {{#if (eq type 'today')}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}">
+                Hôm nay
+            </a>
+            <a href="/report/?type=yesterday"
+                class="hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md {{#if (eq type 'yesterday')}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}">
+                Hôm qua
+            </a>
+            <a href="/report/?type=week"
+                class="hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md {{#if (eq type 'week')}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}">
+                7 ngày qua
+            </a>
+            <a href="/report/?type=month"
+                class="hover:bg-orange-50 hover:text-primary px-4 py-2 rounded-md {{#if (eq type 'month')}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}">
+                Tháng này
+            </a>
+
             <div class="text-gray-500 mx-2">|</div>
             <div class="flex items-center gap-x-2">
                 Từ
-                <input type="date" class="bg-slate-100 px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary" />
+                <input value="{{from}}" id="from-date" type="date"
+                    class="px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary {{#if from}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}" />
                 đến
-                <input type="date" class="bg-slate-100 px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary" />
+                <input value="{{end}}" id="to-date" type="date"
+                    class="px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary {{#if end}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}" />
             </div>
         </div>
     </div>
@@ -20,28 +35,28 @@
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-layers-alt text-4xl font-bold"></i>
             <div class="flex flex-col">
-                <span class="text-2xl text-primary font-bold">1406</span>
+                <span class="text-2xl text-primary font-bold">{{orderCount}}</span>
                 <span class="text-gray-400 text-sm">đơn hàng</span>
             </div>
         </div>
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-mobile text-4xl font-bold"></i>
             <div class="flex flex-col">
-                <span class="text-2xl text-primary font-bold">1406</span>
+                <span class="text-2xl text-primary font-bold">{{productCount}}</span>
                 <span class="text-gray-400 text-sm">sản phẩm đã bán</span>
             </div>
         </div>
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-wallet text-4xl font-bold"></i>
             <div class="flex flex-col">
-                <span class="text-2xl text-primary font-bold">1406</span>
+                <span class="text-2xl text-primary font-bold">{{totalAmount}}</span>
                 <span class="text-gray-400 text-sm">số tiền thu về</span>
             </div>
         </div>
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-user text-4xl font-bold"></i>
             <div class="flex flex-col">
-                <span class="text-2xl text-primary font-bold">320</span>
+                <span class="text-2xl text-primary font-bold">{{customerCount}}</span>
                 <span class="text-gray-400 text-sm">khách hàng mới</span>
             </div>
         </div>
@@ -80,100 +95,39 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th scope="col" class="p-4">
-                        <!-- Removed checkbox -->
+                    <th scope="col" class="px-6 py-3">
+                        Mã đơn hàng
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        ID
+                        Khách hàng
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Hình ảnh
+                        Ngày mua hàng
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Tên sản phẩm
+                        Tổng tiền
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Giá bán
-                    </th>
-
-                    <th scope="col" class="px-6 py-3">
-                        Action
+                        Thao tác
                     </th>
                 </tr>
             </thead>
             <tbody>
+                {{#each orders}}
                 <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="w-4 p-4">
-                        <!-- Removed checkbox -->
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">Silver</td>
-                    <td class="px-6 py-4">Laptop</td>
-                    <td class="px-6 py-4">Yes</td>
+                    <td class="px-6 py-4">{{id}}</td>
+                    <td class="px-6 py-4">{{customer.fullName}}</td>
+                    <td class="px-6 py-4">{{orderDate}}</td>
+                    <td class="px-6 py-4">{{totalAmount}}</td>
                     <td class="flex items-center px-6 py-4">
-                        <div class="flex gap-x-2">
-                            <button data-modal="editProductModal" id="openEditProductModal"
-                                class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                Sửa
-                            </button>
-                            <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                id="openConfirmRemoveProduct"
-                                class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                Xóa
-                            </button>
-                        </div>
+                        <a href="/orders/{{id}}"
+                            class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                            Chi tiết
+                        </a>
                     </td>
                 </tr>
-                <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="w-4 p-4">
-                        <!-- Removed checkbox -->
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">Silver</td>
-                    <td class="px-6 py-4">Laptop</td>
-                    <td class="px-6 py-4">Yes</td>
-                    <td class="flex items-center px-6 py-4">
-                        <div class="flex gap-x-2">
-                            <button data-modal="editProductModal" id="openEditProductModal"
-                                class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                Sửa
-                            </button>
-                            <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                id="openConfirmRemoveProduct"
-                                class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                Xóa
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="w-4 p-4">
-                        <!-- Removed checkbox -->
-                    </td>
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                        Apple MacBook Pro 17"
-                    </th>
-                    <td class="px-6 py-4">Silver</td>
-                    <td class="px-6 py-4">Laptop</td>
-                    <td class="px-6 py-4">Yes</td>
-                    <td class="flex items-center px-6 py-4">
-                        <div class="flex gap-x-2">
-                            <button data-modal="editProductModal" id="openEditProductModal"
-                                class="open-modal-btn bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                                Sửa
-                            </button>
-                            <button data-product-id="1" data-modal="confirmRemoveProductModal"
-                                id="openConfirmRemoveProduct"
-                                class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
-                                Xóa
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+
+                {{/each}}
 
             </tbody>
         </table>
@@ -239,7 +193,7 @@
             // formatter: function (val, opts) {
             //     return val + " - " + opts.w.globals.series[opts.seriesIndex];
             // }
-           
+
         },
         title: {
         },
@@ -260,3 +214,4 @@
     pieChart.render();
 
 </script>
+<script src="/js/report.js"></script>

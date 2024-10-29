@@ -1,6 +1,26 @@
-<div class="grid grid-cols-12 h-[90%]">
-    <div class="col-span-8">
-        <div class="grid grid-cols-4 gap-6 px-10 pt-4 py-8 overflow-y-auto">
+<div class="grid grid-cols-12 h-full overflow-hidden">
+    <div class="col-span-8 overflow-y-auto custom-scrollbar scrollbar-w-2">
+        <div class="w-full h-[70px] shadow bg-slate-300 flex items-center justify-end px-8 sticky top-0 z-50">
+            {{#if user.isPasswordChanged}}
+            <div class="relative">
+                <div class="flex items-center pl-3 pr-2 rounded-lg bg-gray-100">
+                    <img width="15" height="15" src="/svg/search-svg-com.svg" />
+                    <input id="input-search-product" class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
+                        placeholder="Tìm kiếm sản phẩm..." />
+                </div>
+                <div id="search-result-wrapper" class="absolute w-[500px] right-0 flex-col items-start bg-white z-10 shadow rounded-md mt-2 hidden p-4">
+                    <span id="search-result-title"></span>
+                    <div id="search-result-list"
+                        class="flex-col gap-y-2 pt-3 overflow-y-auto custom-scrollbar scrollbar-w-2 max-h-[500px] w-full">
+
+                    </div>
+
+                </div>
+            </div>
+            {{/if}}
+
+        </div>
+        <div class="grid grid-cols-4 gap-6 px-10 pt-4 py-8">
 
             {{#each products}}
             <div id="product-item" class="p-3 bg-white rounded-md shadow-sm relative">
@@ -13,8 +33,7 @@
                     <p class="font-semibold text-primary">{{retailPrice}}</p>
                 </div>
 
-                <button
-                    data-id="{{id}}"
+                <button data-id="{{id}}"
                     class="cart-product absolute bottom-2 right-2 bg-gray-100 p-2 rounded-lg flex justify-center">
                     <img width="20" height="20" src="/svg/cart-svg-com.svg" />
                 </button>
@@ -24,19 +43,16 @@
         </div>
     </div>
 
-
     <aside class="col-span-4 bg-white pt-3 px-6 border-l-[1px] border-gray-100 h-full overflow-y-auto">
         <div class="flex items-center justify-between bg-slate-50 py-2 px-2 rounded-md">
             <span class="text-[16px]">Giỏ hàng hiện tại</span>
-            <span class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">5</span>
+            <span id="cart-count"
+                class="w-8 h-8 flex items-center justify-center rounded-full bg-primary text-white">0</span>
         </div>
-        {{!-- <div class="flex justify-end my-2">
-            <button class="text-primary">Clear All</button>
-        </div> --}}
         <div class="w-full h-[1px] bg-slate-200"></div>
         <div id="cart-area"
             class="flex flex-col gap-y-2 w-full py-4 max-h-[70%] overflow-y-auto custom-scrollbar scrollbar-w-2 rounded-md">
-          
+
         </div>
         <div class="w-full h-[1px] bg-slate-200"></div>
 
@@ -47,7 +63,7 @@
             </div>
             <button type="button" disabled id="btn-checkout" class="w-full py-2 rounded-md bg-primary text-white">
                 <a href="/orders/checkout">Tiếp tục
-                thanh toán</a>
+                    thanh toán</a>
             </button>
         </div>
     </aside>

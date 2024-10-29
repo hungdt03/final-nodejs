@@ -31,38 +31,16 @@ exports.profile = (req, res) => {
     res.render('profile')
 }
 
-exports.report = (req, res) => {
-    res.render('report')
-}
-
 exports.invalidToken = async (req, res) => {
-    const { activationToken } = req.query;
+    const { error } = req.query
 
-    if (!activationToken) {
-        return res.redirect('/invalid-token');
-    }
-
-    const user = await User.findOne({ 'tokens.token': activationToken });
-
-    if (!user) {
-        return res.redirect('/invalid-token'); 
-    }
-
-    const isExistedToken = user.tokens.find(t => t.token === activationToken);
-
-    if (!isExistedToken) {
-        return res.redirect('/invalid-token');
-    }
-
-    if (isExistedToken.isUsed || isExistedToken.expiresAt < Date.now()) {
+    if(error) {
         return res.render('invalid-token', {
             layout: null
-        });
-    }
+        })
+    } 
 
-    if (!isExistedToken.isUsed && isExistedToken.expiresAt > Date.now()) {
-        return res.redirect('/404');
-    }
+    return res.redirect('/404')
 };
 
 
@@ -76,6 +54,12 @@ exports.changePassword = (req, res) => {
 
 exports.processChangePassword = async (req, res) => {
     const { password, confirmPassword } = req.body;
+
+    if(!password) {
+        return res.render('change-password', {
+            error: 'Vui lòng nhập mật khẩu'
+        })
+    }
 
     if(password !== confirmPassword) {
         return res.render('change-password', {

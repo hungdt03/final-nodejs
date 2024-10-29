@@ -25,7 +25,7 @@ exports.createAccount = async (req, res) => {
             token: activationToken,
             isUsed: false,
             createdAt: Date.now(),
-            expiresAt: new Date(Date.now() + 36000000)
+            expiresAt: new Date(Date.now() + 60000)
         };
 
         const newUser = new User({
