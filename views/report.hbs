@@ -1,6 +1,6 @@
 <div class="px-4 pt-0 py-6 flex flex-col gap-6">
     <div
-        class="flex items-center justify-between bg-white shadow px-4 py-2 sticky top-[69px] transition-all ease-in-out duration-300 z-50">
+        class="flex items-center justify-between bg-white shadow px-4 py-2 sticky top-[69px] transition-all ease-in-out duration-300 z-30">
         <span class="text-xl font-semibold">Thống kê bán hàng</span>
         <div class="flex items-center gap-x-4 h-full">
             <a href="/report/?type=today"
@@ -54,164 +54,79 @@
             </div>
         </div>
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
-            <i class="ti-user text-4xl font-bold"></i>
+            <i class="ti-money text-4xl font-bold"></i>
             <div class="flex flex-col">
-                <span class="text-2xl text-primary font-bold">{{customerCount}}</span>
-                <span class="text-gray-400 text-sm">khách hàng mới</span>
+                <span class="text-2xl text-primary font-bold">{{totalProfit}}</span>
+                <span class="text-gray-400 text-sm">lợi nhuận</span>
             </div>
         </div>
     </div>
 
     <div class="grid grid-cols-12 gap-6">
         <div class="col-span-9 p-4 rounded-md bg-white flex flex-col gap-y-6">
-            <div class="flex items-center gap-x-2">
-                <i class="ti-shopping-cart font-bold text-lg text-primary mb-1"></i>
-                <span class="text-lg font-semibold text-gray-700">Bán hàng</span>
-            </div>
-            <div id="chart">
+            <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-x-2">
+                        <i class="ti-shopping-cart font-bold text-2xl text-primary mb-1"></i>
+                        <span class="text-xl font-semibold">Các đơn hàng gần đây</span>
+                    </div>
 
+                    <a href="/orders" class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</a>
+                </div>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                Mã đơn hàng
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Khách hàng
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Ngày mua hàng
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Tổng tiền
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Thao tác
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each orders}}
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">{{id}}</td>
+                            <td class="px-6 py-4">{{customer.fullName}}</td>
+                            <td class="px-6 py-4">{{orderDate}}</td>
+                            <td class="px-6 py-4">{{totalAmount}}</td>
+                            <td class="flex items-center px-6 py-4">
+                                <a href="/orders/{{id}}"
+                                    class="text-green-600 transition-all ease-linear duration-300 border-[1px] border-green-600 hover:bg-green-600 hover:text-white font-medium py-1 px-2 rounded-md">
+                                    <i class="ti-eye"></i>
+                                    Chi tiết
+                                </a>
+                            </td>
+                        </tr>
+
+                        {{/each}}
+
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="col-span-3 p-4 rounded-md bg-white flex flex-col gap-y-6">
             <div class="flex items-center gap-x-2">
-                <i class="ti-user font-bold text-lg text-primary mb-1"></i>
-                <span class="text-lg font-semibold text-gray-700">Khách hàng</span>
+                <i class="ti-money font-bold text-lg text-primary mb-1"></i>
+                <span class="text-lg font-semibold text-gray-700">TỔNG LỢI NHUẬN</span>
             </div>
-            <div id="pie-chart" class="flex items-center justify-center">
-
+            <div class="flex items-center justify-center">
+                {{totalProfit}}
             </div>
         </div>
     </div>
 
-    <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-x-2">
-                <i class="ti-shopping-cart font-bold text-2xl text-primary mb-1"></i>
-                <span class="text-xl font-semibold">Các đơn hàng gần đây</span>
-            </div>
 
-            <button class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</button>
-        </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        Mã đơn hàng
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Khách hàng
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Ngày mua hàng
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Tổng tiền
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Thao tác
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                {{#each orders}}
-                <tr class="bg-white border-b hover:bg-gray-50">
-                    <td class="px-6 py-4">{{id}}</td>
-                    <td class="px-6 py-4">{{customer.fullName}}</td>
-                    <td class="px-6 py-4">{{orderDate}}</td>
-                    <td class="px-6 py-4">{{totalAmount}}</td>
-                    <td class="flex items-center px-6 py-4">
-                        <a href="/orders/{{id}}"
-                            class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
-                            Chi tiết
-                        </a>
-                    </td>
-                </tr>
-
-                {{/each}}
-
-            </tbody>
-        </table>
-    </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    var options = {
-        series: [{
-            name: 'Đơn hàng',
-            data: [31, 40, 28, 51, 42, 109, 100]
-        }, {
-            name: 'Doanh thu',
-            data: [11, 32, 45, 32, 34, 52, 41]
-        }],
-        chart: {
-            height: 400,
-            type: 'area'
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        xaxis: {
-            type: 'datetime',
-            categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-        },
-        tooltip: {
-            x: {
-                format: 'dd/MM/yy HH:mm'
-            },
-        },
-    };
-
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-
-
-    var pieOptions = {
-        series: [44, 55],
-        chart: {
-            width: '350',
-            type: 'donut',
-        },
-        plotOptions: {
-            pie: {
-                startAngle: -90,
-                endAngle: 270
-            }
-        },
-        labels: ['Khách hàng mới', 'Khách hàng cũ'],
-        dataLabels: {
-            enabled: false
-        },
-        fill: {
-            type: 'gradient',
-        },
-        legend: {
-            position: 'bottom', // Chuyển vị trí chú thích lên trên
-            // formatter: function (val, opts) {
-            //     return val + " - " + opts.w.globals.series[opts.seriesIndex];
-            // }
-
-        },
-        title: {
-        },
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200,
-                },
-                legend: {
-                    position: 'top' // Chú thích vẫn ở trên khi màn hình nhỏ
-                }
-            }
-        }]
-    };
-
-    var pieChart = new ApexCharts(document.querySelector("#pie-chart"), pieOptions);
-    pieChart.render();
-
-</script>
 <script src="/js/report.js"></script>

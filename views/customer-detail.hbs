@@ -44,6 +44,12 @@
                                 Ngày mua hàng
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Số tiền khách đưa
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Số tiền trả lại
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Tổng tiền
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -56,10 +62,13 @@
                         <tr class="bg-white border-b hover:bg-gray-50">
                             <td class="px-6 py-4">{{id}}</td>
                             <td class="px-6 py-4">{{orderDate}}</td>
+                            <td class="px-6 py-4">{{givenAmount}}</td>
+                            <td class="px-6 py-4">{{refundAmount}}</td>
                             <td class="px-6 py-4">{{totalAmount}}</td>
                             <td class="flex items-center px-6 py-4">
                                 <a href="/orders/{{id}}"
-                                    class="bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
+                                    class="text-green-600 transition-all ease-linear duration-300 border-[1px] border-green-600 hover:bg-green-600 hover:text-white font-medium py-1 px-2 rounded-md">
+                                    <i class="ti-eye"></i>
                                     Chi tiết
                                 </a>
                             </td>

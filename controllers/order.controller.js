@@ -6,18 +6,57 @@ const PDFDocument = require('pdfkit');
 const { formatDateTime } = require("../utils/formatDatetime");
 
 const { formatCurrencyVND } = require("../utils/formatCurrency");
+const { default: mongoose } = require("mongoose");
+const Product = require("../models/product.model");
+
+exports.ordersList = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const size = parseInt(req.query.size) || 8;
+    const orders = await Order.find()
+        .populate('customerId')
+        .sort({ orderDate: -1 })
+        .skip((page - 1) * size).limit(size);
+
+    const total = await Order.countDocuments();
+
+    const filterOrder = orders.map(order => ({
+        id: order._id,
+        totalAmount: formatCurrencyVND(order.totalAmount),
+        refundAmount: formatCurrencyVND(order.refundAmount),
+        givenAmount: formatCurrencyVND(order.givenAmount),
+        orderDate: formatDateTime(order.orderDate),
+        customer: {
+            fullName: order.customerId.fullName,
+            phoneNumber: order.customerId.phoneNumber,
+            address: order.customerId.address
+        }
+    }))
+
+    return res.render('orders', {
+        orders: filterOrder,
+        isEmpty: filterOrder.length === 0,
+        pagination: {
+            page,
+            size,
+            total,
+            totalPages: Math.ceil(total / size)
+        }
+    })
+
+}
 
 exports.checkout = (req, res) => {
     const carts = req.session.cart ?? []
     const totalPrice = carts.reduce((acc, curr) => acc + curr.subTotal, 0)
     const isEmpty = carts.length === 0
+
     res.render('checkout', {
         carts: carts.map((item, index) => ({
             ...item,
             no: index + 1,
             subTotal: formatCurrencyVND(item.subTotal),
             price: formatCurrencyVND(item.price)
-        })), 
+        })),
         totalPrice: formatCurrencyVND(totalPrice),
         rawTotalPrice: totalPrice,
         isEmpty
@@ -26,6 +65,7 @@ exports.checkout = (req, res) => {
 
 exports.orderDetail = async (req, res) => {
     const { orderId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(orderId)) return res.redirect('/400')
     const order = await Order.findById(orderId).populate('customerId')
     if (!order) {
         return res.redirect('/404')
@@ -111,18 +151,36 @@ exports.processCheckout = async (req, res) => {
         await order.save({ session });
 
         for (const cartItem of carts) {
+            const product = await Product.findById(cartItem.product._id).session(session);
+
+            if (!product) {
+                await session.abortTransaction();
+                session.endSession();
+                req.toastr.error(`Sản phẩm không tồn tại`, 'Thất bại')
+                return res.redirect('/orders/checkout');
+            } 
+
+            if (product.stockQuantity < cartItem.quantity) {
+                await session.abortTransaction();
+                session.endSession();
+                req.toastr.error(`Số lượng tồn kho của sản phẩm ${product.name} không đủ`, 'Thất bại')
+                return res.redirect('/orders/checkout');
+            } else {
+                product.stockQuantity -= cartItem.quantity;
+                await product.save({ session })
+            }
+
             const orderItem = new OrderItem({
                 orderId: order._id,
                 productId: cartItem.product._id,
                 quantity: cartItem.quantity,
                 price: cartItem.price,
+                purchasePrice: cartItem.purchasePrice,
                 subTotal: cartItem.subTotal
             });
 
             await orderItem.save({ session });
         }
-
-
 
         await session.commitTransaction();
         session.endSession();
@@ -137,11 +195,15 @@ exports.processCheckout = async (req, res) => {
 
         console.error("Transaction error: ", error);
         return res.render('checkout', { carts, totalPrice, error: 'Có lỗi xảy ra khi lưu thông tin đơn hàng hoặc khách hàng.' });
+    } finally {
+        session.endSession();
     }
 }
 
 exports.orderSuccess = async (req, res) => {
     const { orderId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(orderId)) return res.redirect('/400')
+
     const order = await Order.findById(orderId);
     if (!order) {
         return res.redirect('/404')
@@ -160,13 +222,14 @@ exports.orderSuccess = async (req, res) => {
 exports.viewInvoice = async (req, res) => {
     const { orderId } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(orderId)) return res.redirect('/400')
+
     try {
         const order = await Order.findById(orderId).populate('customerId');
-        const orderItems = await OrderItem.find({ orderId });
-        console.log(orderItems)
+        const orderItems = await OrderItem.find({ orderId }).populate('productId');
 
         if (!order) {
-            return res.status(404).send('Order not found');
+            return res.status(404).send('Không tìm thấy hóa đơn');
         }
 
         const doc = new PDFDocument();
@@ -195,17 +258,17 @@ exports.viewInvoice = async (req, res) => {
             'Thành tiền'.padEnd(20));
         doc.text('---------------------------------------------------------------------------------------------------');
         orderItems.forEach(item => {
-            doc.text(`${item._id.toString().padEnd(58 - item._id.toString().length)} ${item.quantity.toString().padEnd(10 - item.quantity.toString().length)} ${item.price.toString().padEnd(28 - item.price.toString().length)} ${item.subTotal.toString().padEnd(30 - item.subTotal.toString().length)}`);
+            doc.text(`${item.productId.name.padEnd(58 - item.productId.name.toString().length)} ${item.quantity.toString().padEnd(10 - item.quantity.toString().length)} ${formatCurrencyVND(item.price).padEnd(28 - formatCurrencyVND(item.price).toString().length)} ${formatCurrencyVND(item.subTotal).toString().padEnd(30 - formatCurrencyVND(item.subTotal).toString().length)}`);
         });
 
         doc.moveDown();
-        doc.text(`Tổng tiền phải trả: $${order.totalAmount}`);
-        doc.text(`Số tiền khách đưa: $${order.givenAmount}`);
-        doc.text(`Số tiền thối lại: $${order.refundAmount}`);
+        doc.text(`Tổng tiền phải trả: ${formatCurrencyVND(order.totalAmount)}`);
+        doc.text(`Số tiền khách đưa: ${formatCurrencyVND(order.givenAmount)}`);
+        doc.text(`Số tiền thối lại: ${formatCurrencyVND(order.refundAmount)}`);
 
         doc.end();
     } catch (error) {
         console.error('Error generating invoice:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('Có lỗi xảy ra, vui lòng thử lại sau');
     }
 };

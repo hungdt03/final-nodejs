@@ -59,7 +59,7 @@ const renderSearchResult = (data, query) => {
             <div id="product-row" data-id="${item.id}" onclick="handleAddCart('${item.id}')"
                 class="flex items-center gap-x-3 w-full hover:bg-orange-50 cursor-pointer rounded-lg py-4 px-3">
 
-                <img class="rounded-lg object-cover" width="50" height="50"
+                <img class="rounded-lg object-cover w-[50px] h-[50px]" 
                     src="/images/product/${item.thumbnail}" />
                 <div class="flex flex-col gap-y-2 flex-1">
                     <p class="text-sm font-medium">${item.name}</p>

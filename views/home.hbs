@@ -1,6 +1,6 @@
 <div class="grid grid-cols-12 h-full overflow-hidden">
     <div class="col-span-8 overflow-y-auto custom-scrollbar scrollbar-w-2">
-        <div class="w-full h-[70px] shadow bg-slate-300 flex items-center justify-end px-8 sticky top-0 z-50">
+        <div class="w-full h-[70px] shadow bg-slate-300 flex items-center justify-end px-8 sticky top-0 z-30">
             {{#if user.isPasswordChanged}}
             <div class="relative">
                 <div class="flex items-center pl-3 pr-2 rounded-lg bg-gray-100">
@@ -8,7 +8,8 @@
                     <input id="input-search-product" class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
                         placeholder="Tìm kiếm sản phẩm..." />
                 </div>
-                <div id="search-result-wrapper" class="absolute w-[500px] right-0 flex-col items-start bg-white z-10 shadow rounded-md mt-2 hidden p-4">
+                <div id="search-result-wrapper"
+                    class="absolute w-[500px] right-0 flex-col items-start bg-white z-10 shadow rounded-md mt-2 hidden p-4">
                     <span id="search-result-title"></span>
                     <div id="search-result-list"
                         class="flex-col gap-y-2 pt-3 overflow-y-auto custom-scrollbar scrollbar-w-2 max-h-[500px] w-full">
@@ -61,10 +62,10 @@
                 <span>Tổng tiền</span>
                 <span id="total-money" class="font-semibold text-primary">2.000.000 vnđ</span>
             </div>
-            <button type="button" id="btn-checkout" class="w-full py-2 rounded-md bg-primary text-white">
-                <a href="/orders/checkout">Tiếp tục
-                    thanh toán</a>
-            </button>
+            <a id="btn-checkout" href="/orders/checkout" class="w-full py-2 rounded-md bg-primary text-white text-center">
+                Tiếp tục
+                thanh toán
+            </a>
         </div>
     </aside>
 </div>

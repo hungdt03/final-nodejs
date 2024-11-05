@@ -61,7 +61,7 @@ const accountDetail = async (req, res) => {
         return res.redirect('/404')
     }
 
-    const orders = await Order.find({ userId: userId }).populate('customerId');
+    const orders = await Order.find({ userId: userId }).populate('customerId').sort({ orderDate: -1 });
 
     const filterOrders = orders.map(o => ({
         id: o._id,
@@ -203,6 +203,7 @@ const changePassword = async (req, res) => {
     const hashPassword = await bcrypt.hash(newPassword, 10);
     user.passwordHash = hashPassword;
     await user.save();
+    req.toastr.success('Thay đổi mật khẩu thành công', "Thành công!");
 
     return res.redirect('profile')
 }

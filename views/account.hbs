@@ -87,7 +87,8 @@
                                 {{#unless isActivated}}
                                 <form action="/users/send-link-again/{{id}}" method="post">
                                     <button type="submit"
-                                        class="open-modal-btn bg-green-500 hover:bg-green-700 text-white font-medium py-1 px-2 rounded-md">
+                                        class="open-modal-btn text-green-500 border-[1px] border-green-500 transition-all ease-linear duration-300 hover:bg-green-500 hover:text-white font-medium py-1 px-2 rounded-md">
+                                        <i class="ti-email"></i>
                                         Gửi link
                                     </button>
                                 </form>
@@ -95,10 +96,12 @@
                                 {{/unless}}
                                 <form action="/users/toggle-locked/{{id}}" method="post">
                                     <button type="submit"
-                                        class="open-modal-btn delete-product-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
+                                        class="open-modal-btn delete-product-btn text-red-500 border-[1px] border-red-500 transition-all ease-linear duration-300 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-md">
                                         {{#if locked}}
+                                        <i class="ti-unlock"></i>
                                         Bỏ khóa
                                         {{else}}
+                                         <i class="ti-lock"></i>
                                         Khóa
                                         {{/if}}
                                     </button>
@@ -106,8 +109,10 @@
 
                                 {{/unless}}
                                 <a href="/users/details/{{id}}"
-                                    class="bg-primary text-white font-medium py-1 px-2 rounded-md">Chi
-                                    tiết</a>
+                                    class="text-primary transition-all ease-linear duration-300 border-[1px] border-primary hover:bg-primary hover:text-white font-medium py-1 px-2 rounded-md">
+                                    <i class="ti-eye"></i>
+                                    Chi tiết
+                                </a>
                             </div>
                         </td>
                     </tr>

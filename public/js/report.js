@@ -41,13 +41,12 @@ toDateInput.onchange = () => {
     if (!fromDateInput.value) {
         alert('Chưa chọn ngày bắt đầu');
     } else {
-        const fromDate = new Date(fromDateInput.value);
-        const toDate = new Date(toDateInput.value);
+        window.location.href = '/report/?from=' + fromDateInput.value + '&end=' + toDateInput.value;
+    }
+};
 
-        if (fromDate > toDate) {
-            alert('Ngày bắt đầu phải nhỏ hơn ngày kết thúc');
-        } else {
-            window.location.href = '/report/?from=' + fromDateInput.value + '&end=' + toDateInput.value;
-        }
+fromDateInput.onchange = () => {
+    if (toDateInput.value) {
+        window.location.href = '/report/?from=' + fromDateInput.value + '&end=' + toDateInput.value;
     }
 };

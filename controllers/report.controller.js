@@ -42,13 +42,12 @@ exports.report = async (req, res) => {
     const orders = await Order.find(dateFilter).sort({ orderDate: -1 }).populate('customerId');;
     const orderIds = orders.map(order => order._id);
 
-    const orderItems = await OrderItem.find({ orderId: { $in: orderIds } });
+    const orderItems = await OrderItem.find({ orderId: { $in: orderIds } }).populate('productId');
 
     const totalAmount = orders.reduce((sum, order) => sum + order.totalAmount, 0);
     const orderCount = orders.length;
     const productCount = orderItems.reduce((sum, item) => sum + item.quantity, 0);
-
-    const customerCount = await Customer.countDocuments();
+    const totalProfit = orderItems.reduce((prev, curr) => (curr.price - curr.purchasePrice) * curr.quantity, 0)
 
     const filterOrders = orders.map(o => ({
         id: o._id,
@@ -61,15 +60,14 @@ exports.report = async (req, res) => {
         } 
     }))
 
-    console.log(filterOrders)
 
     res.render('report', {
         title: 'Báo Cáo Doanh Thu',
-        totalAmount,
+        totalAmount: formatCurrencyVND(totalAmount),
         orderCount,
         productCount,
         orders: filterOrders,
-        customerCount,
+        totalProfit: formatCurrencyVND(totalProfit),
         type,
         from,
         end

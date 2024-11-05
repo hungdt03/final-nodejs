@@ -19,9 +19,7 @@ const reportRoutes = require('./routes/report.routes');
 const homeRoutes = require('./routes/home.routes');
 
 const { seedAdminAccount } = require('./seeding/seeding-admin');
-const { checkPasswordChange } = require('./middlewares/checkPasswordChange');
-const { checkAuthenticated } = require('./middlewares/checkAuthenticated');
-const { checkPermission } = require('./middlewares/checkPermission');
+const { authMiddleware } = require('./middlewares/authMiddleware');
 const helpers = require('./helpers');
 
 const app = express()
@@ -87,9 +85,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(checkAuthenticated);
-app.use(checkPasswordChange);
-app.use(checkPermission);
+app.use(authMiddleware);
 
 app.use('/', homeRoutes);
 app.use('/products', productRoutes);

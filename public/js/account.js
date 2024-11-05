@@ -61,7 +61,8 @@ btnOpenCreateEmployeeModal.addEventListener('click', function (e) {
             if(response.success) {
                 window.location.reload()
             } else {
-                alert(response.message)
+                console.log(response.message)
+                window.location.reload()
             }
         }
 
