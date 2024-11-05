@@ -1,7 +1,7 @@
-<div class="px-4 pt-0 py-4 h-full">
+<div class="px-4 pt-0 py-4 h-[88%]">
     <div class="grid grid-cols-12 gap-6 h-full">
         <!-- Product List -->
-        <div class="col-span-8 p-4 bg-white rounded-md">
+        <div class="col-span-8 p-4 bg-white rounded-md overflow-y-auto custom-scrollbar scrollbar-w-2">
             {{#if isEmpty}}
             <div class="flex flex-col gap-y-8 items-center justify-center h-full">
                 <img width="50%" src="/images/system/empty-cart.png" />
@@ -31,15 +31,15 @@
                     <tbody>
                         {{#each carts}}
                         <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4">{{product._id}}</td>
+                            <td class="px-6 py-4">{{no}}</td>
                             <td class="px-6 py-4">
                                 <img class="object-cover rounded-md  w-[70px] h-[70px]"
                                     src="/images/product/{{product.thumbnail}}" alt="Ảnh sản phẩm" />
                             </td>
                             <td class="px-6 py-4">{{product.name}}</td>
-                            <td class="px-6 py-4">${{product.retailPrice}}</td>
+                            <td class="px-6 py-4">{{price}}</td>
                             <td class="px-6 py-4">{{quantity}}</td>
-                            <td class="px-6 py-4">${{subTotal}}</td>
+                            <td class="px-6 py-4">{{subTotal}}</td>
                         </tr>
                         {{/each}}
                     </tbody>
@@ -86,8 +86,8 @@
                     <h2 class="text-lg font-semibold">Thông tin hóa đơn</h2>
                     <div class="flex justify-between">
                         <span>Tổng cộng</span>
-                        <span class="font-bold text-xl">{{totalPrice}}</span>
-                        <input hidden name="totalAmount" value="{{totalPrice}}" />
+                        <span class="font-normal text-lg">{{totalPrice}}</span>
+                        <input data-amount="{{rawTotalPrice}}" hidden name="totalAmount" value="{{totalPrice}}" />
                     </div>
 
                     <div class="flex flex-col gap-y-2">
@@ -96,14 +96,14 @@
                             placeholder="Số tiền khách đưa" />
                         <div class="flex justify-between mt-4">
                             <span>Tiền trả lại</span>
-                            <span id="refund-amount" class="font-bold text-xl">0 VND</span>
+                            <span id="refund-amount" class="font-normal text-lg">0 VND</span>
                             <input hidden name="refundAmount" />
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <button type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md">Thanh toán và In hóa
+                    <button id="btn-checkout" type="submit" class="w-full bg-primary text-white px-4 py-2 rounded-md">Thanh toán và In hóa
                         đơn</button>
                 </div>
             </form>

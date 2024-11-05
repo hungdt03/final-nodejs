@@ -108,6 +108,12 @@ app.get('*', (req, res) => {
     return res.render('404');
 });
 
+app.use((err, req, res) => {
+    res.render('500', {
+        err
+    })
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

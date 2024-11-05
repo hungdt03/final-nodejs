@@ -6,13 +6,15 @@ const cartCount = document.getElementById('cart-count')
 const totalMoneyTag = document.getElementById('total-money')
 const btnCheckout = document.getElementById('btn-checkout')
 const formatCurrencyVND = (amount) => {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
+    return `${formattedAmount} VNĐ`;
 };
+
 const renderCart = (data) => {
     let html = `<div class="flex flex-col gap-y-4 items-center justify-center">
         <img width="60%" src="/images/system/empty-cart.png" />
     </div>`
-    btnCheckout.disabled = true;
+    btnCheckout.classList.add('hidden')
 
     if (data.length > 0) {
         html = data.map(item => `
@@ -44,7 +46,7 @@ const renderCart = (data) => {
             </button>  
          </div>
     `).join('')
-        btnCheckout.disabled = false;
+        btnCheckout.classList.remove('hidden')
     }
 
     let itemCount = data.length;

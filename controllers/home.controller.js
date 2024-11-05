@@ -41,6 +41,7 @@ exports.invalidToken = async (req, res) => {
     } 
 
     return res.redirect('/404')
+
 };
 
 

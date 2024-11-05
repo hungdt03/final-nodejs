@@ -1,5 +1,11 @@
 import customerService from "./services/customer-service.js";
 
+const formatCurrencyVND = (amount) => {
+    const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
+    return `${formattedAmount} VNĐ`;
+};
+
+
 const inputPhoneNumber = document.getElementById('input-phoneNumber');
 const inputName = document.getElementById('input-name');
 const inputAddress = document.getElementById('input-address');
@@ -11,8 +17,9 @@ const totalAmount = document.querySelector('input[name="totalAmount"]');
 const refundAmountTag = document.getElementById('refund-amount')
 
 givenAmountInput.addEventListener('input', function(e) {
-    refundAmount.value = Number(e.target.value) - Number(totalAmount.value)
-    refundAmountTag.innerHTML = Number(e.target.value) - Number(totalAmount.value)
+    const refundValue = Number(e.target.value) - Number(totalAmount.getAttribute('data-amount'))
+    refundAmount.value = refundValue
+    refundAmountTag.innerHTML = formatCurrencyVND(refundValue)
 })
 
 inputPhoneNumber.addEventListener('input', function(e) {
@@ -21,7 +28,6 @@ inputPhoneNumber.addEventListener('input', function(e) {
 
 const loadCustomerInfo = async (phoneNumber) => {
     const response = await customerService.findCustomer(phoneNumber);
-    console.log(response)
     if(response.success) {
         inputPhoneNumber.value = response.data.phoneNumber;
         inputName.value = response.data.fullName;
@@ -31,3 +37,4 @@ const loadCustomerInfo = async (phoneNumber) => {
         alertWarning.classList.remove('hidden')
     }
 }
+

@@ -4,6 +4,20 @@
             <div class="flex items-end justify-between">
                 <span class="text-xl">QUẢN LÍ DANH MỤC</span>
                 <div class="flex items-center gap-x-4">
+                    <form method="get" action="/categories/" class="flex items-center gap-x-2 rounded-lg">
+                        <input name="search" hidden value="{{search}}" />
+                        <input type="hidden" name="page" value="{{pagination.page}}">
+                        <span>Số phần tử mỗi trang: </span>
+                        <select onchange="this.form.submit()" name="size"
+                            class="border-none outline-none px-4 py-2 rounded-md bg-gray-50">
+                            <option value="5" {{#if (eq pagination.size 5)}}selected{{/if}}>5</option>
+                            <option value="8" {{#if (eq pagination.size 8)}}selected{{/if}}>8</option>
+                            <option value="10" {{#if (eq pagination.size 10)}}selected{{/if}}>10</option>
+                            <option value="15" {{#if (eq pagination.size 15)}}selected{{/if}}>15</option>
+                            <option value="20" {{#if (eq pagination.size 20)}}selected{{/if}}>20</option>
+                        </select>
+                    </form>
+
                     <form method="get" action="/categories/" class="flex items-center pl-3 rounded-lg bg-gray-100">
                         <img width="15" height="15" src="/svg/search-svg-com.svg" />
                         <input name="search" value="{{search}}"
@@ -38,6 +52,8 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{#unless isEmpty}}
+
                     {{#each categories}}
                     <tr class="bg-white border-b hover:bg-gray-50">
                         <td class="px-6 py-4">{{id}}</td>
@@ -46,11 +62,13 @@
                         {{#if (eq ../user.role 'ADMIN')}}
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-x-2">
-                                <button data-id="{{id}}" data-name="{{name}}" data-description="{{description}}" data-modal="editCategoryModal"
+                                <button data-id="{{id}}" data-name="{{name}}" data-description="{{description}}"
+                                    data-modal="editCategoryModal"
                                     class="open-modal-btn open-edit-category-modal bg-sky-500 hover:bg-sky-700 text-white font-medium py-1 px-2 rounded-md">
                                     Sửa
                                 </button>
-                                <button data-category-id="{{id}}" data-modal="confirmRemoveCategoryModal"
+                                <button data-category-id="{{id}}" data-category-name="{{name}}"
+                                    data-modal="confirmRemoveCategoryModal"
                                     class="open-modal-btn delete-category-btn bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md">
                                     Xóa
                                 </button>
@@ -59,8 +77,13 @@
                         {{/if}}
                     </tr>
                     {{/each}}
+                    {{/unless}}
+
                 </tbody>
             </table>
+            {{#if isEmpty}}
+            <p class="text-center text-gray-500 py-4">Không có danh mục nào</p>
+            {{/if}}
             {{#if (gt pagination.totalPages 1)}}
             <div class="py-4 flex justify-end">
                 <div class="flex items-center gap-x-2 text-sm">
@@ -195,7 +218,7 @@
                 class="close close-modal-btn">&times;</button>
         </div>
         <div class="py-2 max-h-full">
-            <p>Bạn có chắc là muốn xóa danh mục này</p>
+            <p>Bạn có chắc là muốn xóa danh mục <strong id="category-delete"></strong></p>
         </div>
         <div
             class="sticky mt-4 bottom-0 flex items-center gap-x-2 justify-end py-2 pb-3 border-t-[1px] bg-white z-50 border-gray-200">

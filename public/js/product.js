@@ -95,8 +95,7 @@ const validateCreateProductForm = () => {
 };
 
 const renderCategorySelect = (categories, element, categoryId = '') => {
-    console.log(categoryId);
-    
+    element.innerHTML = ''
     const html = categories.map(category => `
         <option value="${category.id}" ${category.id === categoryId ? 'selected' : ''}>${category.name}</option>
     `).join(''); 
@@ -113,19 +112,21 @@ btnOpenCreateProductModal.addEventListener('click', async function (e) {
     renderCategorySelect(response.data, createCategorySelect)
     modal.classList.add('show')
 
-    btnCreateProduct.addEventListener('click', async (e) => {
+    btnCreateProduct.onclick = async (e) => {
         const formData = new FormData(formCreateProduct);
         formData.set('thumbnail', fileCreates[0])
         if (validateCreateProductForm()) {
+            btnCreateProduct.disabled=true;
             const response = await productService.createProduct(formData);
             if (response.success) {
                 window.location.reload()
             } else {
+                btnCreateProduct.disabled=false;
                 alert(response.message)
             }
 
         }
-    })
+    }
 })
 
 // =====================================================================
@@ -199,7 +200,6 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
         const modalId = this.getAttribute('data-modal')
         const productId = this.getAttribute('data-id')
         const response = await productService.getProductById(productId);
-        console.log(response)
         renderModalData(response.data)
 
         const responseCategory = await categoryService.getAll();
@@ -208,22 +208,23 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
         const modal = document.getElementById(modalId)
         modal.classList.add('show')
 
-        btnSaveProduct.addEventListener('click', async (e) => {
+        btnSaveProduct.onclick = async (e) => {
             const formData = new FormData(formEditProduct);
             if (fileEdits.length > 0) {
                 formData.set('thumbnail', fileEdits[0])
             }
 
             if (validateEditProductForm()) {
+                btnSaveProduct.disabled = true;
                 const response = await productService.updateProduct(productId, formData);
                 if (response.success) {
                     window.location.reload()
                 } else {
-                    console.log(response)
+                    btnSaveProduct.disabled = false;
                 }
             }
 
-        })
+        }
     })
 })
 
@@ -231,13 +232,15 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
 // =============================DELETE PRODUCT============================
 // =====================================================================
 
-
+const productNameTag = document.getElementById('product-delete')
 const deleteProductBtns = document.querySelectorAll('.delete-product-btn');
 deleteProductBtns.forEach(btn => {
     btn.addEventListener('click', function () {
         const productId = this.getAttribute('data-product-id');
+        const productName = this.getAttribute('data-product-name');
         const modal = document.getElementById('confirmRemoveProductModal');
         modal.setAttribute('data-product-id', productId);
+        productNameTag.innerHTML = productName
 
         modal.classList.add('show');
     });

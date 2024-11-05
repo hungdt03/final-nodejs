@@ -8,10 +8,8 @@
         <div class="h-[1px] w-full bg-gray-100"></div>
         {{#if user.isPasswordChanged}}
         <div class="flex flex-col gap-y-3 py-12 w-full px-2">
-            <!-- Sidebar item with tooltip -->
             <a href="/" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
                 <img class="" width="20" height="20" src="/svg/home-svg-com.svg" />
-                <!-- Tooltip -->
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Bán hàng
@@ -20,15 +18,13 @@
 
             <a href="/products" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
                 <img class="" width="20" height="20" src="/svg/smartphone-svg-com.svg" />
-                <!-- Tooltip -->
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Sản phẩm
                 </span>
             </a>
             <a href="/categories" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
-                <img class="" width="20" height="20" src="/svg/smartphone-svg-com.svg" />
-                <!-- Tooltip -->
+                <img class="" width="20" height="20" src="/svg/category-svg-com.svg" />
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Danh mục
@@ -36,8 +32,7 @@
             </a>
             {{#if (eq user.role 'ADMIN')}}
             <a href="/users" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
-                <img class="" width="20" height="20" src="/svg/smartphone-svg-com.svg" />
-                <!-- Tooltip -->
+                <img class="" width="20" height="20" src="/svg/employee-group-svg-com.svg" />
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Nhân viên
@@ -45,25 +40,16 @@
             </a>
             {{/if}}
             <a href="/customers" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
-                <img class="" width="20" height="20" src="/svg/smartphone-svg-com.svg" />
-                <!-- Tooltip -->
+                <img class="" width="20" height="20" src="/svg/shopper-svg-com.svg" />
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Khách hàng
                 </span>
             </a>
 
-            <a href="/profile" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
-                <img class="" width="20" height="20" src="/svg/home-svg-com.svg" />
-                <!-- Tooltip -->
-                <span
-                    class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    Hồ sơ
-                </span>
-            </a>
+           
             <a href="/report" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
-                <img class="" width="20" height="20" src="/svg/home-svg-com.svg" />
-                <!-- Tooltip -->
+                <img class="" width="20" height="20" src="/svg/statistics-svg-com.svg" />
                 <span
                     class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
                     Thống kê
@@ -75,9 +61,13 @@
 
     </div>
     <div class="flex flex-col gap-y-2 py-4 w-full px-2 shadow">
-        <a href="#" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center">
-            <img class="" width="20" height="20" src="/svg/setting-svg-com.svg" />
-        </a>
+         <a href="/profile" class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center relative group">
+                <img class="" width="20" height="20" src="/svg/profile-svg-com.svg" />
+                <span
+                    class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    Hồ sơ
+                </span>
+            </a>
         <button id="btnOpenConfirmLogout" data-modal="confirmLogoutModal"
             class="w-full hover:bg-gray-100 p-3 rounded-lg flex justify-center">
             <img class="rotate-180" width="20" height="20" src="/svg/logout-svg-com.svg" />

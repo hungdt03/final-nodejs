@@ -3,7 +3,7 @@ const Category = require("../models/category.model");
 exports.showCategory = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const size = parseInt(req.query.size) || 6;
+        const size = parseInt(req.query.size) || 5;
         const search = req.query.search || '';
 
         const skip = (page - 1) * size;
@@ -27,6 +27,7 @@ exports.showCategory = async (req, res) => {
         res.render('category', {
             categories: filterCategories,
             search,
+            isEmpty: filterCategories.length === 0,
             pagination: {
                 page,
                 size,
