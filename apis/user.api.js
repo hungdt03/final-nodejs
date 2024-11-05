@@ -41,12 +41,15 @@ exports.createAccount = async (req, res) => {
         });
 
         await newUser.save();
-
-        const linkLogin = `${process.env.WEB_URL}/users/login?email=${email}&activationToken=${activationToken}`
+        req.toastr.success('Tạo tài khoản cho nhân viên thành công', "Thành công!");
+        const linkLogin = `${process.env.WEB_URL}/users/login?email=${email}&activationToken=${encodeURIComponent(activationToken)}`
         const response = await sendLinkLogin(newUser, linkLogin)
-        if(response) {
+
+        if (response) {
+            req.toastr.success('Gửi link đăng nhập thành công', "Thành công!");
             console.log('Gửi gmail thành công')
         } else {
+            req.toastr.error('Gửi link đăng nhập thất bại', "Thất bại!");
             console.log('Gửi gmail thất bại')
         }
 

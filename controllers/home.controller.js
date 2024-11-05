@@ -41,12 +41,15 @@ exports.invalidToken = async (req, res) => {
     } 
 
     return res.redirect('/404')
-}
+
+};
+
 
 exports.changePassword = (req, res) => {
     if(req.session.user.isPasswordChanged) {
         return res.redirect('/')
     }
+
     res.render('change-password')
 }
 

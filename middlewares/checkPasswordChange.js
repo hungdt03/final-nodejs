@@ -8,7 +8,7 @@ const checkPasswordChange = (req, res, next) => {
             return res.redirect('/change-password');
         }
     }
-
+    
     next();
 }
 

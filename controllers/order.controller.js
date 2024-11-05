@@ -4,19 +4,30 @@ const OrderItem = require("../models/orderItem.model");
 
 const PDFDocument = require('pdfkit');
 const { formatDateTime } = require("../utils/formatDatetime");
+
 const { formatCurrencyVND } = require("../utils/formatCurrency");
 
 exports.checkout = (req, res) => {
     const carts = req.session.cart ?? []
     const totalPrice = carts.reduce((acc, curr) => acc + curr.subTotal, 0)
     const isEmpty = carts.length === 0
-    res.render('checkout', { carts, totalPrice, isEmpty });
+    res.render('checkout', {
+        carts: carts.map((item, index) => ({
+            ...item,
+            no: index + 1,
+            subTotal: formatCurrencyVND(item.subTotal),
+            price: formatCurrencyVND(item.price)
+        })), 
+        totalPrice: formatCurrencyVND(totalPrice),
+        rawTotalPrice: totalPrice,
+        isEmpty
+    });
 };
 
 exports.orderDetail = async (req, res) => {
     const { orderId } = req.params;
     const order = await Order.findById(orderId).populate('customerId')
-    if(!order) {
+    if (!order) {
         return res.redirect('/404')
     }
 
@@ -107,14 +118,18 @@ exports.processCheckout = async (req, res) => {
                 price: cartItem.price,
                 subTotal: cartItem.subTotal
             });
+
             await orderItem.save({ session });
         }
+
+
 
         await session.commitTransaction();
         session.endSession();
 
         req.session.cart = []
         req.toastr.success('Thanh toán đơn hàng thành công', "Thành công!");
+
         res.redirect("/orders/success/" + order._id);
     } catch (error) {
         await session.abortTransaction();
@@ -125,10 +140,10 @@ exports.processCheckout = async (req, res) => {
     }
 }
 
-exports.orderSuccess = async(req, res) => {
+exports.orderSuccess = async (req, res) => {
     const { orderId } = req.params;
     const order = await Order.findById(orderId);
-    if(!order) {
+    if (!order) {
         return res.redirect('/404')
     }
 
@@ -141,7 +156,6 @@ exports.orderSuccess = async(req, res) => {
         }
     });
 }
-
 
 exports.viewInvoice = async (req, res) => {
     const { orderId } = req.params;

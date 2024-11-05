@@ -68,7 +68,7 @@ btnOpenCreateCategoryModal.addEventListener('click', function (e) {
     const modal = document.getElementById(modalId)
     modal.classList.add('show')
 
-    btnCreateCategory.addEventListener('click', async (e) => {
+    btnCreateCategory.onclick = async (e) => {
         if (validateFormCreate()) {
             const formData = new FormData(formCreateCategory);
             const data = Object.fromEntries(formData.entries());
@@ -82,7 +82,7 @@ btnOpenCreateCategoryModal.addEventListener('click', function (e) {
             }
         }
 
-    })
+    }
 })
 
 // Handle Edit Employee
@@ -99,7 +99,7 @@ btnOpenModalEdits.forEach(btn => {
         const modal = document.getElementById(modalId)
         modal.classList.add('show')
 
-        btnEditCategory.addEventListener('click', async (e) => {
+        btnEditCategory.onclick = async (e) => {
             if (validateFormEdit()) {
                 const formData = new FormData(formEditCategory);
                 const data = Object.fromEntries(formData.entries());
@@ -117,7 +117,7 @@ btnOpenModalEdits.forEach(btn => {
                 console.log('Vô đây à')
             }
     
-        })
+        }
 
     })
 })
@@ -127,16 +127,20 @@ btnOpenModalEdits.forEach(btn => {
 // ============DELETE CATEGORY==========
 // =====================================
 
+const categoryNameTag = document.getElementById('category-delete')
 const deleteCategoryBtns = document.querySelectorAll('.delete-category-btn');
 deleteCategoryBtns.forEach(btn => {
     btn.addEventListener('click', function (e) {
         const categoryId = this.getAttribute('data-category-id'); 
+        const categoryName = this.getAttribute('data-category-name'); 
         const modal = document.getElementById('confirmRemoveCategoryModal');
         modal.setAttribute('data-category-id', categoryId);
+        categoryNameTag.innerHTML = categoryName
         
         modal.classList.add('show');
     });
 });
+
 
 const confirmDeleteBtn = document.querySelector('#btn-confirm-delete');
 
