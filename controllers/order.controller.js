@@ -74,8 +74,6 @@ exports.processCheckout = async (req, res) => {
         return res.redirect('/orders/checkout');
     }
 
-
-
     const session = await Customer.startSession();
     session.startTransaction();
 
