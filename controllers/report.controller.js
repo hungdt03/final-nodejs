@@ -70,6 +70,7 @@ exports.report = async (req, res) => {
         totalProfit: formatCurrencyVND(totalProfit),
         type,
         from,
-        end
+        end,
+        isEmpty: filterOrders.length === 0
     });
 };

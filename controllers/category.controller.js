@@ -22,8 +22,6 @@ exports.showCategory = async (req, res) => {
             };
         });
 
-
-
         res.render('category', {
             categories: filterCategories,
             search,

@@ -23,71 +23,41 @@ exports.getCustomers = async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching customers:', error);
-        res.status(500).send('Internal Server Error');
+        res.render('500')
     }
 };
 
 exports.customerDetail = async (req, res) => {
     const { customerId } = req.params;
-    const customer = await Customer.findById(customerId);
-    if (!customer) return res.redirect('/404')
-    const orders = await Order.find({
-        customerId
-    }).sort({ orderDate: -1 })
+    
+    try {
+        const customer = await Customer.findById(customerId);
+        if (!customer) return res.redirect('/404')
+        const orders = await Order.find({
+            customerId
+        }).sort({ orderDate: -1 })
 
-    const filterOrders = orders.map(o => ({
-        id: o._id,
-        orderDate: formatDateTime(o.orderDate),
-        totalAmount: formatCurrencyVND(o.totalAmount),
-        refundAmount: formatCurrencyVND(o.refundAmount),
-        givenAmount: formatCurrencyVND(o.givenAmount),
-    }))
+        const filterOrders = orders.map(o => ({
+            id: o._id,
+            orderDate: formatDateTime(o.orderDate),
+            totalAmount: formatCurrencyVND(o.totalAmount),
+            refundAmount: formatCurrencyVND(o.refundAmount),
+            givenAmount: formatCurrencyVND(o.givenAmount),
+        }))
 
-    res.render('customer-detail', {
-        orders: filterOrders,
-        customer: {
-            fullName: customer.fullName,
-            address: customer.address,
-            phoneNumber: customer.phoneNumber
-        },
-        isEmpty: orders.length === 0
-    })
+        res.render('customer-detail', {
+            orders: filterOrders,
+            customer: {
+                fullName: customer.fullName,
+                address: customer.address,
+                phoneNumber: customer.phoneNumber
+            },
+            isEmpty: orders.length === 0
+        })
+    } catch (err) {
+        console.error('Error fetching customer detail:', err);
+        res.render('500')
+    }
 
 }
 
-// exports.getCustomerOrder = async (phoneNumber) => {
-//     try {
-//         const customer = await Customer.findOne({ phoneNumber });
-//         if (!customer) {
-//             return { error: 'Không tìm thấy khách hàng', status: 404 };
-//         }
-//         const orders = await Order.find({ customerId: customer._id });
-//         const orderDetails = [];
-//         for (let order of orders) {
-//             const orderItems = await OrderItem.find({ orderId: order._id }).populate('productId');
-//             orderDetails.push({
-//                 totalAmount: order.totalAmount,
-//                 givenAmount: order.givenAmount,
-//                 refundAmount: order.refundAmount,
-//                 orderDate: order.orderDate,
-//                 items: orderItems.map(item => ({
-//                     productName: item.productId.name,
-//                     quantity: item.quantity,
-//                     price: item.price,
-//                     subTotal: item.subTotal
-//                 }))
-//             });
-//         }
-//         return {
-//             customer: {
-//                 fullName: customer.fullName,
-//                 phoneNumber: customer.phoneNumber,
-//                 address: customer.address
-//             },
-//             orders: orderDetails
-//         };
-//     } catch (error) {
-//         console.error(error);
-//         return { error: 'Có lỗi xảy ra khi lấy thông tin khách hàng và lịch sử mua hàng', status: 500 };
-//     }
-// };

@@ -1,12 +1,12 @@
-const PUBLIC_ROUTE = ['/login', '/users/login', '/invalid-token'];
+const PUBLIC_ROUTES = ['/login', '/users/login', '/invalid-token'];
 const PRIORITY_ROUTES = ['/change-password', '/logout', '/users/login', '/invalid-token', '/404'];
-const PRIVATE_ROUTE = ["/users"];
+const PRIVATE_ROUTES = ["/users"];
 
 function authMiddleware(req, res, next) {
     const user = req.session.user;
 
     // 1. Kiểm tra xác thực cho các PUBLIC_ROUTE
-    if (!user && PUBLIC_ROUTE.some(route => req.path.startsWith(route))) {
+    if (!user && PUBLIC_ROUTES.some(route => req.path.startsWith(route))) {
         return next();
     }
 
@@ -21,11 +21,10 @@ function authMiddleware(req, res, next) {
     }
 
     // 4. Kiểm tra quyền truy cập cho nhân viên (EMPLOYEE) vào các PRIVATE_ROUTE
-    if (user.role === 'EMPLOYEE' && PRIVATE_ROUTE.some(route => req.path === route)) {
+    if (user.role === 'EMPLOYEE' && PRIVATE_ROUTES.some(route => req.path === route)) {
         return res.redirect('/403');
     }
 
-    // Nếu tất cả các kiểm tra đều thông qua
     next();
 }
 

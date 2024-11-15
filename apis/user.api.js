@@ -10,6 +10,7 @@ exports.createAccount = async (req, res) => {
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            req.toastr.error('Địa chỉ email đã tồn tại', "Thất bại!");
             return res.status(400).json({
                 success: false,
                 message: 'Địa chỉ email đã tồn tại'

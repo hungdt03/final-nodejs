@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="grid grid-cols-4 gap-6">
+    <div class="grid gap-6 {{#if (eq user.role 'ADMIN')}}grid-cols-4{{else}}grid-cols-3{{/if}}">
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-layers-alt text-4xl font-bold"></i>
             <div class="flex flex-col">
@@ -53,6 +53,7 @@
                 <span class="text-gray-400 text-sm">số tiền thu về</span>
             </div>
         </div>
+        {{#if (eq user.role 'ADMIN')}}
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-money text-4xl font-bold"></i>
             <div class="flex flex-col">
@@ -60,72 +61,65 @@
                 <span class="text-gray-400 text-sm">lợi nhuận</span>
             </div>
         </div>
+        {{/if}}
     </div>
 
-    <div class="grid grid-cols-12 gap-6">
-        <div class="col-span-9 p-4 rounded-md bg-white flex flex-col gap-y-6">
-            <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-x-2">
-                        <i class="ti-shopping-cart font-bold text-2xl text-primary mb-1"></i>
-                        <span class="text-xl font-semibold">Các đơn hàng gần đây</span>
-                    </div>
-
-                    <a href="/orders" class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</a>
+    <div class="p-4 rounded-md bg-white flex flex-col gap-y-6">
+        <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-x-2">
+                    <i class="ti-shopping-cart font-bold text-2xl text-primary mb-1"></i>
+                    <span class="text-xl font-semibold">Các đơn hàng gần đây</span>
                 </div>
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">
-                                Mã đơn hàng
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Khách hàng
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Ngày mua hàng
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Tổng tiền
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Thao tác
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each orders}}
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4">{{id}}</td>
-                            <td class="px-6 py-4">{{customer.fullName}}</td>
-                            <td class="px-6 py-4">{{orderDate}}</td>
-                            <td class="px-6 py-4">{{totalAmount}}</td>
-                            <td class="flex items-center px-6 py-4">
-                                <a href="/orders/{{id}}"
-                                    class="text-green-600 transition-all ease-linear duration-300 border-[1px] border-green-600 hover:bg-green-600 hover:text-white font-medium py-1 px-2 rounded-md">
-                                    <i class="ti-eye"></i>
-                                    Chi tiết
-                                </a>
-                            </td>
-                        </tr>
 
-                        {{/each}}
+                <a href="/orders" class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</a>
+            </div>
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Mã đơn hàng
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Khách hàng
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Ngày mua hàng
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tổng tiền
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Thao tác
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">{{id}}</td>
+                        <td class="px-6 py-4">{{customer.fullName}}</td>
+                        <td class="px-6 py-4">{{orderDate}}</td>
+                        <td class="px-6 py-4">{{totalAmount}}</td>
+                        <td class="flex items-center px-6 py-4">
+                            <a href="/orders/{{id}}"
+                                class="text-green-600 transition-all ease-linear duration-300 border-[1px] border-green-600 hover:bg-green-600 hover:text-white font-medium py-1 px-2 rounded-md">
+                                <i class="ti-eye"></i>
+                                Chi tiết
+                            </a>
+                        </td>
+                    </tr>
 
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="col-span-3 p-4 rounded-md bg-white flex flex-col gap-y-6">
-            <div class="flex items-center gap-x-2">
-                <i class="ti-money font-bold text-lg text-primary mb-1"></i>
-                <span class="text-lg font-semibold text-gray-700">TỔNG LỢI NHUẬN</span>
-            </div>
-            <div class="flex items-center justify-center">
-                {{totalProfit}}
-            </div>
+                    {{/each}}
+
+                </tbody>
+            </table>
+
+            {{#if isEmpty}}
+            <p class="text-center text-gray-500 py-4">Không có đơn hàng nào</p>
+            {{/if}}
         </div>
     </div>
-
 
 </div>
 

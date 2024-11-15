@@ -19,9 +19,8 @@ const userSchema = new Schema({
         enum: ['ADMIN', 'EMPLOYEE']
     },
     fullName: { type: String, required: true },
-    isActivated: { type: Boolean, required: true },
+    isActivated: { type: Boolean, required: true }, // if login first => activated (active status) ELSE not activated (inactive status)
     isPasswordChanged: { type: Boolean, required: true },
-    status: { type: String, default: 'active' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     locked: { type: Boolean, required: true },

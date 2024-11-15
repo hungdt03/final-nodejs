@@ -70,7 +70,7 @@ const accountDetail = async (req, res) => {
         customer:{
             id: o.customerId._id,   
             fullName: o.customerId.fullName, 
-            address: o.customerId.address 
+            address: o.customerId.address
         } 
     }))
 
@@ -83,6 +83,7 @@ const accountDetail = async (req, res) => {
             status: user.status,
             locked: user.locked,
             avatar: user.avatar,
+            isActivated: user.isActivated,
             role: user.role
         },
         orders: filterOrders,

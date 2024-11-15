@@ -39,7 +39,7 @@ toDateInput.oninput = () => {
 
 toDateInput.onchange = () => {
     if (!fromDateInput.value) {
-        alert('Chưa chọn ngày bắt đầu');
+        return;
     } else {
         window.location.href = '/report/?from=' + fromDateInput.value + '&end=' + toDateInput.value;
     }
