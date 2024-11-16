@@ -268,7 +268,7 @@ const loginWithLink = async (req, res) => {
     }
 }
 
-const sendLinkAgain = async (req, res) => {
+const resendLink = async (req, res) => {
     const { id } = req.params
     const existingUser = await User.findById(id);
 
@@ -309,4 +309,4 @@ const sendLinkAgain = async (req, res) => {
 }
 
 
-module.exports = { accountDetail, profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, sendLinkAgain, changeInfo, changePassword };
+module.exports = { accountDetail, profilePage, accountsPage, loginWithLink, uploadAvatar, toggleLocked, resendLink, changeInfo, changePassword };

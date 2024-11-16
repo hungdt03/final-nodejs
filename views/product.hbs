@@ -73,46 +73,46 @@
                 </thead>
                 <tbody>
                     {{#unless isEmpty}}
-                   
-                        {{#each products}}
-                        <tr class="bg-white border-b hover:bg-gray-50">
-                            <td class="px-6 py-4">
-                                <img class="object-cover rounded-md  w-[70px] h-[70px]" src="/images/product/{{thumbnail}}"
-                                    alt="Ảnh sản phẩm" />
-                            </td>
-                            <td class="px-6 py-4">{{name}}</td>
-                            <td class="px-6 py-4">{{category.name}}</td>
-                            {{#if (eq ../user.role 'ADMIN')}}
-                            <td class="px-6 py-4">{{purchasePrice}}</td>
-                            {{/if}}
-                            <td class="px-6 py-4">{{retailPrice}}</td>
-                            <td class="px-6 py-4">{{stockQuantity}}</td>
-                            <td class="px-6 py-4">{{createdAt}}</td>
-                            <td class="px-6 py-4">{{updatedAt}}</td>
-                            {{#if (eq ../user.role 'ADMIN')}}
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-x-2">
-                                    <button data-id="{{id}}" data-modal="editProductModal"
-                                        class="open-modal-btn open-edit-product-modal text-sky-500 transition-all ease-linear duration-300 border-[1px] border-sky-500 hover:bg-sky-500 hover:text-white font-medium py-1 px-2 rounded-md">
-                                        <i class="ti-pencil-alt"></i>
-                                        Sửa
-                                    </button>
-                                    <button data-product-id="{{id}}" data-product-name="{{name}}"
-                                        data-modal="confirmRemoveProductModal"
-                                        class="open-modal-btn delete-product-btn text-red-500 transition-all ease-linear duration-300 border-[1px] border-red-500 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-md">
-                                        <i class="ti-trash"></i>
-                                        Xóa
-                                    </button>
-                                </div>
-                            </td>
-                            {{/if}}
-                        </tr>
-                        {{/each}}
+
+                    {{#each products}}
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">
+                            <img class="object-cover rounded-md  w-[70px] h-[70px]" src="/images/product/{{thumbnail}}"
+                                alt="Ảnh sản phẩm" />
+                        </td>
+                        <td class="px-6 py-4">{{name}}</td>
+                        <td class="px-6 py-4">{{category.name}}</td>
+                        {{#if (eq ../user.role 'ADMIN')}}
+                        <td class="px-6 py-4">{{purchasePrice}}</td>
+                        {{/if}}
+                        <td class="px-6 py-4">{{retailPrice}}</td>
+                        <td class="px-6 py-4">{{stockQuantity}}</td>
+                        <td class="px-6 py-4">{{createdAt}}</td>
+                        <td class="px-6 py-4">{{updatedAt}}</td>
+                        {{#if (eq ../user.role 'ADMIN')}}
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-x-2">
+                                <button data-id="{{id}}" data-modal="editProductModal"
+                                    class="open-modal-btn open-edit-product-modal text-sky-500 transition-all ease-linear duration-300 border-[1px] border-sky-500 hover:bg-sky-500 hover:text-white font-medium py-1 px-2 rounded-md">
+                                    <i class="ti-pencil-alt"></i>
+                                    Sửa
+                                </button>
+                                <button data-product-id="{{id}}" data-product-name="{{name}}"
+                                    data-modal="confirmRemoveProductModal"
+                                    class="open-modal-btn delete-product-btn text-red-500 transition-all ease-linear duration-300 border-[1px] border-red-500 hover:bg-red-500 hover:text-white font-medium py-1 px-2 rounded-md">
+                                    <i class="ti-trash"></i>
+                                    Xóa
+                                </button>
+                            </div>
+                        </td>
+                        {{/if}}
+                    </tr>
+                    {{/each}}
                     {{/unless}}
 
                 </tbody>
             </table>
-               {{#if isEmpty}}
+            {{#if isEmpty}}
             <p class="text-center text-gray-500 py-4">Không có sản phẩm nào</p>
             {{/if}}
             {{#if (gt pagination.totalPages 1)}}
@@ -227,11 +227,15 @@
                         accept="image/*" />
                     <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
+
+                
             </form>
 
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
+            <div id="create-product-alert" class="bg-red-50 text-red-600 rounded-lg px-4 py-1 border-[1px] border-red-200 hidden">
+                </div>
             <button data-modal="createProductModal"
                 class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-create-product" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
@@ -296,15 +300,19 @@
                         <div class="upload-text text-sm text-gray-500 px-4 py-6">Ấn hoặc kéo thả ảnh vào khu vực này
                         </div>
                     </label>
+                    <input name="oldThumbnail" hidden />
                     <input name="thumbnail" id="upload-edit-product" class="upload-product" type="file" hidden
                         accept="image/*" />
-                    <input name="oldThumbnail" hidden />
                     <p class="text-red-500 text-sm pl-2 hidden"></p>
                 </div>
+
+                
             </form>
         </div>
         <div
             class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
+            <div id="edit-product-alert" class="bg-red-50 text-red-600 rounded-lg px-4 py-1 border-[1px] border-red-200 hidden">
+                </div>
             <button data-modal="editProductModal" class="close px-3 py-1 rounded-md bg-red-600 text-white">Hủy</button>
             <button id="btn-save-product" class="px-3 py-1 rounded-md bg-green-600 text-white">OK</button>
         </div>
