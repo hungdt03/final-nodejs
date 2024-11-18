@@ -5,6 +5,24 @@
                 <i class="ti-shopping-cart font-bold text-2xl text-primary mb-0"></i>
                 <span class="text-xl font-semibold">DANH SÁCH ĐƠN HÀNG</span>
             </div>
+            <!-- Bộ lọc ngày -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-x-2">
+                    Từ
+                    <input value="{{from}}" id="from-date" name="from" type="date"
+                        class="px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary {{#if from}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}" />
+                </div>
+                <div class="flex items-center gap-x-2">
+                    Đến
+                    <input value="{{to}}" id="to-date" name="to" type="date"
+                        class="px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary {{#if to}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}" />
+                </div>
+                <button id="filter-btn"
+                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition">
+                    Lọc
+                </button>
+            </div>
+            <!-- Tìm kiếm -->
             <form method="get" action="/orders" class="flex items-center gap-x-2 bg-gray-100 rounded-lg px-3 py-2">
                 <img width="15" height="15" src="/svg/search-svg-com.svg" />
                 <input type="text" name="search" value="{{search}}"
@@ -111,3 +129,4 @@
         {{/if}}
     </div>
 </div>
+<script src="js/order.js"></script>

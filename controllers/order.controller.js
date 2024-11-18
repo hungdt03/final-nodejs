@@ -12,12 +12,21 @@ const Product = require("../models/product.model");
 exports.ordersList = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 8;
-    const orders = await Order.find()
+    const { from, to } = req.query;
+    const dateFilter = {};
+    if (from) dateFilter.$gte = new Date(from);
+    if (to) dateFilter.$lte = new Date(to);
+    const queryFilter = {};
+    if (Object.keys(dateFilter).length) {
+        queryFilter.orderDate = dateFilter;
+    }
+    const orders = await Order.find(queryFilter)
         .populate('customerId')
         .sort({ orderDate: -1 })
-        .skip((page - 1) * size).limit(size);
+        .skip((page - 1) * size)
+        .limit(size);
 
-    const total = await Order.countDocuments();
+    const total = await Order.countDocuments(queryFilter);
 
     const filterOrder = orders.map(order => ({
         id: order._id,
@@ -40,7 +49,9 @@ exports.ordersList = async (req, res) => {
             size,
             total,
             totalPages: Math.ceil(total / size)
-        }
+        },
+        from,
+        to
     })
 
 }
@@ -158,7 +169,7 @@ exports.processCheckout = async (req, res) => {
                 session.endSession();
                 req.toastr.error(`Sản phẩm không tồn tại`, 'Thất bại')
                 return res.redirect('/orders/checkout');
-            } 
+            }
 
             if (product.stockQuantity < cartItem.quantity) {
                 await session.abortTransaction();
