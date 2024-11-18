@@ -2,10 +2,20 @@
     <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-x-2">
-                <i class="ti-shopping-cart font-bold text-2xl text-primary mb-1"></i>
+                <i class="ti-shopping-cart font-bold text-2xl text-primary mb-0"></i>
                 <span class="text-xl font-semibold">DANH SÁCH ĐƠN HÀNG</span>
             </div>
-
+            <form method="get" action="/orders" class="flex items-center gap-x-2 bg-gray-100 rounded-lg px-3 py-2">
+                <img width="15" height="15" src="/svg/search-svg-com.svg" />
+                <input type="text" name="search" value="{{search}}"
+                    class="text-sm px-2 py-1 bg-transparent outline-none border-none"
+                    placeholder="Tìm kiếm mã, tên, ngày..." />
+                <input type="hidden" name="page" value="{{pagination.page}}">
+                <input type="hidden" name="size" value="{{pagination.size}}">
+                <button type="submit" class="px-4 py-2 text-sm text-white bg-primary rounded-md">
+                    Tìm kiếm
+                </button>
+            </form>
         </div>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">

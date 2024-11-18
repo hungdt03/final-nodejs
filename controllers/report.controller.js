@@ -10,6 +10,7 @@ const types = ['today', 'yesterday', 'month', 'week'];
 exports.report = async (req, res) => {
     const { type = '', from, end } = req.query;
     let dateFilter = {};
+    let limit = null;
 
     if (types.includes(type)) {
         const now = new Date();
@@ -37,29 +38,28 @@ exports.report = async (req, res) => {
         dateFilter = {
             orderDate: { $gte: startOfDay(new Date(from)), $lte: endOfDay(new Date(end)) }
         };
+    } else {
+        limit = 10;
     }
-
-    const orders = await Order.find(dateFilter).sort({ orderDate: -1 }).populate('customerId');;
+    const query = Order.find(dateFilter).sort({ orderDate: -1 }).populate('customerId');
+    if (limit) query.limit(limit);
+    const orders = await query;
     const orderIds = orders.map(order => order._id);
-
     const orderItems = await OrderItem.find({ orderId: { $in: orderIds } }).populate('productId');
-
     const totalAmount = orders.reduce((sum, order) => sum + order.totalAmount, 0);
     const orderCount = orders.length;
     const productCount = orderItems.reduce((sum, item) => sum + item.quantity, 0);
-    const totalProfit = orderItems.reduce((prev, curr) => (curr.price - curr.purchasePrice) * curr.quantity, 0)
-
+    const totalProfit = orderItems.reduce((prev, curr) => prev + (curr.price - curr.purchasePrice) * curr.quantity, 0);
     const filterOrders = orders.map(o => ({
         id: o._id,
         orderDate: formatDateTime(o.orderDate),
         totalAmount: formatCurrencyVND(o.totalAmount),
-        customer:{
-            id: o.customerId._id,   
-            fullName: o.customerId.fullName, 
-            address: o.customerId.address 
-        } 
+        customer: {
+            id: o.customerId._id,
+            fullName: o.customerId.fullName,
+            address: o.customerId.address
+        }
     }))
-
 
     res.render('report', {
         title: 'Báo Cáo Doanh Thu',
