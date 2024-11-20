@@ -2,48 +2,45 @@
     <div class="max-w-[1200px] mx-auto">
         <div class="flex flex-col items-center">
             <div class="py-4">
-                <span class="italic font-bold text-primary text-sm border-8 border-primary rounded-full w-16 h-16 flex items-center justify-center">POS</span>
+                <span
+                    class="italic font-bold text-primary text-sm border-8 border-primary rounded-full w-16 h-16 flex items-center justify-center">POS</span>
             </div>
-            <form action="/login" method="post" class="flex flex-col gap-y-7 px-6 pt-6 py-10 rounded-lg bg-white shadow">
+            <form action="/login" method="post"
+                class="flex flex-col gap-y-7 px-6 pt-6 py-10 rounded-lg bg-white shadow">
                 <div class="flex flex-col gap-y-1">
                     <span class="font-semibold text-black text-3xl text-center">Đăng nhập hệ thống</span>
                     <p class="text-gray-400">Chào mừng bạn! Nhập thông tin tài khoản của bạn ở đây</p>
                 </div>
                 <div class="flex flex-col gap-y-1">
                     <label>Username</label>
-                    <input value="{{username}}" name="username" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input value="{{username}}" name="username"
+                        class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Nhập username" />
                 </div>
 
                 <div class="flex flex-col gap-y-1">
                     <label>Mật khẩu</label>
-                    <input type="password" name="password" class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
+                    <input type="password" name="password"
+                        class="bg-slate-100 outline-none border-none w-full px-3 py-2 rounded-md"
                         placeholder="Nhập mật khẩu" />
                 </div>
                 {{#if error}}
-                    <div class="bg-red-50 text-red-600 rounded-lg p-4 border-[1px] border-red-200">
-                        {{error}}
-                    </div>
+                <div class="bg-red-50 text-red-600 rounded-lg p-4 border-[1px] border-red-200">
+                    {{error}}
+                </div>
                 {{/if}}
 
                 <button type="submit" class="w-full py-2 rounded-md bg-primary text-white">Đăng nhập</button>
 
-                {{!-- <div class="flex items-center my-4">
-                    <div class="flex-grow border-t border-gray-300"></div>
-                    <span class="px-3 text-gray-500">hoặc</span>
-                    <div class="flex-grow border-t border-gray-300"></div>
-                </div> --}}
 
-                {{!-- <!-- Đăng nhập bằng Google và Facebook -->
-                <div class="flex flex-col gap-y-2">
-                    <a href="/auth/google" class="w-full py-2 rounded-md bg-red-500 text-white text-center flex items-center justify-center">
-                        <span class="mr-2">🔴</span> Đăng nhập bằng Google
-                    </a>
-                    <a href="/auth/facebook" class="w-full py-2 rounded-md bg-blue-600 text-white text-center flex items-center justify-center">
-                        <span class="mr-2">🔵</span> Đăng nhập bằng Facebook
-                    </a>
-                </div> --}}
             </form>
+
+            <div class="mt-6 flex flex-col items-center text-center">
+                <img src="images/system/login.jfif" alt="Welcome" class="w-100 h-40">
+                <p class="mt-4 text-gray-500 text-sm italic">
+                    "Truy cập ngay để khám phá những điều tuyệt vời trong hệ thống của chúng tôi!"
+                </p>
+            </div>
         </div>
     </div>
 </div>

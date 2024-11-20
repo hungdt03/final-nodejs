@@ -68,7 +68,15 @@ const renderCart = (data) => {
     quantityInputs.forEach(qty => {
         qty.addEventListener('change', function (e) {
             const productId = this.getAttribute('data-id');
-            updateCart(productId, parseInt(e.target.value))
+            const quantity = parseInt(e.target.value);
+            if(quantity <= 0) {
+                alert('Số lượng phải lớn hơn 0');
+                qty.value = 1
+                updateCart(productId, 1)
+                return;
+            }
+
+            updateCart(productId, quantity)
         })
     })
 

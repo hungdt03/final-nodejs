@@ -60,10 +60,35 @@ const validateFiles = (input, message) => {
     if (!input.files.length && !fileCreates.length) {
         showError(input, message);
         return false;
-    } else {
-        hideError(input);
-        return true
     }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    for (let file of input.files) {
+        if (!allowedTypes.includes(file.type)) {
+            showError(input, "Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP).");
+            return false;
+        }
+    }
+
+    hideError(input);
+    return true;
+};
+
+const validateFilesEdit = (input) => {
+    console.log(input)
+    if (input.files && input.files.length > 0) {
+        console.log(input.files)
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        for (let file of input.files) {
+            if (!allowedTypes.includes(file.type)) {
+                showError(input, "Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP).");
+                return false;
+            }
+        }
+    }
+
+    hideError(input);
+    return true;
 };
 
 
@@ -72,7 +97,7 @@ createNameInput.addEventListener('blur', () => validateInput(createNameInput, 'T
 createPurchasePriceInput.addEventListener('blur', () => validateInput(createPurchasePriceInput, 'Giá nhập không được để trống'));
 createRetailPriceInput.addEventListener('blur', () => validateInput(createRetailPriceInput, 'Giá bán không được để trống'));
 createStockQuantityInput.addEventListener('blur', () => validateInput(createStockQuantityInput, 'Số lượng trong kho không được để trống'));
-createThumbnailInput.addEventListener('blur', () => validateFiles(createThumbnailInput, 'Ảnh sản phẩm không được để trống'));
+createThumbnailInput.addEventListener('change', () => validateFiles(createThumbnailInput, 'Ảnh sản phẩm không được để trống'));
 
 // Ẩn lỗi khi người dùng đang gõ
 createSelectCategory.addEventListener('change', () => hideError(createSelectCategory));
@@ -98,7 +123,7 @@ const renderCategorySelect = (categories, element, categoryId = '') => {
     element.innerHTML = ''
     const html = categories.map(category => `
         <option value="${category.id}" ${category.id === categoryId ? 'selected' : ''}>${category.name}</option>
-    `).join(''); 
+    `).join('');
 
     element.innerHTML += html;
 }
@@ -116,13 +141,16 @@ btnOpenCreateProductModal.addEventListener('click', async function (e) {
         const formData = new FormData(formCreateProduct);
         formData.set('thumbnail', fileCreates[0])
         if (validateCreateProductForm()) {
-            btnCreateProduct.disabled=true;
+            btnCreateProduct.disabled = true;
             const response = await productService.createProduct(formData);
             if (response.success) {
                 window.location.reload()
             } else {
-                btnCreateProduct.disabled=false;
-                alert(response.message)
+                btnCreateProduct.disabled = false;
+                const productAlert = document.getElementById('create-product-alert')
+                productAlert.innerHTML = response.message
+                productAlert.classList.remove('hidden')
+                console.log(response.message)
             }
 
         }
@@ -152,7 +180,7 @@ editNameInput.addEventListener('blur', () => validateInput(editNameInput, 'Tên 
 editPurchasePriceInput.addEventListener('blur', () => validateInput(editPurchasePriceInput, 'Giá nhập không được để trống'));
 editRetailPriceInput.addEventListener('blur', () => validateInput(editRetailPriceInput, 'Giá bán không được để trống'));
 editStockQuantityInput.addEventListener('blur', () => validateInput(editStockQuantityInput, 'Số lượng trong kho không được để trống'));
-editThumbnailInput.addEventListener('blur', () => validateInput(editThumbnailInput, 'Ảnh sản phẩm không được để trống'));
+editThumbnailInput.addEventListener('change', () => validateFilesEdit(editThumbnailInput));
 
 // Ẩn lỗi khi người dùng đang gõ
 editCategorySelect.addEventListener('change', () => hideError(editCategorySelect));
@@ -169,8 +197,9 @@ const validateEditProductForm = () => {
     const isPurchasePriceValid = validateInput(editPurchasePriceInput, 'Giá nhập không được để trống');
     const isRetailPriceValid = validateInput(editRetailPriceInput, 'Giá bán không được để trống');
     const isStockQuantityValid = validateInput(editStockQuantityInput, 'Số lượng trong kho không được để trống');
+    const isValidFiles = validateFilesEdit(editThumbnailInput);
 
-    return isCategoryValid && isNameValid && isPurchasePriceValid && isRetailPriceValid && isStockQuantityValid
+    return isCategoryValid && isNameValid && isPurchasePriceValid && isRetailPriceValid && isStockQuantityValid && isValidFiles
 };
 
 const renderModalData = (product) => {
@@ -221,6 +250,9 @@ btnOpenEditProductModals.forEach(btnOpenEditProductModal => {
                     window.location.reload()
                 } else {
                     btnSaveProduct.disabled = false;
+                    const productAlert = document.getElementById('edit-product-alert')
+                    productAlert.innerHTML = response.message
+                    productAlert.classList.remove('hidden')
                 }
             }
 

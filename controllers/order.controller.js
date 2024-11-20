@@ -11,15 +11,37 @@ const Product = require("../models/product.model");
 
 exports.ordersList = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 8;
-    const orders = await Order.find()
-        .populate('customerId')
+    const size = parseInt(req.query.size) || 5;
+    const { from, to, search } = req.query;
+
+    const dateFilter = {};
+    if (from) dateFilter.$gte = new Date(from);
+    if (to) dateFilter.$lte = new Date(to);
+
+    const queryFilter = {};
+
+    if (Object.keys(dateFilter).length) {
+        queryFilter.orderDate = dateFilter;
+    }
+
+    console.log('Query Filter:', JSON.stringify(queryFilter, null, 2));
+    console.log('Search Term:', search); 
+
+    const orders = await Order.find(queryFilter)
+        .populate({
+            path: 'customerId',
+            match: { fullName: { $regex: search || '', $options: 'i' } },
+        })
         .sort({ orderDate: -1 })
-        .skip((page - 1) * size).limit(size);
+        .skip((page - 1) * size)
+        .limit(size);
 
-    const total = await Order.countDocuments();
+    // Lọc những orders không có customerId phù hợp với tìm kiếm
+    const filteredOrders = orders.filter(order => order.customerId);
 
-    const filterOrder = orders.map(order => ({
+    const total = await Order.countDocuments(queryFilter);
+
+    const filterOrder = filteredOrders.map(order => ({
         id: order._id,
         totalAmount: formatCurrencyVND(order.totalAmount),
         refundAmount: formatCurrencyVND(order.refundAmount),
@@ -28,9 +50,11 @@ exports.ordersList = async (req, res) => {
         customer: {
             fullName: order.customerId.fullName,
             phoneNumber: order.customerId.phoneNumber,
-            address: order.customerId.address
-        }
-    }))
+            address: order.customerId.address,
+        },
+    }));
+
+    console.log('Pages: ', Math.ceil(total / size))
 
     return res.render('orders', {
         orders: filterOrder,
@@ -39,11 +63,13 @@ exports.ordersList = async (req, res) => {
             page,
             size,
             total,
-            totalPages: Math.ceil(total / size)
-        }
-    })
-
-}
+            totalPages: Math.ceil(total / size),
+        },
+        from,
+        to,
+        search,
+    });
+};
 
 exports.checkout = (req, res) => {
     const carts = req.session.cart ?? []
@@ -158,7 +184,7 @@ exports.processCheckout = async (req, res) => {
                 session.endSession();
                 req.toastr.error(`Sản phẩm không tồn tại`, 'Thất bại')
                 return res.redirect('/orders/checkout');
-            } 
+            }
 
             if (product.stockQuantity < cartItem.quantity) {
                 await session.abortTransaction();

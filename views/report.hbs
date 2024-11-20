@@ -72,7 +72,27 @@
                     <span class="text-xl font-semibold">Các đơn hàng gần đây</span>
                 </div>
 
-                <a href="/orders" class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</a>
+                <div class="flex items-center gap-x-3">
+                    {{#if isShowPagination}}
+                    <div class="flex gap-x-2 items-center">
+                        {{#if hasPrevPage}}
+                        <a href="/report/?page={{subtract page 1}}"
+                            class="p-2 rounded-mg bg-orange-50 rounded-full w-18 h-8 flex items-center justify-center hover:bg-orange-200">
+                            <i class="ti-angle-left"></i>
+                        </a>
+                        {{/if}}
+                        {{#if hasNextPage}}
+                         <a href="/report/?page={{add page 1}}"
+                            class="p-2 rounded-mg bg-orange-50 rounded-full w-18 h-8 flex items-center justify-center hover:bg-orange-200">
+                            <i class="ti-angle-right"></i>
+                        </a>
+                        {{/if}}
+                       
+                    </div>
+                    {{/if}}
+
+                    <a href="/orders" class="text-primary text-sm bg-orange-50 px-3 py-1 rounded-lg">Xem thêm</a>
+                </div>
             </div>
             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">

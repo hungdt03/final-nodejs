@@ -7,10 +7,19 @@ const { formatDateTime } = require('../utils/formatDatetime');
 exports.getCustomers = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 5;
+    const search = req.query.search || '';
     try {
-        const customers = await Customer.find().skip((page - 1) * size).limit(size);
-
-        const total = await Customer.countDocuments();
+        const filter = search
+            ? {
+                $or: [
+                    { fullName: { $regex: search, $options: "i" } },
+                    { phoneNumber: { $regex: search, $options: "i" } },
+                ],
+            }
+            : {};
+            
+        const customers = await Customer.find(filter).skip((page - 1) * size).limit(size);
+        const total = await Customer.countDocuments(filter);
         const plainCustomers = customers.map(customer => customer.toObject())
         res.render('customer', {
             customers: plainCustomers, isEmpty: customers.length === 0,
@@ -19,7 +28,8 @@ exports.getCustomers = async (req, res) => {
                 size,
                 total,
                 totalPages: Math.ceil(total / size)
-            }
+            },
+            query: { search },
         });
     } catch (error) {
         console.error('Error fetching customers:', error);
@@ -29,7 +39,7 @@ exports.getCustomers = async (req, res) => {
 
 exports.customerDetail = async (req, res) => {
     const { customerId } = req.params;
-    
+
     try {
         const customer = await Customer.findById(customerId);
         if (!customer) return res.redirect('/404')

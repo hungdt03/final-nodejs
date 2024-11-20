@@ -1,11 +1,23 @@
 <div class="px-4 pt-0 py-4 h-full flex flex-col gap-4">
     <div class="bg-white p-4 rounded-md flex flex-col gap-y-6">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-x-2">
-                <i class="ti-user font-bold text-xl text-primary mb-1"></i>
-                <span class="text-lg font-semibold">DANH SÁCH KHÁCH HÀNG</span>
+            <div class="flex items-center gap-x-1">
+                <i class="ti-user font-bold text-xl text-primary"></i>
+                <span class="text-lg font-semibold" style="margin: 0; padding: 0;">DANH SÁCH KHÁCH HÀNG</span>
+            </div>
+            <div class="flex items-center gap-x-4">
+                <form method="GET" action="/customers/" class="flex items-center pl-3 rounded-lg bg-gray-100">
+                    <img width="15" height="15" src="/svg/search-svg-com.svg" />
+                    <input name="search" value="{{query.search}}"
+                        class="px-2 py-[10px] outline-none border-none text-sm bg-gray-100"
+                        placeholder="Tìm kiếm khách hàng..." />
+                    <input type="hidden" name="page" value="{{pagination.page}}">
+                    <input type="hidden" name="size" value="{{pagination.size}}">
+                    <button type="submit" class="px-4 py-2 rounded-md bg-primary text-white">Tìm kiếm</button>
+                </form>
             </div>
         </div>
+
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
