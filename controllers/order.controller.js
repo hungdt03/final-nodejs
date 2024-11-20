@@ -11,18 +11,22 @@ const Product = require("../models/product.model");
 
 exports.ordersList = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 8;
+    const size = parseInt(req.query.size) || 5;
     const { from, to, search } = req.query;
 
     const dateFilter = {};
     if (from) dateFilter.$gte = new Date(from);
     if (to) dateFilter.$lte = new Date(to);
+
     const queryFilter = {};
+
     if (Object.keys(dateFilter).length) {
         queryFilter.orderDate = dateFilter;
     }
+
     console.log('Query Filter:', JSON.stringify(queryFilter, null, 2));
     console.log('Search Term:', search); 
+
     const orders = await Order.find(queryFilter)
         .populate({
             path: 'customerId',
@@ -35,9 +39,7 @@ exports.ordersList = async (req, res) => {
     // Lọc những orders không có customerId phù hợp với tìm kiếm
     const filteredOrders = orders.filter(order => order.customerId);
 
-    const total = filteredOrders.length;
-
-    console.log('Filtered Orders:', JSON.stringify(filteredOrders, null, 2));
+    const total = await Order.countDocuments(queryFilter);
 
     const filterOrder = filteredOrders.map(order => ({
         id: order._id,
@@ -51,6 +53,8 @@ exports.ordersList = async (req, res) => {
             address: order.customerId.address,
         },
     }));
+
+    console.log('Pages: ', Math.ceil(total / size))
 
     return res.render('orders', {
         orders: filterOrder,

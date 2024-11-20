@@ -9,8 +9,12 @@ const types = ['today', 'yesterday', 'month', 'week'];
 
 exports.report = async (req, res) => {
     const { type = '', from, end } = req.query;
+
+    const page = parseInt(req.query.page) || 1
     let dateFilter = {};
+    let isShowPagination = false;
     let limit = null;
+    let totalPages = 0;
 
     if (types.includes(type)) {
         const now = new Date();
@@ -39,11 +43,17 @@ exports.report = async (req, res) => {
             orderDate: { $gte: startOfDay(new Date(from)), $lte: endOfDay(new Date(end)) }
         };
     } else {
-        limit = 10;
+        const total = await Order.countDocuments()
+        limit = 6;
+        totalPages = Math.ceil(total / limit)
+        isShowPagination = true
     }
+
     const query = Order.find(dateFilter).sort({ orderDate: -1 }).populate('customerId');
-    if (limit) query.limit(limit);
+    if (limit) query.skip((page - 1) * limit).limit(limit);
+
     const orders = await query;
+
     const orderIds = orders.map(order => order._id);
     const orderItems = await OrderItem.find({ orderId: { $in: orderIds } }).populate('productId');
     const totalAmount = orders.reduce((sum, order) => sum + order.totalAmount, 0);
@@ -71,6 +81,10 @@ exports.report = async (req, res) => {
         type,
         from,
         end,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+        page,
+        isShowPagination,
         isEmpty: filterOrders.length === 0
     });
 };

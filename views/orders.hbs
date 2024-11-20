@@ -6,7 +6,10 @@
                 <span class="text-xl font-semibold">DANH SÁCH ĐƠN HÀNG</span>
             </div>
             <!-- Bộ lọc ngày -->
-            <div class="flex items-center gap-4">
+            <form method="get" action="/orders" class="flex items-center gap-4">
+                <input type="hidden" name="search" value="{{search}}" />
+                <input type="hidden" name="page" value="{{pagination.page}}">
+                <input type="hidden" name="size" value="{{pagination.size}}">
                 <div class="flex items-center gap-x-2">
                     Từ
                     <input value="{{from}}" id="from-date" name="from" type="date"
@@ -17,11 +20,11 @@
                     <input value="{{to}}" id="to-date" name="to" type="date"
                         class="px-4 py-2 rounded-md hover:bg-orange-50 hover:text-primary {{#if to}}bg-orange-50 text-primary{{else}}bg-slate-100{{/if}}" />
                 </div>
-                <button id="filter-btn"
+                <button type="submit"
                     class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition">
                     Lọc
                 </button>
-            </div>
+            </form>
             <!-- Tìm kiếm -->
             <form method="get" action="/orders" class="flex items-center gap-x-2 bg-gray-100 rounded-lg px-3 py-2">
                 <img width="15" height="15" src="/svg/search-svg-com.svg" />
@@ -30,6 +33,8 @@
                     placeholder="Tìm kiếm theo tên khách hàng..." />
                 <input type="hidden" name="page" value="{{pagination.page}}">
                 <input type="hidden" name="size" value="{{pagination.size}}">
+                <input type="hidden" name="from" value="{{from}}">
+                <input type="hidden" name="to" value="{{to}}">
                 <button type="submit" class="px-4 py-2 text-sm text-white bg-primary rounded-md">
                     Tìm kiếm
                 </button>
@@ -72,10 +77,8 @@
                         </a>
                     </td>
                 </tr>
-
                 {{/each}}
                 {{/unless}}
-
 
             </tbody>
         </table>

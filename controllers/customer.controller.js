@@ -17,6 +17,7 @@ exports.getCustomers = async (req, res) => {
                 ],
             }
             : {};
+            
         const customers = await Customer.find(filter).skip((page - 1) * size).limit(size);
         const total = await Customer.countDocuments(filter);
         const plainCustomers = customers.map(customer => customer.toObject())
