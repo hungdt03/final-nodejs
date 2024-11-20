@@ -5,6 +5,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const toastr = require('express-toastr');
 const dotenv = require('dotenv');
+const cron = require('node-cron');
+const axios = require('axios');
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
 dotenv.config({ path: envFile });
 
@@ -90,7 +92,24 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     console.log('Running in development mode');
 }
+console.log(`Loaded environment variables from: ${envFile}`);
+console.log(`WEB_URL: ${process.env.WEB_URL}`);
+const SELF_PING_URL = process.env.WEB_URL;
 
+if (!SELF_PING_URL) {
+    console.error('WEB_URL is not defined in the environment variables.');
+} else {
+    console.log(`Cron job will ping: ${SELF_PING_URL}`);
+}
+
+cron.schedule('*/14 * * * *', async () => {
+    try {
+        const response = await axios.get(SELF_PING_URL);
+        console.log('Self-ping successful:', response.status);
+    } catch (error) {
+        console.error('Self-ping failed:', error.message);
+    }
+});
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
