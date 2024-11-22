@@ -235,7 +235,6 @@ exports.orderSuccess = async (req, res) => {
         return res.redirect('/404')
     }
 
-
     return res.render('order-success', {
         order: {
             id: order._id,

@@ -39,12 +39,20 @@
                 <span class="text-gray-400 text-sm">đơn hàng</span>
             </div>
         </div>
-        <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
+        <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8 relative">
             <i class="ti-mobile text-4xl font-bold"></i>
             <div class="flex flex-col">
                 <span class="text-2xl text-primary font-bold">{{productCount}}</span>
                 <span class="text-gray-400 text-sm">sản phẩm đã bán</span>
             </div>
+            <button id="btnShowModalProducts" data-modal="modalShowProducts" class="open-modal-btn absolute top-3 right-3 group">
+                <img class="w-8 -h8" src="/images/system/info.png" />
+                <span
+                    class="absolute z-40 left-full top-1/2 -translate-y-1/2 ml-2 w-max px-2 py-1 bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    Xem chi tiết
+                </span>
+            </button>
+            
         </div>
         <div class="p-4 rounded-md bg-white flex justify-center items-center gap-x-4 py-8">
             <i class="ti-wallet text-4xl font-bold"></i>
@@ -141,6 +149,33 @@
         </div>
     </div>
 
+</div>
+
+<div id="modalShowProducts" class="modal">
+    <div class="modal-content w-[500px] max-h-[90%] overflow-y-auto custom-scrollbar scrollbar-w-2">
+        <div class="sticky top-0 z-50 bg-white py-4">
+            <h2 class="text-center text-xl font-semibold">CÁC SẢN PHẨM ĐÃ BÁN</h2>
+            <button id="closeModalShowProducts" data-modal="modalShowProducts"
+                class="close close-modal-btn">&times;</button>
+        </div>
+        <div class="py-4 max-h-full flex flex-col gap-y-2">
+            {{#if isProductSellingEmpty}}
+                <p>Chưa bán sản phẩm nào</p>
+            {{/if}}
+            {{#each productSelling}}
+                <div class="flex gap-x-2 items-center py-2 px-3 rounded-md hover:bg-orange-50">
+                    <img class="w-10 h-10 object-cover rounded-md" src="/images/product/{{thumbnail}}" />
+                    <span class="font-semibold">{{productName}}</span> đã bán <span class="font-semibold">{{quantity}}</span>
+                </div>
+            {{/each}}
+        </div>
+        <div
+            class="sticky bottom-0 flex items-center gap-x-2 justify-end py-3 border-t-[1px] bg-white z-50 border-gray-200">
+            <div id="edit-product-alert" class="bg-red-50 text-red-600 rounded-lg px-4 py-1 border-[1px] border-red-200 hidden">
+                </div>
+            <button data-modal="modalShowProducts" class="close px-3 py-1 rounded-md bg-gray-400 text-white">Đóng</button>
+        </div>
+    </div>
 </div>
 
 <script src="/js/report.js"></script>

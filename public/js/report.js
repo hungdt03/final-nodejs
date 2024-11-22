@@ -50,3 +50,12 @@ fromDateInput.onchange = () => {
         window.location.href = '/report/?from=' + fromDateInput.value + '&end=' + toDateInput.value;
     }
 };
+
+// HANDLE OPEN MODAL SHOW PRODUCTS
+const btnShowModalProducts = document.getElementById('btnShowModalProducts');
+
+btnShowModalProducts.addEventListener('click', function(e) {
+    const modalId = this.getAttribute('data-modal');
+    const modal = document.getElementById(modalId);
+    modal.classList.add('show')
+})
