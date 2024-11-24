@@ -94,6 +94,16 @@ if (process.env.NODE_ENV === 'production') {
 }
 console.log(`Loaded environment variables from: ${envFile}`);
 console.log(`WEB_URL: ${process.env.WEB_URL}`);
+
+
+// Mục đích đoạn code ở dưới: Đoạn code bên dưới không liên quan tới nghiệp vụ của bài cuối kì
+
+// Đảm bảo ứng dụng luôn hoạt động:
+// Nhóm em deploy ứng dụng lên hosting miễn phí có giới hạn nên ứng dụng sẽ tự động vào chế độ ngủ nếu không có lưu lượng truy cập trong một khoảng thời gian.
+// Việc gửi "self-ping" định kỳ sẽ giữ cho ứng dụng "thức".
+
+// START=======================
+
 const SELF_PING_URL = process.env.WEB_URL;
 
 if (!SELF_PING_URL) {
@@ -110,6 +120,9 @@ cron.schedule('*/14 * * * *', async () => {
         console.error('Self-ping failed:', error.message);
     }
 });
+
+// END=======================
+
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
