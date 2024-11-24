@@ -17,7 +17,7 @@ const profilePage = (req, res) => {
 
 const accountsPage = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
-    const size = parseInt(req.query.size) || 3;
+    const size = parseInt(req.query.size) || 5;
     const search = req.query.search || '';
 
     const skip = (page - 1) * size;

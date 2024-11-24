@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -17,7 +16,17 @@ const sendLinkLogin = async (user, link, res) => {
             from: 'hungktpm1406@gmail.com',
             to: user.email,
             subject: 'Đường link đăng nhập hệ thống',
-            text: link,
+            html: `
+                <p>Xin chào bạn,</p>
+                <p>Bạn vui lòng truy cập vào link bên dưới để thực hiện việc đăng nhập:</p>
+                <a href="${link}" target="_blank" style="text-decoration: none; color: #3498db;">Bấm vào đây để đăng nhập</a>
+                <div>
+                    <strong>Lưu ý: </strong>
+                    Link này chỉ có hiệu lực trong vòng 1 phút
+                </div>
+                <p>Trân trọng,</p>
+                <p><strong>Double Hưng Kiên</strong></p>
+            `,
         };
 
         const info = await transporter.sendMail(mailOptions);
@@ -29,5 +38,4 @@ const sendLinkLogin = async (user, link, res) => {
     }
 }
 
-
-module.exports = { sendLinkLogin }
+module.exports = { sendLinkLogin };

@@ -12,6 +12,7 @@ const connectMongoose = async () => {
         
     } catch (err) {
         console.error('MongoDB connection error or seeding error:', err);
+        process.exit(1)
     }
 };
 
