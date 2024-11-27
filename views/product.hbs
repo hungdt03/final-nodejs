@@ -41,7 +41,7 @@
                             Hình ảnh
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Tên sản phẩm
+                            Tên sản phẩm / Barcode
                         </th>
                         <th scope="col" class="px-6 py-3">
                             Danh mục
@@ -80,7 +80,10 @@
                             <img class="object-cover rounded-md  w-[70px] h-[70px]" src="/images/product/{{thumbnail}}"
                                 alt="Ảnh sản phẩm" />
                         </td>
-                        <td class="px-6 py-4">{{name}}</td>
+                        <td class="px-6 py-4">
+                            <div>{{name}}</div>
+                            <div class="font-bold">{{barcode}}</div>
+                        </td>
                         <td class="px-6 py-4">{{category.name}}</td>
                         {{#if (eq ../user.role 'ADMIN')}}
                         <td class="px-6 py-4">{{purchasePrice}}</td>

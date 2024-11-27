@@ -4,6 +4,7 @@ const cartApi = require('../apis/cart.api');
 
 // API
 router.post('/api/add', cartApi.addToCart);
+router.post('/api/add-barcode', cartApi.addToCartByBarcode);
 router.post('/api/update', cartApi.updateCart);
 router.delete('/api/:productId', cartApi.removeItemCart);
 router.get('/api/', cartApi.getCartSession);
