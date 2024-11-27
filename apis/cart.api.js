@@ -87,6 +87,46 @@ exports.updateCart = async (req, res) => {
 }
 
 
+exports.addToCartByBarcode = async (req, res) => {
+    const { barcode } = req.body;
+
+    const product = await Product.findOne({ barcode });
+    if(!product) {
+        return res.status(404).json({
+            message: 'Sản phẩm không tồn tại',
+            success: false
+        })
+    }
+    
+    if (!req.session.cart) {
+        req.session.cart = [];
+    }
+
+    const existingItem = req.session.cart.find(item => item.product._id.toString() === product._id.toString());
+
+    if (existingItem) {
+        existingItem.quantity += 1;
+        existingItem.subTotal += existingItem.product.retailPrice;
+    } else {
+        const item = {
+            product: product,
+            subTotal: product.retailPrice,
+            quantity: 1,
+            price: product.retailPrice,
+            purchasePrice: product.purchasePrice
+        }
+
+        req.session.cart.push(item);
+    }
+
+    res.status(200).json({
+        message: 'Sản phẩm đã được thêm vào giỏ hàng',
+        cart: req.session.cart,
+        success: true
+    });
+}
+
+
 exports.getCartSession = async (req, res) => {
     if (!req.session.cart) {
         req.session.cart = [];

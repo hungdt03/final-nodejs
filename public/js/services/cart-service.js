@@ -1,3 +1,4 @@
+
 const cartService = {
     getCartSession: async () => {
         const response = await fetch('/carts/api');
@@ -6,6 +7,18 @@ const cartService = {
     },
     addToCart: async (payload) => {
         const response = await fetch('/carts/api/add', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json' 
+            }
+        });
+
+        const data = await response.json();
+        return data;
+    },
+    addProductByBarCode: async (payload) => {
+        const response = await fetch('/carts/api/add-barcode', {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {

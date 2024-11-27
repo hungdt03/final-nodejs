@@ -1,10 +1,13 @@
 import cartService from "./services/cart-service.js";
 
+const btnScanBarCode = document.getElementById('btn-scan-barcode')
+const inputBarcode = document.getElementById('barcode-input')
 const cartBtnProducts = document.querySelectorAll('.cart-product');
 const cartArea = document.getElementById('cart-area')
 const cartCount = document.getElementById('cart-count')
 const totalMoneyTag = document.getElementById('total-money')
 const btnCheckout = document.getElementById('btn-checkout')
+
 const formatCurrencyVND = (amount) => {
     const formattedAmount = new Intl.NumberFormat('vi-VN').format(amount);
     return `${formattedAmount} VNĐ`;
@@ -114,7 +117,19 @@ const addItemToCart = async (productId, quantity) => {
 
     if (response.success) {
         loadCart()
-    } else alert(response.message)
+        toastr.success("Thêm sản phẩm vào giỏ hàng thành công", "Thành công");
+    } else toastr.error(response.message, 'Thất bại')
+}
+
+const addItemToCartByBarcode = async (barcode) => {
+    const response = await cartService.addProductByBarCode({
+        barcode
+    });
+
+    if (response.success) {
+        loadCart()
+        toastr.success("Quét barcode thành công", "Thành công");
+    } else toastr.error(response.message, 'Thất bại')
 }
 
 const updateCart = async (productId, quantity) => {
@@ -124,15 +139,17 @@ const updateCart = async (productId, quantity) => {
 
     if (response.success) {
         loadCart()
-    } else alert(response.message)
+        toastr.success("Cập nhật giỏ hàng thành công", "Thành công");
+    } else  toastr.error(response.message, 'Thất bại')
 }
 
 const removeCartItem = async (productId) => {
     const response = await cartService.removeCartItem(productId);
     if (response.success) {
         loadCart()
+        toastr.success("Xóa sản phẩm khỏi giỏ hàng thành công", "Thành công");
     } else {
-        alert(response.message)
+        toastr.error(response.message, 'Thất bại')
     }
 }
 
@@ -146,6 +163,16 @@ cartBtnProducts.forEach(btn => {
         addItemToCart(productId, 1)
     })
 })
+
+btnScanBarCode.onclick = function () {
+    if(!inputBarcode.value) {
+        toastr.error("Chưa nhập barcode", "Lỗi");
+        return;     
+    }
+
+    addItemToCartByBarcode(inputBarcode.value)
+    inputBarcode.value = ''
+}
 
 export { addItemToCart, renderCart }
 
