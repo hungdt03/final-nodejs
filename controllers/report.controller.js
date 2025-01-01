@@ -66,10 +66,10 @@ exports.report = async (req, res) => {
     let totalPages = 0;
     let isShowPagination = false;
 
+    const totalOrderCount = await Order.countDocuments(dateFilter);
     if (!Object.keys(dateFilter).length) {
-        const total = await Order.countDocuments();
         limit = 6;
-        totalPages = Math.ceil(total / limit);
+        totalPages = Math.ceil(totalOrderCount  / limit);
         isShowPagination = true;
     }
 
@@ -96,7 +96,7 @@ exports.report = async (req, res) => {
     res.render('report', {
         title: 'Báo Cáo Doanh Thu',
         totalAmount: formatCurrencyVND(totalAmount),
-        orderCount: orders.length,
+        orderCount: totalOrderCount,
         productCount,
         orders: filterOrders,
         totalProfit: formatCurrencyVND(totalProfit),
